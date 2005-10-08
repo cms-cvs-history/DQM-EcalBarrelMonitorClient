@@ -1,3 +1,11 @@
+/*
+ * \file EcalBarrelMonitorClient.cpp
+ *
+ *  $Date: 2005/10/06 17:47:01 $
+ *  $Revision: 1.6 $
+ *  \author G. Della Ricca
+ *
+ */
 
 #include "TROOT.h"
 #include "TFile.h"
