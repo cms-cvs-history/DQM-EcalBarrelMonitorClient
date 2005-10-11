@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorClient.cpp
  *
- *  $Date: 2005/10/11 09:49:24 $
- *  $Revision: 1.1 $
+ *  $Date: 2005/10/11 13:39:36 $
+ *  $Revision: 1.2 $
  *  \author G. Della Ricca
  *
  */
@@ -26,24 +26,29 @@ int main(int argc, char** argv) {
   cout << endl;
 
   TApplication app("app",&argc,argv);
+
   // default client name
   string cfuname = "User0";
+
   // default collector host name
   string hostname = "localhost";
+
   // default port #
   int port_no = 9090;
 
-  TCanvas* c1 = new TCanvas("c1","Monitoring objects",200,10,600,480);
+  TCanvas* c1 = new TCanvas("Ecal Barrel","Monitoring objects",200,10,600,480);
   c1->Draw();
+  c1->Modified();
 
   if(argc >= 2) cfuname = argv[1];
   if(argc >= 3) hostname = argv[2];
 
-  cout << " Client " << cfuname << " begins requesting monitoring from host "
-       << hostname << endl;
+  cout << " Client " << cfuname
+       << " begins requesting monitoring from host " << hostname << endl;
 
   // start user interface instance
   MonitorUserInterface* mui= new MonitorUIRoot(hostname,port_no,cfuname);
+
   // will attempt to reconnect upon connection problems (w/ a 5-sec delay)
   mui->setReconnectDelay(5);
 
@@ -54,10 +59,12 @@ int main(int argc, char** argv) {
 
   // last time monitoring objects were plotted
   int last_plotting = -1;
+
   // last time root-file was saved
   int last_save = -1;
 
-  while(stay_in_loop) {
+  while ( stay_in_loop ) {
+
       bool saveHistograms = false;
   
       // this is the "main" loop where we receive monitoring
