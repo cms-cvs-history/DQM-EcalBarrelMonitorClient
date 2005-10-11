@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorClient.cpp
  *
- *  $Date: 2005/10/11 13:39:36 $
- *  $Revision: 1.2 $
+ *  $Date: 2005/10/11 14:58:44 $
+ *  $Revision: 1.3 $
  *  \author G. Della Ricca
  *
  */
@@ -10,13 +10,12 @@
 #include "DQMServices/Core/interface/MonitorElement.h"
 #include "DQMServices/UI/interface/MonitorUIRoot.h"
 
+#include "TROOT.h"
+#include "TH2D.h"
+#include "TApplication.h"
+
 #include <iostream>
 #include <math.h>
-
-#include "TROOT.h"
-#include <TApplication.h>
-
-#include <iostream>
 
 using namespace std;
 
@@ -39,6 +38,7 @@ int main(int argc, char** argv) {
   TCanvas* c1 = new TCanvas("Ecal Barrel","Monitoring objects",200,10,600,480);
   c1->Draw();
   c1->Modified();
+  c1->Update();
 
   if(argc >= 2) cfuname = argv[1];
   if(argc >= 3) hostname = argv[2];
@@ -76,15 +76,18 @@ int main(int argc, char** argv) {
       // # of full monitoring cycles processed
       int updates = mui->getNumUpdates();
 
-      // draw all monitoring objects every 5 monitoring cycles
-      if(updates % 5 == 0 && updates != last_plotting)
+      // draw monitoring objects every 2 monitoring cycles
+      if(updates % 2 == 0 && updates != last_plotting)
         {
 //          mui->drawAll();
 
           MonitorElement * me = mui->get("Collector/FU0/EcalBarrel/EBMonitorEvent/EBMM event SM01");
           MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
+
           if ( ob ) {
-            ob->operator->()->Draw();
+            TH2F* h = dynamic_cast<TH2F*> (ob->operator->());
+            h->SetMaximum(4096.);
+            h->Draw("box");
             c1->Modified();
             c1->Update();
           }
