@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorClient.cpp
  *
- *  $Date: 2005/10/08 08:55:06 $
- *  $Revision: 1.3 $
+ *  $Date: 2005/10/11 09:49:24 $
+ *  $Revision: 1.1 $
  *  \author G. Della Ricca
  *
  */
@@ -20,8 +20,7 @@
 
 using namespace std;
 
-int main(int argc, char** argv)
-{
+int main(int argc, char** argv) {
   cout << endl;
   cout << " *** Ecal Barrel Monitor Client ***" << endl;
   cout << endl;
@@ -34,6 +33,9 @@ int main(int argc, char** argv)
   // default port #
   int port_no = 9090;
 
+  TCanvas* c1 = new TCanvas("c1","Monitoring objects",200,10,600,480);
+  c1->Draw();
+
   if(argc >= 2) cfuname = argv[1];
   if(argc >= 3) hostname = argv[2];
 
@@ -45,8 +47,8 @@ int main(int argc, char** argv)
   // will attempt to reconnect upon connection problems (w/ a 5-sec delay)
   mui->setReconnectDelay(5);
 
-  // subscribe to all monitorable matching pattern "EcalBarrel/EBMonitorEvent/*"
-  mui->subscribe("EcalBarrel/EBMonitorEvent/*");
+  // subscribe to all monitorable matching pattern
+  mui->subscribe("EcalBarrel/EBMonitorEvent/EB*");
 
   bool stay_in_loop = true;
 
@@ -55,15 +57,14 @@ int main(int argc, char** argv)
   // last time root-file was saved
   int last_save = -1;
 
-  while(stay_in_loop)
-    {
+  while(stay_in_loop) {
       bool saveHistograms = false;
   
       // this is the "main" loop where we receive monitoring
       stay_in_loop = mui->update();
 
-      // subscribe to new monitorable matching pattern "*/C1/C2/*"
-      mui->subscribeNew("EcalBarrel/EBMonitorEvent/*");
+      // subscribe to new monitorable matching pattern
+      mui->subscribeNew("EcalBarrel/EBMonitorEvent/EB*SM01*");
 
       // # of full monitoring cycles processed
       int updates = mui->getNumUpdates();
@@ -71,7 +72,16 @@ int main(int argc, char** argv)
       // draw all monitoring objects every 5 monitoring cycles
       if(updates % 5 == 0 && updates != last_plotting)
         {
-          mui->drawAll();
+//          mui->drawAll();
+
+          MonitorElement * me = mui->get("Collector/FU0/EcalBarrel/EBMonitorEvent/EBMM event SM01");
+          MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
+          if ( ob ) {
+            ob->operator->()->Draw();
+            c1->Modified();
+            c1->Update();
+          }
+
           last_plotting = updates;
         }
 
