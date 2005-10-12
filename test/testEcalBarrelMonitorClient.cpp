@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorClient.cpp
  *
- *  $Date: 2005/10/11 16:47:06 $
- *  $Revision: 1.6 $
+ *  $Date: 2005/10/12 14:20:45 $
+ *  $Revision: 1.7 $
  *  \author G. Della Ricca
  *
  */
@@ -53,7 +53,9 @@ int main(int argc, char** argv) {
   mui->setReconnectDelay(5);
 
   // subscribe to all monitorable matching pattern
-  mui->subscribe("EcalBarrel/EBMonitorEvent/EB*");
+  mui->subscribe("EcalBarrel/RUN");
+  mui->subscribe("EcalBarrel/EVT");
+  mui->subscribe("EcalBarrel/EBMonitorEvent/EB*SM01*");
 
   bool stay_in_loop = true;
 
@@ -71,6 +73,8 @@ int main(int argc, char** argv) {
       stay_in_loop = mui->update();
 
       // subscribe to new monitorable matching pattern
+      mui->subscribeNew("EcalBarrel/RUN");
+      mui->subscribeNew("EcalBarrel/EVT");
       mui->subscribeNew("EcalBarrel/EBMonitorEvent/EB*SM01*");
 
       // # of full monitoring cycles processed
@@ -79,17 +83,25 @@ int main(int argc, char** argv) {
       // draw monitoring objects every 2 monitoring cycles
       if(updates % 2 == 0 && updates != last_plotting) {
 
-          MonitorElementT<TNamed>* ob;
           MonitorElement* me;
+
+          me = mui->get("Collector/FU0/EcalBarrel/EVT");
+          if ( me ) {
+            cout << me->valueString() << endl;
+          }
 
           me = mui->get("Collector/FU0/EcalBarrel/EBMonitorEvent/EBMM event SM01");
           if ( me ) {
-            ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
-            TH2F* h = dynamic_cast<TH2F*> (ob->operator->());
-            h->SetMaximum(4096.);
-            h->Draw("box");
-            c1->Modified();
-            c1->Update();
+            MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
+            if ( ob ) {
+              TH2F* h = dynamic_cast<TH2F*> (ob->operator->());
+              if ( h ) {
+                h->SetMaximum(4096.);
+                h->Draw("box");
+                c1->Modified();
+                c1->Update();
+              }
+            }
           }
 
           last_plotting = updates;
