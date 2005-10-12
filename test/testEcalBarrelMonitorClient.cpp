@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorClient.cpp
  *
- *  $Date: 2005/10/11 16:45:57 $
- *  $Revision: 1.5 $
+ *  $Date: 2005/10/11 16:47:06 $
+ *  $Revision: 1.6 $
  *  \author G. Della Ricca
  *
  */
@@ -77,14 +77,14 @@ int main(int argc, char** argv) {
       int updates = mui->getNumUpdates();
 
       // draw monitoring objects every 2 monitoring cycles
-      if(updates % 2 == 0 && updates != last_plotting)
-        {
-//          mui->drawAll();
+      if(updates % 2 == 0 && updates != last_plotting) {
 
-          MonitorElement * me = mui->get("Collector/FU0/EcalBarrel/EBMonitorEvent/EBMM event SM01");
-          MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
+          MonitorElementT<TNamed>* ob;
+          MonitorElement* me;
 
-          if ( ob ) {
+          me = mui->get("Collector/FU0/EcalBarrel/EBMonitorEvent/EBMM event SM01");
+          if ( me ) {
+            ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
             TH2F* h = dynamic_cast<TH2F*> (ob->operator->());
             h->SetMaximum(4096.);
             h->Draw("box");
@@ -96,16 +96,15 @@ int main(int argc, char** argv) {
         }
 
       // come here every 100 monitoring cycles, operate on Monitoring Elements
-      if(updates % 100 == 0 && updates != last_save)
-        {
+      if( updates % 100 == 0 && updates != last_save ) {
+
           saveHistograms = true;
 
           last_save = updates;
-        }
+      }
 
       // save monitoring structure in root-file
-      if(saveHistograms)
-        mui->save("EcalBarrelMonitorClient.root");
+      if ( saveHistograms ) mui->save("EcalBarrelMonitorClient.root");
 
     }
 
