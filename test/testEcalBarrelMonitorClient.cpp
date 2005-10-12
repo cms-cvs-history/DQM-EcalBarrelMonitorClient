@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorClient.cpp
  *
- *  $Date: 2005/10/12 14:20:45 $
- *  $Revision: 1.7 $
+ *  $Date: 2005/10/12 15:36:19 $
+ *  $Revision: 1.8 $
  *  \author G. Della Ricca
  *
  */
@@ -48,6 +48,8 @@ int main(int argc, char** argv) {
 
   // start user interface instance
   MonitorUserInterface* mui = new MonitorUIRoot(hostname,port_no,cfuname);
+
+  mui->setVerbose(0);
 
   // will attempt to reconnect upon connection problems (w/ a 5-sec delay)
   mui->setReconnectDelay(5);
