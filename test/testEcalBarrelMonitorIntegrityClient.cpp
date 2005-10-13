@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorIntegrityClient.cpp
  *
- *  $Date: 2005/10/13 13:29:55 $
- *  $Revision: 1.3 $
+ *  $Date: 2005/10/13 13:41:30 $
+ *  $Revision: 1.4 $
  *  \author G. Della Ricca
  *
  */
@@ -63,7 +63,11 @@ int main(int argc, char** argv) {
   mui->subscribe("EcalBarrel/STATUS");
   mui->subscribe("EcalBarrel/RUN");
   mui->subscribe("EcalBarrel/EVT");
-  mui->subscribe("EcalBarrel/EBMonitorEvent/EB*SM*");
+  mui->subscribe("EcalIntegrity/Gain/EI gain SM*");
+  mui->subscribe("EcalIntegrity/ChId/EI ChId SM*");
+  mui->subscribe("EcalIntegrity/TTId/EI TTId SM*");
+  mui->subscribe("EcalIntegrity/TTBlockSize/EI TTBlockSize SM*");
+  mui->subscribe("EcalIntegrity/DCC size error");
 
   bool stay_in_loop = true;
 
@@ -84,7 +88,11 @@ int main(int argc, char** argv) {
       mui->subscribeNew("EcalBarrel/STATUS");
       mui->subscribeNew("EcalBarrel/RUN");
       mui->subscribeNew("EcalBarrel/EVT");
-      mui->subscribeNew("EcalBarrel/EBMonitorEvent/EB*SM*");
+      mui->subscribeNew("EcalIntegrity/Gain/EI gain SM*");
+      mui->subscribeNew("EcalIntegrity/ChId/EI ChId SM*");
+      mui->subscribeNew("EcalIntegrity/TTId/EI TTId SM*");
+      mui->subscribeNew("EcalIntegrity/TTBlockSize/EI TTBlockSize SM*");
+      mui->subscribeNew("EcalIntegrity/DCC size error");
 
       // # of full monitoring cycles processed
       int updates = mui->getNumUpdates();
@@ -119,11 +127,11 @@ int main(int argc, char** argv) {
             cout << "event = " << evt.c_str() << endl;
           }
 
-          me = mui->get("Collector/FU0/EcalBarrel/EBMonitorEvent/EBMM event SM01");
+          me = mui->get("Collector/FU0/EcalIntegrity/DCC size error");
           if ( me ) {
             MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
             if ( ob ) {
-              TH2F* h = dynamic_cast<TH2F*> (ob->operator->());
+              TH1F* h = dynamic_cast<TH1F*> (ob->operator->());
               if ( h ) {
                 h->SetMaximum(4096.);
                 c1->cd();
@@ -134,7 +142,7 @@ int main(int argc, char** argv) {
             }
           }
 
-          me = mui->get("Collector/FU0/EcalBarrel/EBMonitorEvent/EBMM event SM02");
+          me = mui->get("Collector/FU0/EcalIntegrity/Gain/EI gain SM01");
           if ( me ) {
             MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
             if ( ob ) {
@@ -149,7 +157,7 @@ int main(int argc, char** argv) {
             }
           }
 
-          me = mui->get("Collector/FU0/EcalBarrel/EBMonitorEvent/EBMM event SM03");
+          me = mui->get("Collector/FU0/EcalIntegrity/ChId/EI ChId SM01");
           if ( me ) {
             MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
             if ( ob ) {
@@ -157,6 +165,36 @@ int main(int argc, char** argv) {
               if ( h ) {
                 h->SetMaximum(4096.);
                 c2->cd(2);
+                h->Draw("box");
+                c2->Modified();
+                c2->Update();
+              }
+            }
+          }
+
+          me = mui->get("Collector/FU0/EcalIntegrity/TTId/EI TTId SM01");
+          if ( me ) {
+            MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
+            if ( ob ) {
+              TH2F* h = dynamic_cast<TH2F*> (ob->operator->());
+              if ( h ) {
+                h->SetMaximum(4096.);
+                c2->cd(3);
+                h->Draw("box");
+                c2->Modified();
+                c2->Update();
+              }
+            }
+          }
+
+          me = mui->get("Collector/FU0/EcalIntegrity/TTBlockSize/EI TTBlockSize SM01");
+          if ( me ) {
+            MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
+            if ( ob ) {
+              TH2F* h = dynamic_cast<TH2F*> (ob->operator->());
+              if ( h ) {
+                h->SetMaximum(4096.);
+                c2->cd(4);
                 h->Draw("box");
                 c2->Modified();
                 c2->Update();
