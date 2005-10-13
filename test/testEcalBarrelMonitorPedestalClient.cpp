@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorPedestalClient.cpp
  *
- *  $Date: 2005/10/13 13:41:30 $
- *  $Revision: 1.4 $
+ *  $Date: 2005/10/13 14:33:16 $
+ *  $Revision: 1.5 $
  *  \author G. Della Ricca
  *
  */
@@ -35,11 +35,18 @@ int main(int argc, char** argv) {
   // default port #
   int port_no = 9090;
 
-  TCanvas* c1 = new TCanvas("Ecal Barrel Pedestal Monitoring","Ecal Barrel Pedestal Monitoring",200,10,600,480);
-  c1->Divide(2,2);
+  TCanvas* c1 = new TCanvas("Ecal Barrel Pedestal Monitoring G01","Ecal Barrel Pedestal Monitoring G01", 70,  0,500,400);
   c1->Draw();
   c1->Modified();
   c1->Update();
+  TCanvas* c2 = new TCanvas("Ecal Barrel Pedestal Monitoring G06","Ecal Barrel Pedestal Monitoring G06",600,  0,500,400);
+  c2->Draw();
+  c2->Modified();
+  c2->Update();
+  TCanvas* c3 = new TCanvas("Ecal Barrel Pedestal Monitoring G12","Ecal Barrel Pedestal Monitoring G12",600,450,500,400);
+  c3->Draw();
+  c3->Modified();
+  c3->Update();
 
   if(argc >= 2) cfuname = argv[1];
   if(argc >= 3) hostname = argv[2];
@@ -126,7 +133,7 @@ int main(int argc, char** argv) {
               TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
               if ( h ) {
                 h->SetMaximum(4096.);
-                c1->cd(1);
+                c1->cd();
                 h->Draw("box");
                 c1->Modified();
                 c1->Update();
@@ -141,10 +148,10 @@ int main(int argc, char** argv) {
               TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
               if ( h ) {
                 h->SetMaximum(4096.);
-                c1->cd(2);
+                c2->cd();
                 h->Draw("box");
-                c1->Modified();
-                c1->Update();
+                c2->Modified();
+                c2->Update();
               }
             }
           }
@@ -156,17 +163,13 @@ int main(int argc, char** argv) {
               TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
               if ( h ) {
                 h->SetMaximum(4096.);
-                c1->cd(3);
+                c3->cd();
                 h->Draw("box");
-                c1->Modified();
-                c1->Update();
+                c3->Modified();
+                c3->Update();
               }
             }
           }
-
-          c1->cd();
-          c1->Modified();
-          c1->Update();
 
           last_plotting = updates;
         }
