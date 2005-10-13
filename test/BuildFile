@@ -3,3 +3,16 @@
  <use name=DQMServices/UI>
  <use name=root>
 </bin>
+
+<bin file=testEcalBarrelMonitorIntegrity.cpp>
+ <use name=DQMServices/NodeROOT>
+ <use name=DQMServices/UI>
+ <use name=root>
+</bin>
+
+<bin file=testEcalBarrelMonitorPedestal.cpp>
+ <use name=DQMServices/NodeROOT>
+ <use name=DQMServices/UI>
+ <use name=root>
+</bin>
+
