@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorClient.cpp
  *
- *  $Date: 2005/10/12 15:36:19 $
- *  $Revision: 1.8 $
+ *  $Date: 2005/10/12 15:47:07 $
+ *  $Revision: 1.9 $
  *  \author G. Della Ricca
  *
  */
@@ -21,7 +21,7 @@ using namespace std;
 
 int main(int argc, char** argv) {
   cout << endl;
-  cout << " *** Ecal Barrel Monitor Client ***" << endl;
+  cout << " *** Ecal Barrel Generic Monitor Client ***" << endl;
   cout << endl;
 
   TApplication app("app",&argc,argv);
@@ -35,7 +35,7 @@ int main(int argc, char** argv) {
   // default port #
   int port_no = 9090;
 
-  TCanvas* c1 = new TCanvas("Ecal Barrel Monitoring","Ecal Barrel Monitoring",200,10,600,480);
+  TCanvas* c1 = new TCanvas("Ecal Barrel Generic Monitoring","Ecal Barrel Generic Monitoring",200,10,600,480);
   c1->Draw();
   c1->Modified();
   c1->Update();

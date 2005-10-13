@@ -4,13 +4,13 @@
  <use name=root>
 </bin>
 
-<bin file=testEcalBarrelMonitorIntegrity.cpp>
+<bin file=testEcalBarrelMonitorIntegrityClient.cpp>
  <use name=DQMServices/NodeROOT>
  <use name=DQMServices/UI>
  <use name=root>
 </bin>
 
-<bin file=testEcalBarrelMonitorPedestal.cpp>
+<bin file=testEcalBarrelMonitorPedestalClient.cpp>
  <use name=DQMServices/NodeROOT>
  <use name=DQMServices/UI>
  <use name=root>

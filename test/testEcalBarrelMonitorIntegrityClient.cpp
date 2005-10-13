@@ -1,8 +1,8 @@
 /*
- * \file EcalBarrelMonitorClient.cpp
+ * \file EcalBarrelMonitorIntegrityClient.cpp
  *
- *  $Date: 2005/10/12 15:47:07 $
- *  $Revision: 1.9 $
+ *  $Date: 2005/10/13 07:21:39 $
+ *  $Revision: 1.1 $
  *  \author G. Della Ricca
  *
  */
@@ -35,10 +35,15 @@ int main(int argc, char** argv) {
   // default port #
   int port_no = 9090;
 
-  TCanvas* c1 = new TCanvas("Ecal Barrel Integrity Monitoring","Ecal Barrel Integrity Monitoring",200,10,600,480);
+  TCanvas* c1 = new TCanvas("Ecal Barrel Integrity Monitoring 1","Ecal Barrel Integrity Monitoring 1", 10,10,550,480);
   c1->Draw();
   c1->Modified();
   c1->Update();
+  TCanvas* c2 = new TCanvas("Ecal Barrel Integrity Monitoring 2","Ecal Barrel Integrity Monitoring 2",600,10,550,480);
+  c2->Divide(2,2);
+  c2->Draw();
+  c2->Modified();
+  c2->Update();
 
   if(argc >= 2) cfuname = argv[1];
   if(argc >= 3) hostname = argv[2];
@@ -57,7 +62,7 @@ int main(int argc, char** argv) {
   // subscribe to all monitorable matching pattern
   mui->subscribe("EcalBarrel/RUN");
   mui->subscribe("EcalBarrel/EVT");
-  mui->subscribe("EcalBarrel/EBMonitorEvent/EB*SM01*");
+  mui->subscribe("EcalBarrel/EBMonitorEvent/EB*SM*");
 
   bool stay_in_loop = true;
 
@@ -77,7 +82,7 @@ int main(int argc, char** argv) {
       // subscribe to new monitorable matching pattern
       mui->subscribeNew("EcalBarrel/RUN");
       mui->subscribeNew("EcalBarrel/EVT");
-      mui->subscribeNew("EcalBarrel/EBMonitorEvent/EB*SM01*");
+      mui->subscribeNew("EcalBarrel/EBMonitorEvent/EB*SM*");
 
       // # of full monitoring cycles processed
       int updates = mui->getNumUpdates();
@@ -99,9 +104,40 @@ int main(int argc, char** argv) {
               TH2F* h = dynamic_cast<TH2F*> (ob->operator->());
               if ( h ) {
                 h->SetMaximum(4096.);
+                c1->cd();
                 h->Draw("box");
                 c1->Modified();
                 c1->Update();
+              }
+            }
+          }
+
+          me = mui->get("Collector/FU0/EcalBarrel/EBMonitorEvent/EBMM event SM02");
+          if ( me ) {
+            MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
+            if ( ob ) {
+              TH2F* h = dynamic_cast<TH2F*> (ob->operator->());
+              if ( h ) {
+                h->SetMaximum(4096.);
+                c2->cd(1);
+                h->Draw("box");
+                c2->Modified();
+                c2->Update();
+              }
+            }
+          }
+
+          me = mui->get("Collector/FU0/EcalBarrel/EBMonitorEvent/EBMM event SM03");
+          if ( me ) {
+            MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
+            if ( ob ) {
+              TH2F* h = dynamic_cast<TH2F*> (ob->operator->());
+              if ( h ) {
+                h->SetMaximum(4096.);
+                c2->cd(2);
+                h->Draw("box");
+                c2->Modified();
+                c2->Update();
               }
             }
           }
