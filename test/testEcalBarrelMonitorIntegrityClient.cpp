@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorIntegrityClient.cpp
  *
- *  $Date: 2005/10/13 13:41:30 $
- *  $Revision: 1.4 $
+ *  $Date: 2005/10/13 14:21:07 $
+ *  $Revision: 1.5 $
  *  \author G. Della Ricca
  *
  */
@@ -110,7 +110,7 @@ int main(int argc, char** argv) {
             if ( s.substr(2,1) == "1" ) status = "running";
             if ( s.substr(2,1) == "2" ) status = "end-of-run";
             cout << "status = " << status << endl;
-            if ( status == "end-of-run" ) stay_in_loop = false;
+//            if ( status == "end-of-run" ) stay_in_loop = false;
           }
 
           me = mui->get("Collector/FU0/EcalBarrel/RUN");
