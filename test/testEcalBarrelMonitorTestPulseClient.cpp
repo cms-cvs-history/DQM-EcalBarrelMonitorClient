@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorTest PulseClient.cpp
  *
- *  $Date: 2005/10/13 15:10:08 $
- *  $Revision: 1.6 $
+ *  $Date: 2005/10/13 15:20:33 $
+ *  $Revision: 1.1 $
  *  \author G. Della Ricca
  *
  */
@@ -165,6 +165,10 @@ int main(int argc, char** argv) {
             }
           }
 
+          c1->cd();
+          c1->Modified();
+          c1->Update();
+
           me = mui->get("Collector/FU0/EcalBarrel/EBTestPulseTask/Gain06/EBTT shape SM01 G06");
           if ( me ) {
             MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
@@ -195,6 +199,10 @@ int main(int argc, char** argv) {
             }
           }
 
+          c2->cd();
+          c2->Modified();
+          c2->Update();
+
           me = mui->get("Collector/FU0/EcalBarrel/EBTestPulseTask/Gain12/EBTT shape SM01 G12");
           if ( me ) {
             MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
@@ -224,6 +232,10 @@ int main(int argc, char** argv) {
               }
             }
           }
+
+          c3->cd();
+          c3->Modified();
+          c3->Update();
 
           last_plotting = updates;
         }
