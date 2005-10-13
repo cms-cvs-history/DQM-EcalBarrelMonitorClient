@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorPedestalClient.cpp
  *
- *  $Date: 2005/10/13 14:33:16 $
- *  $Revision: 1.5 $
+ *  $Date: 2005/10/13 15:10:08 $
+ *  $Revision: 1.6 $
  *  \author G. Della Ricca
  *
  */
@@ -134,7 +134,7 @@ int main(int argc, char** argv) {
               if ( h ) {
                 h->SetMaximum(4096.);
                 c1->cd();
-                h->Draw("box");
+                h->Draw("col");
                 c1->Modified();
                 c1->Update();
               }
@@ -149,7 +149,7 @@ int main(int argc, char** argv) {
               if ( h ) {
                 h->SetMaximum(4096.);
                 c2->cd();
-                h->Draw("box");
+                h->Draw("col");
                 c2->Modified();
                 c2->Update();
               }
@@ -164,7 +164,7 @@ int main(int argc, char** argv) {
               if ( h ) {
                 h->SetMaximum(4096.);
                 c3->cd();
-                h->Draw("box");
+                h->Draw("col");
                 c3->Modified();
                 c3->Update();
               }

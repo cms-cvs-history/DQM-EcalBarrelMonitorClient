@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorTest PulseClient.cpp
  *
- *  $Date: 2005/10/13 15:20:33 $
- *  $Revision: 1.1 $
+ *  $Date: 2005/10/13 15:23:22 $
+ *  $Revision: 1.2 $
  *  \author G. Della Ricca
  *
  */
@@ -143,7 +143,7 @@ int main(int argc, char** argv) {
               if ( h ) {
                 h->SetMaximum(4096.);
                 c1->cd(1);
-                h->Draw("box");
+                h->Draw("col");
                 c1->Modified();
                 c1->Update();
               }
@@ -158,7 +158,7 @@ int main(int argc, char** argv) {
               if ( h ) {
                 h->SetMaximum(4096.);
                 c1->cd(2);
-                h->Draw("box");
+                h->Draw("col");
                 c1->Modified();
                 c1->Update();
               }
@@ -177,7 +177,7 @@ int main(int argc, char** argv) {
               if ( h ) {
                 h->SetMaximum(4096.);
                 c2->cd(1);
-                h->Draw("box");
+                h->Draw("col");
                 c2->Modified();
                 c2->Update();
               }
@@ -192,7 +192,7 @@ int main(int argc, char** argv) {
               if ( h ) {
                 h->SetMaximum(4096.);
                 c2->cd(2);
-                h->Draw("box");
+                h->Draw("col");
                 c2->Modified();
                 c2->Update();
               }
@@ -211,7 +211,7 @@ int main(int argc, char** argv) {
               if ( h ) {
                 h->SetMaximum(4096.);
                 c3->cd(1);
-                h->Draw("box");
+                h->Draw("col");
                 c3->Modified();
                 c3->Update();
               }
@@ -226,7 +226,7 @@ int main(int argc, char** argv) {
               if ( h ) {
                 h->SetMaximum(4096.);
                 c3->cd(2);
-                h->Draw("box");
+                h->Draw("col");
                 c3->Modified();
                 c3->Update();
               }
