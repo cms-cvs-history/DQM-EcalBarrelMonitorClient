@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorTest PulseClient.cpp
  *
- *  $Date: 2005/10/13 15:23:22 $
- *  $Revision: 1.2 $
+ *  $Date: 2005/10/13 15:42:03 $
+ *  $Revision: 1.3 $
  *  \author G. Della Ricca
  *
  */
@@ -141,7 +141,6 @@ int main(int argc, char** argv) {
             if ( ob ) {
               TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
               if ( h ) {
-                h->SetMaximum(4096.);
                 c1->cd(1);
                 h->Draw("col");
                 c1->Modified();
@@ -156,7 +155,6 @@ int main(int argc, char** argv) {
             if ( ob ) {
               TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
               if ( h ) {
-                h->SetMaximum(4096.);
                 c1->cd(2);
                 h->Draw("col");
                 c1->Modified();
@@ -175,7 +173,6 @@ int main(int argc, char** argv) {
             if ( ob ) {
               TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
               if ( h ) {
-                h->SetMaximum(4096.);
                 c2->cd(1);
                 h->Draw("col");
                 c2->Modified();
@@ -190,7 +187,6 @@ int main(int argc, char** argv) {
             if ( ob ) {
               TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
               if ( h ) {
-                h->SetMaximum(4096.);
                 c2->cd(2);
                 h->Draw("col");
                 c2->Modified();
@@ -209,7 +205,6 @@ int main(int argc, char** argv) {
             if ( ob ) {
               TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
               if ( h ) {
-                h->SetMaximum(4096.);
                 c3->cd(1);
                 h->Draw("col");
                 c3->Modified();
@@ -224,7 +219,6 @@ int main(int argc, char** argv) {
             if ( ob ) {
               TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
               if ( h ) {
-                h->SetMaximum(4096.);
                 c3->cd(2);
                 h->Draw("col");
                 c3->Modified();

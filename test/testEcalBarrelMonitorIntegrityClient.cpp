@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorIntegrityClient.cpp
  *
- *  $Date: 2005/10/13 14:33:16 $
- *  $Revision: 1.6 $
+ *  $Date: 2005/10/13 15:42:03 $
+ *  $Revision: 1.7 $
  *  \author G. Della Ricca
  *
  */
@@ -133,7 +133,6 @@ int main(int argc, char** argv) {
             if ( ob ) {
               TH1F* h = dynamic_cast<TH1F*> (ob->operator->());
               if ( h ) {
-                h->SetMaximum(4096.);
                 c1->cd();
                 h->Draw("text");
                 c1->Modified();
@@ -148,7 +147,6 @@ int main(int argc, char** argv) {
             if ( ob ) {
               TH2F* h = dynamic_cast<TH2F*> (ob->operator->());
               if ( h ) {
-                h->SetMaximum(4096.);
                 c2->cd(1);
                 h->Draw("text");
                 c2->Modified();
@@ -163,7 +161,6 @@ int main(int argc, char** argv) {
             if ( ob ) {
               TH2F* h = dynamic_cast<TH2F*> (ob->operator->());
               if ( h ) {
-                h->SetMaximum(4096.);
                 c2->cd(2);
                 h->Draw("text");
                 c2->Modified();
@@ -178,7 +175,6 @@ int main(int argc, char** argv) {
             if ( ob ) {
               TH2F* h = dynamic_cast<TH2F*> (ob->operator->());
               if ( h ) {
-                h->SetMaximum(4096.);
                 c2->cd(3);
                 h->Draw("text");
                 c2->Modified();
@@ -193,7 +189,6 @@ int main(int argc, char** argv) {
             if ( ob ) {
               TH2F* h = dynamic_cast<TH2F*> (ob->operator->());
               if ( h ) {
-                h->SetMaximum(4096.);
                 c2->cd(4);
                 h->Draw("text");
                 c2->Modified();
