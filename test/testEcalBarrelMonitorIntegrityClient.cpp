@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorIntegrityClient.cpp
  *
- *  $Date: 2005/10/13 07:56:43 $
- *  $Revision: 1.2 $
+ *  $Date: 2005/10/13 13:29:55 $
+ *  $Revision: 1.3 $
  *  \author G. Della Ricca
  *
  */
@@ -60,6 +60,7 @@ int main(int argc, char** argv) {
   mui->setReconnectDelay(5);
 
   // subscribe to all monitorable matching pattern
+  mui->subscribe("EcalBarrel/STATUS");
   mui->subscribe("EcalBarrel/RUN");
   mui->subscribe("EcalBarrel/EVT");
   mui->subscribe("EcalBarrel/EBMonitorEvent/EB*SM*");
@@ -80,6 +81,7 @@ int main(int argc, char** argv) {
       stay_in_loop = mui->update();
 
       // subscribe to new monitorable matching pattern
+      mui->subscribeNew("EcalBarrel/STATUS");
       mui->subscribeNew("EcalBarrel/RUN");
       mui->subscribeNew("EcalBarrel/EVT");
       mui->subscribeNew("EcalBarrel/EBMonitorEvent/EB*SM*");
@@ -92,9 +94,29 @@ int main(int argc, char** argv) {
 
           MonitorElement* me;
 
+          me = mui->get("Collector/FU0/EcalBarrel/STATUS");
+          if ( me ) {
+            string s = me->valueString();
+            string status = "unknown";
+            if ( s.substr(2,1) == "0" ) status = "start-of-run";
+            if ( s.substr(2,1) == "1" ) status = "running";
+            if ( s.substr(2,1) == "2" ) status = "end-of-run";
+            cout << "status = " << status << endl;
+            if ( status == "end-of-run" ) stay_in_loop = false;
+          }
+
+          me = mui->get("Collector/FU0/EcalBarrel/RUN");
+          if ( me ) {
+            string s = me->valueString();
+            string run = s.substr(2,s.length()-2);
+            cout << "run = " << run << endl;
+          }
+
           me = mui->get("Collector/FU0/EcalBarrel/EVT");
           if ( me ) {
-            cout << me->valueString() << endl;
+            string s = me->valueString();
+            string evt = s.substr(2,s.length()-2);
+            cout << "event = " << evt.c_str() << endl;
           }
 
           me = mui->get("Collector/FU0/EcalBarrel/EBMonitorEvent/EBMM event SM01");
