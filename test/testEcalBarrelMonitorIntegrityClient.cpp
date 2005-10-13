@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorIntegrityClient.cpp
  *
- *  $Date: 2005/10/13 07:21:39 $
- *  $Revision: 1.1 $
+ *  $Date: 2005/10/13 07:56:43 $
+ *  $Revision: 1.2 $
  *  \author G. Della Ricca
  *
  */
@@ -141,6 +141,10 @@ int main(int argc, char** argv) {
               }
             }
           }
+
+          c2->cd();
+          c2->Modified();
+          c2->Update();
 
           last_plotting = updates;
         }

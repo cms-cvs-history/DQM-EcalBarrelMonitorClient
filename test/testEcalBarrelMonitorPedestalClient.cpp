@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorPedestalClient.cpp
  *
- *  $Date: 2005/10/13 07:21:39 $
- *  $Revision: 1.1 $
+ *  $Date: 2005/10/13 07:56:43 $
+ *  $Revision: 1.2 $
  *  \author G. Della Ricca
  *
  */
@@ -36,6 +36,7 @@ int main(int argc, char** argv) {
   int port_no = 9090;
 
   TCanvas* c1 = new TCanvas("Ecal Barrel Pedestal Monitoring","Ecal Barrel Pedestal Monitoring",200,10,600,480);
+  c1->Divide(2,2);
   c1->Draw();
   c1->Modified();
   c1->Update();
@@ -57,7 +58,9 @@ int main(int argc, char** argv) {
   // subscribe to all monitorable matching pattern
   mui->subscribe("EcalBarrel/RUN");
   mui->subscribe("EcalBarrel/EVT");
-  mui->subscribe("EcalBarrel/EBMonitorEvent/EB*SM01*");
+  mui->subscribe("EcalBarrel/EBPedestalTask/Gain01/EBPT pedestal SM*");
+  mui->subscribe("EcalBarrel/EBPedestalTask/Gain06/EBPT pedestal SM*");
+  mui->subscribe("EcalBarrel/EBPedestalTask/Gain12/EBPT pedestal SM*");
 
   bool stay_in_loop = true;
 
@@ -75,9 +78,11 @@ int main(int argc, char** argv) {
       stay_in_loop = mui->update();
 
       // subscribe to new monitorable matching pattern
-      mui->subscribeNew("EcalBarrel/RUN");
+      mui->subscribeNew("EcalBarrel/RUN"); 
       mui->subscribeNew("EcalBarrel/EVT");
-      mui->subscribeNew("EcalBarrel/EBMonitorEvent/EB*SM01*");
+      mui->subscribeNew("EcalBarrel/EBPedestalTask/Gain01/EBPT pedestal SM*");
+      mui->subscribeNew("EcalBarrel/EBPedestalTask/Gain06/EBPT pedestal SM*");
+      mui->subscribeNew("EcalBarrel/EBPedestalTask/Gain12/EBPT pedestal SM*");
 
       // # of full monitoring cycles processed
       int updates = mui->getNumUpdates();
@@ -92,19 +97,54 @@ int main(int argc, char** argv) {
             cout << me->valueString() << endl;
           }
 
-          me = mui->get("Collector/FU0/EcalBarrel/EBMonitorEvent/EBMM event SM01");
+          me = mui->get("Collector/FU0/EcalBarrel/EBPedestalTask/Gain01/EBPT pedestal SM01 G01");
           if ( me ) {
             MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
             if ( ob ) {
-              TH2F* h = dynamic_cast<TH2F*> (ob->operator->());
+              TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
               if ( h ) {
                 h->SetMaximum(4096.);
+                c1->cd(1);
                 h->Draw("box");
                 c1->Modified();
                 c1->Update();
               }
             }
           }
+
+          me = mui->get("Collector/FU0/EcalBarrel/EBPedestalTask/Gain06/EBPT pedestal SM01 G06");
+          if ( me ) {
+            MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
+            if ( ob ) {
+              TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
+              if ( h ) {
+                h->SetMaximum(4096.);
+                c1->cd(2);
+                h->Draw("box");
+                c1->Modified();
+                c1->Update();
+              }
+            }
+          }
+
+          me = mui->get("Collector/FU0/EcalBarrel/EBPedestalTask/Gain12/EBPT pedestal SM01 G12");
+          if ( me ) {
+            MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
+            if ( ob ) {
+              TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
+              if ( h ) {
+                h->SetMaximum(4096.);
+                c1->cd(3);
+                h->Draw("box");
+                c1->Modified();
+                c1->Update();
+              }
+            }
+          }
+
+          c1->cd();
+          c1->Modified();
+          c1->Update();
 
           last_plotting = updates;
         }
