@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorCosmicClient.cpp
  *
- *  $Date: 2005/10/14 09:10:04 $
- *  $Revision: 1.1 $
+ *  $Date: 2005/10/14 09:12:11 $
+ *  $Revision: 1.2 $
  *  \author G. Della Ricca
  *
  */
@@ -63,7 +63,7 @@ int main(int argc, char** argv) {
   mui->subscribe("EcalBarrel/RUN");
   mui->subscribe("EcalBarrel/EVT");
   mui->subscribe("EcalBarrel/EBCosmicTask/Cut/EBCT amplitude (cut) SM*");
-  mui->subscribe("EcalBarrel/EBCosmicTask/Sel/EBCT amplitude (sel) SM*");
+  mui->subscribe("EcalBarrel/EBCosmicTask/Sel/EBCT amplitude [sel] SM*");
 
   bool stay_in_loop = true;
 
@@ -85,7 +85,7 @@ int main(int argc, char** argv) {
       mui->subscribeNew("EcalBarrel/RUN");
       mui->subscribeNew("EcalBarrel/EVT");
       mui->subscribeNew("EcalBarrel/EBCosmicTask/Cut/EBCT amplitude (cut) SM*");
-      mui->subscribeNew("EcalBarrel/EBCosmicTask/Sel/EBCT amplitude (sel) SM*");
+      mui->subscribeNew("EcalBarrel/EBCosmicTask/Sel/EBCT amplitude [sel] SM*");
 
       // # of full monitoring cycles processed
       int updates = mui->getNumUpdates();
@@ -134,7 +134,7 @@ int main(int argc, char** argv) {
             }
           }
 
-          me = mui->get("Collector/FU0/EcalBarrel/EBCosmicTask/Sel/EBCT amplitude (sel) SM01");
+          me = mui->get("Collector/FU0/EcalBarrel/EBCosmicTask/Sel/EBCT amplitude [sel] SM01");
           if ( me ) {
             MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
             if ( ob ) {
