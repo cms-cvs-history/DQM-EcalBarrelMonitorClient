@@ -1,8 +1,8 @@
 /*
- * \file EcalBarrelMonitorCosmicClient.cpp
+ * \file EcalBarrelMonitorLaserClient.cpp
  *
- *  $Date: 2005/10/14 09:10:04 $
- *  $Revision: 1.1 $
+ *  $Date: 2005/10/13 15:57:40 $
+ *  $Revision: 1.4 $
  *  \author G. Della Ricca
  *
  */
@@ -21,7 +21,7 @@ using namespace std;
 
 int main(int argc, char** argv) {
   cout << endl;
-  cout << " *** Ecal Barrel Monitor Cosmic ***" << endl;
+  cout << " *** Ecal Barrel Laser Monitor Client ***" << endl;
   cout << endl;
 
   TApplication app("app",&argc,argv);
@@ -35,11 +35,13 @@ int main(int argc, char** argv) {
   // default port #
   int port_no = 9090;
 
-  TCanvas* c1 = new TCanvas("Ecal Barrel Cosmic Monitoring 1","Ecal Barrel Cosmic Monitoring 1", 10,10,550,480);
+  TCanvas* c1 = new TCanvas("Ecal Barrel Laser Monitoring L1","Ecal Barrel Laser Monitoring L1", 70,  0,500,400);
+  c1->Divide(1,2);
   c1->Draw();
   c1->Modified();
   c1->Update();
-  TCanvas* c2 = new TCanvas("Ecal Barrel Cosmic Monitoring 2","Ecal Barrel Cosmic Monitoring 2",600,10,550,480);
+  TCanvas* c2 = new TCanvas("Ecal Barrel Laser Monitoring L2","Ecal Barrel Laser Monitoring L2",600,  0,500,400);
+  c2->Divide(1,2);
   c2->Draw();
   c2->Modified();
   c2->Update();
@@ -62,8 +64,10 @@ int main(int argc, char** argv) {
   mui->subscribe("EcalBarrel/STATUS");
   mui->subscribe("EcalBarrel/RUN");
   mui->subscribe("EcalBarrel/EVT");
-  mui->subscribe("EcalBarrel/EBCosmicTask/Cut/EBCT amplitude (cut) SM*");
-  mui->subscribe("EcalBarrel/EBCosmicTask/Sel/EBCT amplitude (sel) SM*");
+  mui->subscribe("EcalBarrel/EBLaserTask/Laser1/EBLT shape SM*");
+  mui->subscribe("EcalBarrel/EBLaserTask/Laser1/EBLT amplitude SM*");
+  mui->subscribe("EcalBarrel/EBLaserTask/Laser2/EBLT shape SM*");
+  mui->subscribe("EcalBarrel/EBLaserTask/Laser2/EBLT amplitude SM*");
 
   bool stay_in_loop = true;
 
@@ -82,10 +86,12 @@ int main(int argc, char** argv) {
 
       // subscribe to new monitorable matching pattern
       mui->subscribeNew("EcalBarrel/STATUS");
-      mui->subscribeNew("EcalBarrel/RUN");
+      mui->subscribeNew("EcalBarrel/RUN"); 
       mui->subscribeNew("EcalBarrel/EVT");
-      mui->subscribeNew("EcalBarrel/EBCosmicTask/Cut/EBCT amplitude (cut) SM*");
-      mui->subscribeNew("EcalBarrel/EBCosmicTask/Sel/EBCT amplitude (sel) SM*");
+      mui->subscribeNew("EcalBarrel/EBLaserTask/Laser1/EBLT shape SM*");
+      mui->subscribeNew("EcalBarrel/EBLaserTask/Laser1/EBLT amplitude SM*");
+      mui->subscribeNew("EcalBarrel/EBLaserTask/Laser2/EBLT shape SM*");
+      mui->subscribeNew("EcalBarrel/EBLaserTask/Laser2/EBLT amplitude SM*");
 
       // # of full monitoring cycles processed
       int updates = mui->getNumUpdates();
@@ -120,13 +126,13 @@ int main(int argc, char** argv) {
             cout << "event = " << evt.c_str() << endl;
           }
 
-          me = mui->get("Collector/FU0/EcalBarrel/EBCosmicTask/Cut/EBCT amplitude (cut) SM01");
+          me = mui->get("Collector/FU0/EcalBarrel/EBLaserTask/Laser1/EBLT shape SM01 L1");
           if ( me ) {
             MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
             if ( ob ) {
               TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
               if ( h ) {
-                c1->cd();
+                c1->cd(1);
                 h->Draw("col");
                 c1->Modified();
                 c1->Update();
@@ -134,19 +140,55 @@ int main(int argc, char** argv) {
             }
           }
 
-          me = mui->get("Collector/FU0/EcalBarrel/EBCosmicTask/Sel/EBCT amplitude (sel) SM01");
+          me = mui->get("Collector/FU0/EcalBarrel/EBLaserTask/Laser1/EBLT amplitude SM01 L1");
           if ( me ) {
             MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
             if ( ob ) {
               TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
               if ( h ) {
-                c2->cd();
+                c1->cd(2);
+                h->Draw("col");
+                c1->Modified();
+                c1->Update();
+              }
+            }
+          }
+
+          c1->cd();
+          c1->Modified();
+          c1->Update();
+
+          me = mui->get("Collector/FU0/EcalBarrel/EBLaserTask/Laser2/EBLT shape SM01 L2");
+          if ( me ) {
+            MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
+            if ( ob ) {
+              TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
+              if ( h ) {
+                c2->cd(1);
                 h->Draw("col");
                 c2->Modified();
                 c2->Update();
               }
             }
           }
+
+          me = mui->get("Collector/FU0/EcalBarrel/EBLaserTask/Laser2/EBLT amplitude SM01 L2");
+          if ( me ) {
+            MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
+            if ( ob ) {
+              TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
+              if ( h ) {
+                c2->cd(2);
+                h->Draw("col");
+                c2->Modified();
+                c2->Update();
+              }
+            }
+          }
+
+          c2->cd();
+          c2->Modified();
+          c2->Update();
 
           last_plotting = updates;
         }

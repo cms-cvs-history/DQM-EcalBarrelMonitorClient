@@ -1,8 +1,8 @@
 /*
- * \file EcalBarrelMonitorTest PulseClient.cpp
+ * \file EcalBarrelMonitorTestPulseClient.cpp
  *
- *  $Date: 2005/10/13 15:42:03 $
- *  $Revision: 1.3 $
+ *  $Date: 2005/10/13 15:57:40 $
+ *  $Revision: 1.4 $
  *  \author G. Della Ricca
  *
  */
