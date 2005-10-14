@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorCosmicClient.cpp
  *
- *  $Date: 2005/10/14 09:12:11 $
- *  $Revision: 1.2 $
+ *  $Date: 2005/10/14 09:21:50 $
+ *  $Revision: 1.3 $
  *  \author G. Della Ricca
  *
  */
@@ -21,7 +21,7 @@ using namespace std;
 
 int main(int argc, char** argv) {
   cout << endl;
-  cout << " *** Ecal Barrel Monitor Cosmic ***" << endl;
+  cout << " *** Ecal Barrel Monitor Cosmic Client ***" << endl;
   cout << endl;
 
   TApplication app("app",&argc,argv);
@@ -62,8 +62,8 @@ int main(int argc, char** argv) {
   mui->subscribe("EcalBarrel/STATUS");
   mui->subscribe("EcalBarrel/RUN");
   mui->subscribe("EcalBarrel/EVT");
-  mui->subscribe("EcalBarrel/EBCosmicTask/Cut/EBCT amplitude (cut) SM*");
-  mui->subscribe("EcalBarrel/EBCosmicTask/Sel/EBCT amplitude [sel] SM*");
+  mui->subscribe("EcalBarrel/EBCosmicTask/Cut/EBCT amplitude cut SM*");
+  mui->subscribe("EcalBarrel/EBCosmicTask/Sel/EBCT amplitude sel SM*");
 
   bool stay_in_loop = true;
 
@@ -84,8 +84,8 @@ int main(int argc, char** argv) {
       mui->subscribeNew("EcalBarrel/STATUS");
       mui->subscribeNew("EcalBarrel/RUN");
       mui->subscribeNew("EcalBarrel/EVT");
-      mui->subscribeNew("EcalBarrel/EBCosmicTask/Cut/EBCT amplitude (cut) SM*");
-      mui->subscribeNew("EcalBarrel/EBCosmicTask/Sel/EBCT amplitude [sel] SM*");
+      mui->subscribeNew("EcalBarrel/EBCosmicTask/Cut/EBCT amplitude cut SM*");
+      mui->subscribeNew("EcalBarrel/EBCosmicTask/Sel/EBCT amplitude sel SM*");
 
       // # of full monitoring cycles processed
       int updates = mui->getNumUpdates();
@@ -120,13 +120,14 @@ int main(int argc, char** argv) {
             cout << "event = " << evt.c_str() << endl;
           }
 
-          me = mui->get("Collector/FU0/EcalBarrel/EBCosmicTask/Cut/EBCT amplitude (cut) SM01");
+          me = mui->get("Collector/FU0/EcalBarrel/EBCosmicTask/Cut/EBCT amplitude cut SM01");
           if ( me ) {
             MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
             if ( ob ) {
               TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
               if ( h ) {
                 c1->cd();
+                h->SetMaximum(4096.);
                 h->Draw("col");
                 c1->Modified();
                 c1->Update();
@@ -134,13 +135,14 @@ int main(int argc, char** argv) {
             }
           }
 
-          me = mui->get("Collector/FU0/EcalBarrel/EBCosmicTask/Sel/EBCT amplitude [sel] SM01");
+          me = mui->get("Collector/FU0/EcalBarrel/EBCosmicTask/Sel/EBCT amplitude sel SM01");
           if ( me ) {
             MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
             if ( ob ) {
               TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
               if ( h ) {
                 c2->cd();
+                h->SetMaximum(4096.);
                 h->Draw("col");
                 c2->Modified();
                 c2->Update();

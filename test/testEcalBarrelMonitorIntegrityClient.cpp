@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorIntegrityClient.cpp
  *
- *  $Date: 2005/10/13 15:42:03 $
- *  $Revision: 1.7 $
+ *  $Date: 2005/10/13 15:57:40 $
+ *  $Revision: 1.8 $
  *  \author G. Della Ricca
  *
  */
@@ -21,7 +21,7 @@ using namespace std;
 
 int main(int argc, char** argv) {
   cout << endl;
-  cout << " *** Ecal Barrel Monitor Integrity ***" << endl;
+  cout << " *** Ecal Barrel Monitor Integrity Client ***" << endl;
   cout << endl;
 
   TApplication app("app",&argc,argv);
