@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorIntegrityClient.cpp
  *
- *  $Date: 2005/10/13 15:57:40 $
- *  $Revision: 1.8 $
+ *  $Date: 2005/10/14 18:29:49 $
+ *  $Revision: 1.9 $
  *  \author G. Della Ricca
  *
  */
@@ -79,141 +79,141 @@ int main(int argc, char** argv) {
 
   while ( stay_in_loop ) {
 
-      bool saveHistograms = false;
+    bool saveHistograms = false;
   
-      // this is the "main" loop where we receive monitoring
-      stay_in_loop = mui->update();
+    // this is the "main" loop where we receive monitoring
+    stay_in_loop = mui->update();
 
-      // subscribe to new monitorable matching pattern
-      mui->subscribeNew("EcalBarrel/STATUS");
-      mui->subscribeNew("EcalBarrel/RUN");
-      mui->subscribeNew("EcalBarrel/EVT");
-      mui->subscribeNew("EcalIntegrity/Gain/EI gain SM*");
-      mui->subscribeNew("EcalIntegrity/ChId/EI ChId SM*");
-      mui->subscribeNew("EcalIntegrity/TTId/EI TTId SM*");
-      mui->subscribeNew("EcalIntegrity/TTBlockSize/EI TTBlockSize SM*");
-      mui->subscribeNew("EcalIntegrity/DCC size error");
+    // subscribe to new monitorable matching pattern
+    mui->subscribeNew("EcalBarrel/STATUS");
+    mui->subscribeNew("EcalBarrel/RUN");
+    mui->subscribeNew("EcalBarrel/EVT");
+    mui->subscribeNew("EcalIntegrity/Gain/EI gain SM*");
+    mui->subscribeNew("EcalIntegrity/ChId/EI ChId SM*");
+    mui->subscribeNew("EcalIntegrity/TTId/EI TTId SM*");
+    mui->subscribeNew("EcalIntegrity/TTBlockSize/EI TTBlockSize SM*");
+    mui->subscribeNew("EcalIntegrity/DCC size error");
 
-      // # of full monitoring cycles processed
-      int updates = mui->getNumUpdates();
+    // # of full monitoring cycles processed
+    int updates = mui->getNumUpdates();
 
-      // draw monitoring objects every 2 monitoring cycles
-      if(updates % 2 == 0 && updates != last_plotting) {
+    MonitorElement* me;
 
-          MonitorElement* me;
+    me = mui->get("Collector/FU0/EcalBarrel/STATUS");
+    if ( me ) {
+      string s = me->valueString();
+      string status = "unknown";
+      if ( s.substr(2,1) == "0" ) status = "start-of-run";
+      if ( s.substr(2,1) == "1" ) status = "running";
+      if ( s.substr(2,1) == "2" ) status = "end-of-run";
+      cout << "status = " << status << endl;
+//      if ( status == "end-of-run" ) stay_in_loop = false;
+    }
 
-          me = mui->get("Collector/FU0/EcalBarrel/STATUS");
-          if ( me ) {
-            string s = me->valueString();
-            string status = "unknown";
-            if ( s.substr(2,1) == "0" ) status = "start-of-run";
-            if ( s.substr(2,1) == "1" ) status = "running";
-            if ( s.substr(2,1) == "2" ) status = "end-of-run";
-            cout << "status = " << status << endl;
-//            if ( status == "end-of-run" ) stay_in_loop = false;
+    me = mui->get("Collector/FU0/EcalBarrel/RUN");
+    if ( me ) {
+      string s = me->valueString();
+      string run = s.substr(2,s.length()-2);
+      cout << "run = " << run << endl;
+    }
+
+    me = mui->get("Collector/FU0/EcalBarrel/EVT");
+    if ( me ) {
+      string s = me->valueString();
+      string evt = s.substr(2,s.length()-2);
+      cout << "event = " << evt.c_str() << endl;
+    }
+
+    // draw monitoring objects every 2 monitoring cycles
+    if ( updates % 2 == 0 && updates != last_plotting ) {
+
+      me = mui->get("Collector/FU0/EcalIntegrity/DCC size error");
+      if ( me ) {
+        MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
+        if ( ob ) {
+          TH1F* h = dynamic_cast<TH1F*> (ob->operator->());
+          if ( h ) {
+            c1->cd();
+            h->Draw("text");
+            c1->Modified();
+            c1->Update();
           }
-
-          me = mui->get("Collector/FU0/EcalBarrel/RUN");
-          if ( me ) {
-            string s = me->valueString();
-            string run = s.substr(2,s.length()-2);
-            cout << "run = " << run << endl;
-          }
-
-          me = mui->get("Collector/FU0/EcalBarrel/EVT");
-          if ( me ) {
-            string s = me->valueString();
-            string evt = s.substr(2,s.length()-2);
-            cout << "event = " << evt.c_str() << endl;
-          }
-
-          me = mui->get("Collector/FU0/EcalIntegrity/DCC size error");
-          if ( me ) {
-            MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
-            if ( ob ) {
-              TH1F* h = dynamic_cast<TH1F*> (ob->operator->());
-              if ( h ) {
-                c1->cd();
-                h->Draw("text");
-                c1->Modified();
-                c1->Update();
-              }
-            }
-          }
-
-          me = mui->get("Collector/FU0/EcalIntegrity/Gain/EI gain SM01");
-          if ( me ) {
-            MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
-            if ( ob ) {
-              TH2F* h = dynamic_cast<TH2F*> (ob->operator->());
-              if ( h ) {
-                c2->cd(1);
-                h->Draw("text");
-                c2->Modified();
-                c2->Update();
-              }
-            }
-          }
-
-          me = mui->get("Collector/FU0/EcalIntegrity/ChId/EI ChId SM01");
-          if ( me ) {
-            MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
-            if ( ob ) {
-              TH2F* h = dynamic_cast<TH2F*> (ob->operator->());
-              if ( h ) {
-                c2->cd(2);
-                h->Draw("text");
-                c2->Modified();
-                c2->Update();
-              }
-            }
-          }
-
-          me = mui->get("Collector/FU0/EcalIntegrity/TTId/EI TTId SM01");
-          if ( me ) {
-            MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
-            if ( ob ) {
-              TH2F* h = dynamic_cast<TH2F*> (ob->operator->());
-              if ( h ) {
-                c2->cd(3);
-                h->Draw("text");
-                c2->Modified();
-                c2->Update();
-              }
-            }
-          }
-
-          me = mui->get("Collector/FU0/EcalIntegrity/TTBlockSize/EI TTBlockSize SM01");
-          if ( me ) {
-            MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
-            if ( ob ) {
-              TH2F* h = dynamic_cast<TH2F*> (ob->operator->());
-              if ( h ) {
-                c2->cd(4);
-                h->Draw("text");
-                c2->Modified();
-                c2->Update();
-              }
-            }
-          }
-
-          c2->cd();
-          c2->Modified();
-          c2->Update();
-
-          last_plotting = updates;
         }
-
-      // come here every 100 monitoring cycles, operate on Monitoring Elements
-      if( updates % 100 == 0 && updates != last_save ) {
-
-          saveHistograms = true;
-
-          last_save = updates;
       }
 
-      // save monitoring structure in root-file
-      if ( saveHistograms ) mui->save("EcalBarrelMonitorClient.root");
+      me = mui->get("Collector/FU0/EcalIntegrity/Gain/EI gain SM01");
+      if ( me ) {
+        MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
+        if ( ob ) {
+          TH2F* h = dynamic_cast<TH2F*> (ob->operator->());
+          if ( h ) {
+            c2->cd(1);
+            h->Draw("text");
+            c2->Modified();
+            c2->Update();
+          }
+        }
+      }
+
+      me = mui->get("Collector/FU0/EcalIntegrity/ChId/EI ChId SM01");
+      if ( me ) {
+        MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
+        if ( ob ) {
+          TH2F* h = dynamic_cast<TH2F*> (ob->operator->());
+          if ( h ) {
+            c2->cd(2);
+            h->Draw("text");
+            c2->Modified();
+            c2->Update();
+          }
+        }
+      }
+
+      me = mui->get("Collector/FU0/EcalIntegrity/TTId/EI TTId SM01");
+      if ( me ) {
+        MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
+        if ( ob ) {
+          TH2F* h = dynamic_cast<TH2F*> (ob->operator->());
+          if ( h ) {
+            c2->cd(3);
+            h->Draw("text");
+            c2->Modified();
+            c2->Update();
+          }
+        }
+      }
+
+      me = mui->get("Collector/FU0/EcalIntegrity/TTBlockSize/EI TTBlockSize SM01");
+      if ( me ) {
+        MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
+        if ( ob ) {
+          TH2F* h = dynamic_cast<TH2F*> (ob->operator->());
+          if ( h ) {
+            c2->cd(4);
+            h->Draw("text");
+            c2->Modified();
+            c2->Update();
+          }
+        }
+      }
+
+      c2->cd();
+      c2->Modified();
+      c2->Update();
+
+      last_plotting = updates;
+    }
+
+    // come here every 100 monitoring cycles, operate on Monitoring Elements
+    if ( updates % 100 == 0 && updates != last_save ) {
+
+      saveHistograms = true;
+
+      last_save = updates;
+    }
+
+    // save monitoring structure in root-file
+    if ( saveHistograms ) mui->save("EcalBarrelMonitorClient.root");
 
     }
 

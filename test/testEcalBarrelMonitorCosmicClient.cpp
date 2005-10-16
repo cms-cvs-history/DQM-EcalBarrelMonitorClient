@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorCosmicClient.cpp
  *
- *  $Date: 2005/10/15 15:58:55 $
- *  $Revision: 1.5 $
+ *  $Date: 2005/10/16 07:48:28 $
+ *  $Revision: 1.6 $
  *  \author G. Della Ricca
  *
  */
@@ -75,94 +75,94 @@ int main(int argc, char** argv) {
 
   while ( stay_in_loop ) {
 
-      bool saveHistograms = false;
+    bool saveHistograms = false;
   
-      // this is the "main" loop where we receive monitoring
-      stay_in_loop = mui->update();
+    // this is the "main" loop where we receive monitoring
+    stay_in_loop = mui->update();
 
-      // subscribe to new monitorable matching pattern
-      mui->subscribeNew("EcalBarrel/STATUS");
-      mui->subscribeNew("EcalBarrel/RUN");
-      mui->subscribeNew("EcalBarrel/EVT");
-      mui->subscribeNew("EcalBarrel/EBCosmicTask/Cut/EBCT amplitude cut SM*");
-      mui->subscribeNew("EcalBarrel/EBCosmicTask/Sel/EBCT amplitude sel SM*");
+    // subscribe to new monitorable matching pattern
+    mui->subscribeNew("EcalBarrel/STATUS");
+    mui->subscribeNew("EcalBarrel/RUN");
+    mui->subscribeNew("EcalBarrel/EVT");
+    mui->subscribeNew("EcalBarrel/EBCosmicTask/Cut/EBCT amplitude cut SM*");
+    mui->subscribeNew("EcalBarrel/EBCosmicTask/Sel/EBCT amplitude sel SM*");
 
-      // # of full monitoring cycles processed
-      int updates = mui->getNumUpdates();
+    // # of full monitoring cycles processed
+    int updates = mui->getNumUpdates();
 
-      // draw monitoring objects every 2 monitoring cycles
-      if(updates % 2 == 0 && updates != last_plotting) {
+    MonitorElement* me;
 
-          MonitorElement* me;
+    me = mui->get("Collector/FU0/EcalBarrel/STATUS");
+    if ( me ) {
+      string s = me->valueString();
+      string status = "unknown";
+      if ( s.substr(2,1) == "0" ) status = "start-of-run";
+      if ( s.substr(2,1) == "1" ) status = "running";
+      if ( s.substr(2,1) == "2" ) status = "end-of-run";
+      cout << "status = " << status << endl;
+//      if ( status == "end-of-run" ) stay_in_loop = false;
+    }
 
-          me = mui->get("Collector/FU0/EcalBarrel/STATUS");
-          if ( me ) {
-            string s = me->valueString();
-            string status = "unknown";
-            if ( s.substr(2,1) == "0" ) status = "start-of-run";
-            if ( s.substr(2,1) == "1" ) status = "running";
-            if ( s.substr(2,1) == "2" ) status = "end-of-run";
-            cout << "status = " << status << endl;
-//            if ( status == "end-of-run" ) stay_in_loop = false;
+    me = mui->get("Collector/FU0/EcalBarrel/RUN");
+     if ( me ) {
+      string s = me->valueString();
+      string run = s.substr(2,s.length()-2);
+      cout << "run = " << run << endl;
+    }
+
+    me = mui->get("Collector/FU0/EcalBarrel/EVT");
+    if ( me ) {
+      string s = me->valueString();
+      string evt = s.substr(2,s.length()-2);
+      cout << "event = " << evt.c_str() << endl;
+    }
+
+    // draw monitoring objects every 2 monitoring cycles
+    if ( updates % 2 == 0 && updates != last_plotting ) {
+
+      me = mui->get("Collector/FU0/EcalBarrel/EBCosmicTask/Cut/EBCT amplitude cut SM01");
+      if ( me ) {
+        MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
+        if ( ob ) {
+          TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
+          if ( h ) {
+//            h->SetMaximum(4096.);
+            c1->cd();
+            h->Draw("lego");
+            c1->Modified();
+            c1->Update();
           }
-
-          me = mui->get("Collector/FU0/EcalBarrel/RUN");
-          if ( me ) {
-            string s = me->valueString();
-            string run = s.substr(2,s.length()-2);
-            cout << "run = " << run << endl;
-          }
-
-          me = mui->get("Collector/FU0/EcalBarrel/EVT");
-          if ( me ) {
-            string s = me->valueString();
-            string evt = s.substr(2,s.length()-2);
-            cout << "event = " << evt.c_str() << endl;
-          }
-
-          me = mui->get("Collector/FU0/EcalBarrel/EBCosmicTask/Cut/EBCT amplitude cut SM01");
-          if ( me ) {
-            MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
-            if ( ob ) {
-              TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
-              if ( h ) {
-//                h->SetMaximum(4096.);
-                c1->cd();
-                h->Draw("col");
-                c1->Modified();
-                c1->Update();
-              }
-            }
-          }
-
-          me = mui->get("Collector/FU0/EcalBarrel/EBCosmicTask/Sel/EBCT amplitude sel SM01");
-          if ( me ) {
-            MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
-            if ( ob ) {
-              TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
-              if ( h ) {
-//                h->SetMaximum(4096.);
-                c2->cd();
-                h->Draw("col");
-                c2->Modified();
-                c2->Update();
-              }
-            }
-          }
-
-          last_plotting = updates;
         }
-
-      // come here every 100 monitoring cycles, operate on Monitoring Elements
-      if( updates % 100 == 0 && updates != last_save ) {
-
-          saveHistograms = true;
-
-          last_save = updates;
       }
 
-      // save monitoring structure in root-file
-      if ( saveHistograms ) mui->save("EcalBarrelMonitorClient.root");
+      me = mui->get("Collector/FU0/EcalBarrel/EBCosmicTask/Sel/EBCT amplitude sel SM01");
+      if ( me ) {
+        MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
+        if ( ob ) {
+          TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
+          if ( h ) {
+//            h->SetMaximum(4096.);
+            c2->cd();
+            h->Draw("lego");
+            c2->Modified();
+            c2->Update();
+          }
+        }
+      }
+
+      last_plotting = updates;
+    }
+
+    // come here every 100 monitoring cycles, operate on Monitoring Elements
+    if ( updates % 100 == 0 && updates != last_save ) {
+
+      saveHistograms = true;
+
+      last_save = updates;
+    }
+
+    // save monitoring structure in root-file
+    if ( saveHistograms ) mui->save("EcalBarrelMonitorClient.root");
 
     }
 
