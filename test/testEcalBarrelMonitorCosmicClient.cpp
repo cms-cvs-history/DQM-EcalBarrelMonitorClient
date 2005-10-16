@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorCosmicClient.cpp
  *
- *  $Date: 2005/10/14 18:29:49 $
- *  $Revision: 1.4 $
+ *  $Date: 2005/10/15 15:58:55 $
+ *  $Revision: 1.5 $
  *  \author G. Della Ricca
  *
  */
@@ -126,7 +126,7 @@ int main(int argc, char** argv) {
             if ( ob ) {
               TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
               if ( h ) {
-                h->SetMaximum(4096.);
+//                h->SetMaximum(4096.);
                 c1->cd();
                 h->Draw("col");
                 c1->Modified();
@@ -141,7 +141,7 @@ int main(int argc, char** argv) {
             if ( ob ) {
               TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
               if ( h ) {
-                h->SetMaximum(4096.);
+//                h->SetMaximum(4096.);
                 c2->cd();
                 h->Draw("col");
                 c2->Modified();
