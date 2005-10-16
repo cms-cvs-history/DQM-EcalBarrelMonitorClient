@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorPedestalClient.cpp
  *
- *  $Date: 2005/10/13 15:42:03 $
- *  $Revision: 1.7 $
+ *  $Date: 2005/10/16 13:23:40 $
+ *  $Revision: 1.8 $
  *  \author G. Della Ricca
  *
  */
@@ -11,7 +11,6 @@
 #include "DQMServices/UI/interface/MonitorUIRoot.h"
 
 #include "TROOT.h"
-#include "TH2D.h"
 #include "TApplication.h"
 
 #include <iostream>
