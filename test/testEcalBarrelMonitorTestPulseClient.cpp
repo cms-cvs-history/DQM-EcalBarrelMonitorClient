@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorTestPulseClient.cpp
  *
- *  $Date: 2005/10/16 13:23:40 $
- *  $Revision: 1.6 $
+ *  $Date: 2005/10/16 13:44:55 $
+ *  $Revision: 1.7 $
  *  \author G. Della Ricca
  *
  */
@@ -106,33 +106,33 @@ int main(int argc, char** argv) {
 
     MonitorElement* me;
 
-    me = mui->get("Collector/FU0/EcalBarrel/STATUS");
-    if ( me ) {
-      string s = me->valueString();
-      string status = "unknown";
-      if ( s.substr(2,1) == "0" ) status = "start-of-run";
-      if ( s.substr(2,1) == "1" ) status = "running";
-      if ( s.substr(2,1) == "2" ) status = "end-of-run";
-      cout << "status = " << status << endl;
-//      if ( status == "end-of-run" ) stay_in_loop = false;
-    }
-
-    me = mui->get("Collector/FU0/EcalBarrel/RUN");
-    if ( me ) {
-      string s = me->valueString();
-      string run = s.substr(2,s.length()-2);
-      cout << "run = " << run << endl;
-    }
-
-    me = mui->get("Collector/FU0/EcalBarrel/EVT");
-    if ( me ) {
-      string s = me->valueString();
-      string evt = s.substr(2,s.length()-2);
-      cout << "event = " << evt.c_str() << endl;
-    }
-
     // draw monitoring objects every 2 monitoring cycles
     if ( updates % 2 == 0 && updates != last_plotting ) {
+
+      me = mui->get("Collector/FU0/EcalBarrel/STATUS");
+      if ( me ) {
+        string s = me->valueString();
+        string status = "unknown";
+        if ( s.substr(2,1) == "0" ) status = "start-of-run";
+        if ( s.substr(2,1) == "1" ) status = "running";
+        if ( s.substr(2,1) == "2" ) status = "end-of-run";
+        cout << "status = " << status << endl;
+//        if ( status == "end-of-run" ) stay_in_loop = false;
+      }
+
+      me = mui->get("Collector/FU0/EcalBarrel/RUN");
+      if ( me ) {
+        string s = me->valueString();
+        string run = s.substr(2,s.length()-2);
+        cout << "run = " << run << endl;
+      }
+
+      me = mui->get("Collector/FU0/EcalBarrel/EVT");
+      if ( me ) {
+        string s = me->valueString();
+        string evt = s.substr(2,s.length()-2);
+        cout << "event = " << evt.c_str() << endl;
+      }
 
       me = mui->get("Collector/FU0/EcalBarrel/EBTestPulseTask/Gain01/EBTT shape SM01 G01");
       if ( me ) {
