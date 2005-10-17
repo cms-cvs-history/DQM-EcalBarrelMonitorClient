@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorPedestalClient.cpp
  *
- *  $Date: 2005/10/17 11:00:19 $
- *  $Revision: 1.12 $
+ *  $Date: 2005/10/17 13:07:39 $
+ *  $Revision: 1.13 $
  *  \author G. Della Ricca
  *
  */
@@ -66,7 +66,7 @@ void *mhs1(void *) {
         if ( s.substr(2,1) == "1" ) status = "running";
         if ( s.substr(2,1) == "2" ) status = "end-of-run";
         cout << "status = " << status << endl;
-//        if ( status == "end-of-run" ) stay_in_loop = false;
+        if ( status == "end-of-run" ) mui->save("EcalBarrelMonitorClient.root");
       }
 
       me = mui->get("Collector/FU0/EcalBarrel/RUN");
