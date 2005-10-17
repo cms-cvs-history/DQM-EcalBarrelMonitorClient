@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorClient.cpp
  *
- *  $Date: 2005/10/16 13:56:33 $
- *  $Revision: 1.15 $
+ *  $Date: 2005/10/17 10:01:07 $
+ *  $Revision: 1.16 $
  *  \author G. Della Ricca
  *
  */
@@ -25,8 +25,6 @@ MonitorUserInterface* mui;
 
 void *mhs1(void *) {
 
-//  TThread::Printf("Start of mhs1");
-
   bool stay_in_loop = true;
 
   // last time monitoring objects were plotted
@@ -43,10 +41,10 @@ void *mhs1(void *) {
     stay_in_loop = mui->update();
 
     // subscribe to new monitorable matching pattern
-    mui->subscribeNew("EcalBarrel/STATUS");
-    mui->subscribeNew("EcalBarrel/RUN");
-    mui->subscribeNew("EcalBarrel/EVT");
-    mui->subscribeNew("EcalBarrel/EBMonitorEvent/EBMM event SM*");
+    mui->subscribeNew("*/EcalBarrel/STATUS");
+    mui->subscribeNew("*/EcalBarrel/RUN");
+    mui->subscribeNew("*/EcalBarrel/EVT");
+    mui->subscribeNew("*/EcalBarrel/EBMonitorEvent/EBMM event SM*");
 
     // # of full monitoring cycles processed
     int updates = mui->getNumUpdates();
@@ -109,12 +107,8 @@ void *mhs1(void *) {
     // save monitoring structure in root-file
     if ( saveHistograms ) mui->save("EcalBarrelMonitorClient.root");
 
-    gSystem->Sleep(1);
+    TThread::CancelPoint();
   }
-
-  mui->save("EcalBarrelMonitorClient.root");
-
-//  TThread::Printf("End of mhs1\n");
 
   c1->Modified();
   c1->Update();
@@ -158,10 +152,10 @@ int main(int argc, char** argv) {
   mui->setReconnectDelay(5);
 
   // subscribe to all monitorable matching pattern
-  mui->subscribe("EcalBarrel/STATUS");
-  mui->subscribe("EcalBarrel/RUN");
-  mui->subscribe("EcalBarrel/EVT");
-  mui->subscribe("EcalBarrel/EBMonitorEvent/EBMM event SM*");
+  mui->subscribe("*/EcalBarrel/STATUS");
+  mui->subscribe("*/EcalBarrel/RUN");
+  mui->subscribe("*/EcalBarrel/EVT");
+  mui->subscribe("*/EcalBarrel/EBMonitorEvent/EBMM event SM*");
 
   TThread *th1 = new TThread("th1",mhs1);
 
@@ -169,9 +163,11 @@ int main(int argc, char** argv) {
 
   app.Run(kTRUE);
 
-  th1->SetCancelAsynchronous();
+  th1->SetCancelDeferred();
 
   th1->Kill();
+
+  gSystem->Sleep(1000);
 
   delete mui;
 

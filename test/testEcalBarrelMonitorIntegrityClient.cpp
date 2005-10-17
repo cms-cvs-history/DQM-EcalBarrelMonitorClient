@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorIntegrityClient.cpp
  *
- *  $Date: 2005/10/16 13:56:33 $
- *  $Revision: 1.12 $
+ *  $Date: 2005/10/17 10:01:07 $
+ *  $Revision: 1.13 $
  *  \author G. Della Ricca
  *
  */
@@ -26,8 +26,6 @@ MonitorUserInterface* mui;
 
 void *mhs1(void *) {
 
-//  TThread::Printf("Start of mhs1");
-
   bool stay_in_loop = true;
 
   // last time monitoring objects were plotted
@@ -44,14 +42,14 @@ void *mhs1(void *) {
     stay_in_loop = mui->update();
 
     // subscribe to new monitorable matching pattern
-    mui->subscribeNew("EcalBarrel/STATUS");
-    mui->subscribeNew("EcalBarrel/RUN");
-    mui->subscribeNew("EcalBarrel/EVT");
-    mui->subscribeNew("EcalIntegrity/Gain/EI gain SM*");
-    mui->subscribeNew("EcalIntegrity/ChId/EI ChId SM*");
-    mui->subscribeNew("EcalIntegrity/TTId/EI TTId SM*");
-    mui->subscribeNew("EcalIntegrity/TTBlockSize/EI TTBlockSize SM*");
-    mui->subscribeNew("EcalIntegrity/DCC size error");
+    mui->subscribeNew("*/EcalBarrel/STATUS");
+    mui->subscribeNew("*/EcalBarrel/RUN");
+    mui->subscribeNew("*/EcalBarrel/EVT");
+    mui->subscribeNew("*/EcalIntegrity/Gain/EI gain SM*");
+    mui->subscribeNew("*/EcalIntegrity/ChId/EI ChId SM*");
+    mui->subscribeNew("*/EcalIntegrity/TTId/EI TTId SM*");
+    mui->subscribeNew("*/EcalIntegrity/TTBlockSize/EI TTBlockSize SM*");
+    mui->subscribeNew("*/EcalIntegrity/DCC size error");
 
     // # of full monitoring cycles processed
     int updates = mui->getNumUpdates();
@@ -174,12 +172,8 @@ void *mhs1(void *) {
     // save monitoring structure in root-file
     if ( saveHistograms ) mui->save("EcalBarrelMonitorClient.root");
 
-    gSystem->Sleep(1);
+    TThread::CancelPoint();
   }
-
-  mui->save("EcalBarrelMonitorClient.root");
-
-//  TThread::Printf("End of mhs1\n");
 
   c1->Modified();
   c1->Update(); 
@@ -230,14 +224,14 @@ int main(int argc, char** argv) {
   mui->setReconnectDelay(5);
 
   // subscribe to all monitorable matching pattern
-  mui->subscribe("EcalBarrel/STATUS");
-  mui->subscribe("EcalBarrel/RUN");
-  mui->subscribe("EcalBarrel/EVT");
-  mui->subscribe("EcalIntegrity/Gain/EI gain SM*");
-  mui->subscribe("EcalIntegrity/ChId/EI ChId SM*");
-  mui->subscribe("EcalIntegrity/TTId/EI TTId SM*");
-  mui->subscribe("EcalIntegrity/TTBlockSize/EI TTBlockSize SM*");
-  mui->subscribe("EcalIntegrity/DCC size error");
+  mui->subscribe("*/EcalBarrel/STATUS");
+  mui->subscribe("*/EcalBarrel/RUN");
+  mui->subscribe("*/EcalBarrel/EVT");
+  mui->subscribe("*/EcalIntegrity/Gain/EI gain SM*");
+  mui->subscribe("*/EcalIntegrity/ChId/EI ChId SM*");
+  mui->subscribe("*/EcalIntegrity/TTId/EI TTId SM*");
+  mui->subscribe("*/EcalIntegrity/TTBlockSize/EI TTBlockSize SM*");
+  mui->subscribe("*/EcalIntegrity/DCC size error");
 
   TThread *th1 = new TThread("th1",mhs1);
 
@@ -245,9 +239,11 @@ int main(int argc, char** argv) {
 
   app.Run(kTRUE);
 
-  th1->SetCancelAsynchronous();
+  th1->SetCancelDeferred();
 
   th1->Kill();
+
+  gSystem->Sleep(1000);
 
   delete mui;
 
