@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorTestPulseClient.cpp
  *
- *  $Date: 2005/10/17 10:01:07 $
- *  $Revision: 1.9 $
+ *  $Date: 2005/10/17 11:00:20 $
+ *  $Revision: 1.10 $
  *  \author G. Della Ricca
  *
  */
@@ -93,7 +93,8 @@ void *mhs1(void *) {
           TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
           if ( h ) {
             c1->cd(1);
-            h->Draw("col");
+            h->SetOption("col");
+            h->Draw();
             c1->Modified();
             c1->Update();
           }
@@ -107,7 +108,8 @@ void *mhs1(void *) {
           TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
           if ( h ) {
             c1->cd(2);
-            h->Draw("col");
+            h->SetOption("col");
+            h->Draw();
             c1->Modified();
             c1->Update();
           }
@@ -125,7 +127,8 @@ void *mhs1(void *) {
           TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
           if ( h ) {
             c2->cd(1);
-            h->Draw("col");
+            h->SetOption("col");
+            h->Draw();
             c2->Modified();
             c2->Update();
           }
@@ -139,7 +142,8 @@ void *mhs1(void *) {
           TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
           if ( h ) {
             c2->cd(2);
-            h->Draw("col");
+            h->SetOption("col");
+            h->Draw();
             c2->Modified();
             c2->Update();
           }
@@ -157,7 +161,8 @@ void *mhs1(void *) {
           TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
           if ( h ) {
             c3->cd(1);
-            h->Draw("col");
+            h->SetOption("col");
+            h->Draw();
             c3->Modified();
             c3->Update();
           }
@@ -171,7 +176,8 @@ void *mhs1(void *) {
           TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
           if ( h ) {
             c3->cd(2);
-            h->Draw("col");
+            h->SetOption("col");
+            h->Draw();
             c3->Modified();
             c3->Update();
           }

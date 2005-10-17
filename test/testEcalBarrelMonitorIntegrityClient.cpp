@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorIntegrityClient.cpp
  *
- *  $Date: 2005/10/17 10:01:07 $
- *  $Revision: 1.13 $
+ *  $Date: 2005/10/17 11:00:19 $
+ *  $Revision: 1.14 $
  *  \author G. Della Ricca
  *
  */
@@ -91,7 +91,8 @@ void *mhs1(void *) {
           TH1F* h = dynamic_cast<TH1F*> (ob->operator->());
           if ( h ) {
             c1->cd();
-            h->Draw("text");
+            h->SetOption("text");
+            h->Draw();
             c1->Modified();
             c1->Update();
           }
@@ -105,7 +106,8 @@ void *mhs1(void *) {
           TH2F* h = dynamic_cast<TH2F*> (ob->operator->());
           if ( h ) {
             c2->cd(1);
-            h->Draw("text");
+            h->SetOption("text");
+            h->Draw();
             c2->Modified();
             c2->Update();
           }
@@ -119,7 +121,8 @@ void *mhs1(void *) {
           TH2F* h = dynamic_cast<TH2F*> (ob->operator->());
           if ( h ) {
             c2->cd(2);
-            h->Draw("text");
+            h->SetOption("text");
+            h->Draw();
             c2->Modified();
             c2->Update();
           }
@@ -133,7 +136,8 @@ void *mhs1(void *) {
           TH2F* h = dynamic_cast<TH2F*> (ob->operator->());
           if ( h ) {
             c2->cd(3);
-            h->Draw("text");
+            h->SetOption("text");
+            h->Draw();
             c2->Modified();
             c2->Update();
           }
@@ -147,7 +151,8 @@ void *mhs1(void *) {
           TH2F* h = dynamic_cast<TH2F*> (ob->operator->());
           if ( h ) {
             c2->cd(4);
-            h->Draw("text");
+            h->SetOption("text");
+            h->Draw();
             c2->Modified();
             c2->Update();
           }

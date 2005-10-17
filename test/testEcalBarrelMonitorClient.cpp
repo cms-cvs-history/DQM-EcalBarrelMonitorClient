@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorClient.cpp
  *
- *  $Date: 2005/10/17 11:00:19 $
- *  $Revision: 1.17 $
+ *  $Date: 2005/10/17 13:07:39 $
+ *  $Revision: 1.18 $
  *  \author G. Della Ricca
  *
  */
@@ -87,7 +87,7 @@ void *mhs1(void *) {
           if ( h ) {
             c1->cd();
             h->SetMaximum(4096.);
-            h->SetOption("box);
+            h->SetOption("box");
             h->Draw();
             c1->Modified();
             c1->Update();

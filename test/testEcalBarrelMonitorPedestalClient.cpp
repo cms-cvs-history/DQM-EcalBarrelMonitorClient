@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorPedestalClient.cpp
  *
- *  $Date: 2005/10/17 10:01:07 $
- *  $Revision: 1.11 $
+ *  $Date: 2005/10/17 11:00:19 $
+ *  $Revision: 1.12 $
  *  \author G. Della Ricca
  *
  */
@@ -89,9 +89,10 @@ void *mhs1(void *) {
         if ( ob ) {
           TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
           if ( h ) {
-            h->SetMaximum(4096.);
             c1->cd();
-            h->Draw("col");
+            h->SetMaximum(4096.);
+            h->SetOption("col");
+            h->Draw();
             c1->Modified();
             c1->Update();
           }
@@ -104,9 +105,10 @@ void *mhs1(void *) {
         if ( ob ) {
           TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
           if ( h ) {
-            h->SetMaximum(4096.);
             c2->cd();
-            h->Draw("col");
+            h->SetMaximum(4096.);
+            h->SetOption("col");
+            h->Draw();
             c2->Modified();
             c2->Update();
           }
@@ -119,9 +121,10 @@ void *mhs1(void *) {
         if ( ob ) {
           TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
           if ( h ) {
-            h->SetMaximum(4096.);
             c3->cd();
-            h->Draw("col");
+            h->SetMaximum(4096.);
+            h->SetOption("col");
+            h->Draw();
             c3->Modified();
             c3->Update();
           }
