@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorPedestalClient.cpp
  *
- *  $Date: 2005/10/16 13:44:55 $
- *  $Revision: 1.9 $
+ *  $Date: 2005/10/16 13:56:33 $
+ *  $Revision: 1.10 $
  *  \author G. Della Ricca
  *
  */
@@ -12,62 +12,22 @@
 
 #include "TROOT.h"
 #include "TApplication.h"
+#include "TThread.h"
 
 #include <iostream>
 #include <math.h>
 
 using namespace std;
 
-int main(int argc, char** argv) {
-  cout << endl;
-  cout << " *** Ecal Barrel Pedestal Monitor Client ***" << endl;
-  cout << endl;
+TCanvas* c1;
+TCanvas* c2;
+TCanvas* c3;
 
-  TApplication app("app",&argc,argv);
+MonitorUserInterface* mui;
 
-  // default client name
-  string cfuname = "User0";
+void *mhs1(void *) {
 
-  // default collector host name
-  string hostname = "localhost";
-
-  // default port #
-  int port_no = 9090;
-
-  TCanvas* c1 = new TCanvas("Ecal Barrel Pedestal Monitoring G01","Ecal Barrel Pedestal Monitoring G01", 70,  0,500,400);
-  c1->Draw();
-  c1->Modified();
-  c1->Update();
-  TCanvas* c2 = new TCanvas("Ecal Barrel Pedestal Monitoring G06","Ecal Barrel Pedestal Monitoring G06",600,  0,500,400);
-  c2->Draw();
-  c2->Modified();
-  c2->Update();
-  TCanvas* c3 = new TCanvas("Ecal Barrel Pedestal Monitoring G12","Ecal Barrel Pedestal Monitoring G12",600,450,500,400);
-  c3->Draw();
-  c3->Modified();
-  c3->Update();
-
-  if(argc >= 2) cfuname = argv[1];
-  if(argc >= 3) hostname = argv[2];
-
-  cout << " Client " << cfuname
-       << " begins requesting monitoring from host " << hostname << endl;
-
-  // start user interface instance
-  MonitorUserInterface* mui = new MonitorUIRoot(hostname,port_no,cfuname);
-
-  mui->setVerbose(0);
-
-  // will attempt to reconnect upon connection problems (w/ a 5-sec delay)
-  mui->setReconnectDelay(5);
-
-  // subscribe to all monitorable matching pattern
-  mui->subscribe("EcalBarrel/STATUS");
-  mui->subscribe("EcalBarrel/RUN");
-  mui->subscribe("EcalBarrel/EVT");
-  mui->subscribe("EcalBarrel/EBPedestalTask/Gain01/EBPT pedestal SM*");
-  mui->subscribe("EcalBarrel/EBPedestalTask/Gain06/EBPT pedestal SM*");
-  mui->subscribe("EcalBarrel/EBPedestalTask/Gain12/EBPT pedestal SM*");
+//  TThread::Printf("Start of mhs1");
 
   bool stay_in_loop = true;
 
@@ -184,12 +144,87 @@ int main(int argc, char** argv) {
     // save monitoring structure in root-file
     if ( saveHistograms ) mui->save("EcalBarrelMonitorClient.root");
 
-    }
+    gSystem->Sleep(1);
+  }
 
-  // if here (ie. Collector has stopped), save into root file
   mui->save("EcalBarrelMonitorClient.root");
+
+//  TThread::Printf("End of mhs1\n");
+
+  c1->Modified();
+  c1->Update(); 
+  c2->Modified();
+  c2->Update(); 
+  c3->Modified();
+  c3->Update(); 
+
+  return 0;
+}
+
+int main(int argc, char** argv) {
+  cout << endl;
+  cout << " *** Ecal Barrel Pedestal Monitor Client ***" << endl;
+  cout << endl;
+
+  TApplication app("app",&argc,argv);
+
+  // default client name
+  string cfuname = "User0";
+
+  // default collector host name
+  string hostname = "localhost";
+
+  // default port #
+  int port_no = 9090;
+
+  c1 = new TCanvas("Ecal Barrel Pedestal Monitoring G01","Ecal Barrel Pedestal Monitoring G01", 70,  0,500,400);
+  c1->Draw();
+  c1->Modified();
+  c1->Update();
+  c2 = new TCanvas("Ecal Barrel Pedestal Monitoring G06","Ecal Barrel Pedestal Monitoring G06",600,  0,500,400);
+  c2->Draw();
+  c2->Modified();
+  c2->Update();
+  c3 = new TCanvas("Ecal Barrel Pedestal Monitoring G12","Ecal Barrel Pedestal Monitoring G12",600,450,500,400);
+  c3->Draw();
+  c3->Modified();
+  c3->Update();
+
+  if(argc >= 2) cfuname = argv[1];
+  if(argc >= 3) hostname = argv[2];
+
+  cout << " Client " << cfuname
+       << " begins requesting monitoring from host " << hostname << endl;
+
+  // start user interface instance
+  mui = new MonitorUIRoot(hostname,port_no,cfuname);
+
+  mui->setVerbose(0);
+
+  // will attempt to reconnect upon connection problems (w/ a 5-sec delay)
+  mui->setReconnectDelay(5);
+
+  // subscribe to all monitorable matching pattern
+  mui->subscribe("EcalBarrel/STATUS");
+  mui->subscribe("EcalBarrel/RUN");
+  mui->subscribe("EcalBarrel/EVT");
+  mui->subscribe("EcalBarrel/EBPedestalTask/Gain01/EBPT pedestal SM*");
+  mui->subscribe("EcalBarrel/EBPedestalTask/Gain06/EBPT pedestal SM*");
+  mui->subscribe("EcalBarrel/EBPedestalTask/Gain12/EBPT pedestal SM*");
+
+  TThread *th1 = new TThread("th1",mhs1);
+
+  th1->Run();
+
+  app.Run(kTRUE);
+
+  th1->SetCancelAsynchronous();
+
+  th1->Kill();
 
   delete mui;
 
   return 0;
+
 }
+

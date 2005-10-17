@@ -1,3 +1,7 @@
+<makefile>
+LDFLAGS := $(LDFLAGS) -lThread
+</makefile>
+
 <bin file=testEcalBarrelMonitorClient.cpp>
  <use name=DQMServices/NodeROOT>
  <use name=DQMServices/UI>

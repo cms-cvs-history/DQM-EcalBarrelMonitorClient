@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorIntegrityClient.cpp
  *
- *  $Date: 2005/10/16 13:44:55 $
- *  $Revision: 1.11 $
+ *  $Date: 2005/10/16 13:56:33 $
+ *  $Revision: 1.12 $
  *  \author G. Della Ricca
  *
  */
@@ -12,61 +12,21 @@
 
 #include "TROOT.h"
 #include "TApplication.h"
+#include "TThread.h"
 
 #include <iostream>
 #include <math.h>
 
 using namespace std;
 
-int main(int argc, char** argv) {
-  cout << endl;
-  cout << " *** Ecal Barrel Monitor Integrity Client ***" << endl;
-  cout << endl;
+TCanvas* c1;
+TCanvas* c2;
 
-  TApplication app("app",&argc,argv);
+MonitorUserInterface* mui;
 
-  // default client name
-  string cfuname = "User0";
+void *mhs1(void *) {
 
-  // default collector host name
-  string hostname = "localhost";
-
-  // default port #
-  int port_no = 9090;
-
-  TCanvas* c1 = new TCanvas("Ecal Barrel Integrity Monitoring 1","Ecal Barrel Integrity Monitoring 1", 10,10,550,480);
-  c1->Draw();
-  c1->Modified();
-  c1->Update();
-  TCanvas* c2 = new TCanvas("Ecal Barrel Integrity Monitoring 2","Ecal Barrel Integrity Monitoring 2",600,10,550,480);
-  c2->Divide(2,2);
-  c2->Draw();
-  c2->Modified();
-  c2->Update();
-
-  if(argc >= 2) cfuname = argv[1];
-  if(argc >= 3) hostname = argv[2];
-
-  cout << " Client " << cfuname
-       << " begins requesting monitoring from host " << hostname << endl;
-
-  // start user interface instance
-  MonitorUserInterface* mui = new MonitorUIRoot(hostname,port_no,cfuname);
-
-  mui->setVerbose(0);
-
-  // will attempt to reconnect upon connection problems (w/ a 5-sec delay)
-  mui->setReconnectDelay(5);
-
-  // subscribe to all monitorable matching pattern
-  mui->subscribe("EcalBarrel/STATUS");
-  mui->subscribe("EcalBarrel/RUN");
-  mui->subscribe("EcalBarrel/EVT");
-  mui->subscribe("EcalIntegrity/Gain/EI gain SM*");
-  mui->subscribe("EcalIntegrity/ChId/EI ChId SM*");
-  mui->subscribe("EcalIntegrity/TTId/EI TTId SM*");
-  mui->subscribe("EcalIntegrity/TTBlockSize/EI TTBlockSize SM*");
-  mui->subscribe("EcalIntegrity/DCC size error");
+//  TThread::Printf("Start of mhs1");
 
   bool stay_in_loop = true;
 
@@ -109,7 +69,7 @@ int main(int argc, char** argv) {
         if ( s.substr(2,1) == "1" ) status = "running";
         if ( s.substr(2,1) == "2" ) status = "end-of-run";
         cout << "status = " << status << endl;
-//        if ( status == "end-of-run" ) stay_in_loop = false;
+        if ( status == "end-of-run" ) mui->save("EcalBarrelMonitorClient.root");
       }
 
       me = mui->get("Collector/FU0/EcalBarrel/RUN");
@@ -214,12 +174,84 @@ int main(int argc, char** argv) {
     // save monitoring structure in root-file
     if ( saveHistograms ) mui->save("EcalBarrelMonitorClient.root");
 
-    }
+    gSystem->Sleep(1);
+  }
 
-  // if here (ie. Collector has stopped), save into root file
   mui->save("EcalBarrelMonitorClient.root");
+
+//  TThread::Printf("End of mhs1\n");
+
+  c1->Modified();
+  c1->Update(); 
+  c2->Modified();
+  c2->Update(); 
+
+  return 0;
+}
+
+int main(int argc, char** argv) {
+  cout << endl;
+  cout << " *** Ecal Barrel Monitor Integrity Client ***" << endl;
+  cout << endl;
+
+  TApplication app("app",&argc,argv);
+
+  // default client name
+  string cfuname = "User0";
+
+  // default collector host name
+  string hostname = "localhost";
+
+  // default port #
+  int port_no = 9090;
+
+  c1 = new TCanvas("Ecal Barrel Integrity Monitoring 1","Ecal Barrel Integrity Monitoring 1", 10,10,550,480);
+  c1->Draw();
+  c1->Modified();
+  c1->Update();
+  c2 = new TCanvas("Ecal Barrel Integrity Monitoring 2","Ecal Barrel Integrity Monitoring 2",600,10,550,480);
+  c2->Divide(2,2);
+  c2->Draw();
+  c2->Modified();
+  c2->Update();
+
+  if(argc >= 2) cfuname = argv[1];
+  if(argc >= 3) hostname = argv[2];
+
+  cout << " Client " << cfuname
+       << " begins requesting monitoring from host " << hostname << endl;
+
+  // start user interface instance
+  mui = new MonitorUIRoot(hostname,port_no,cfuname);
+
+  mui->setVerbose(0);
+
+  // will attempt to reconnect upon connection problems (w/ a 5-sec delay)
+  mui->setReconnectDelay(5);
+
+  // subscribe to all monitorable matching pattern
+  mui->subscribe("EcalBarrel/STATUS");
+  mui->subscribe("EcalBarrel/RUN");
+  mui->subscribe("EcalBarrel/EVT");
+  mui->subscribe("EcalIntegrity/Gain/EI gain SM*");
+  mui->subscribe("EcalIntegrity/ChId/EI ChId SM*");
+  mui->subscribe("EcalIntegrity/TTId/EI TTId SM*");
+  mui->subscribe("EcalIntegrity/TTBlockSize/EI TTBlockSize SM*");
+  mui->subscribe("EcalIntegrity/DCC size error");
+
+  TThread *th1 = new TThread("th1",mhs1);
+
+  th1->Run();
+
+  app.Run(kTRUE);
+
+  th1->SetCancelAsynchronous();
+
+  th1->Kill();
 
   delete mui;
 
   return 0;
+
 }
+
