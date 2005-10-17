@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorClient.cpp
  *
- *  $Date: 2005/10/17 10:01:07 $
- *  $Revision: 1.16 $
+ *  $Date: 2005/10/17 11:00:19 $
+ *  $Revision: 1.17 $
  *  \author G. Della Ricca
  *
  */
@@ -85,8 +85,10 @@ void *mhs1(void *) {
         if ( ob ) {
           TH2F* h = dynamic_cast<TH2F*> (ob->operator->());
           if ( h ) {
+            c1->cd();
             h->SetMaximum(4096.);
-            h->Draw("box");
+            h->SetOption("box);
+            h->Draw();
             c1->Modified();
             c1->Update();
           }
