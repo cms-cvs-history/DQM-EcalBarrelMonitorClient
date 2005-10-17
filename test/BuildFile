@@ -1,5 +1,5 @@
 <makefile>
-LDFLAGS := $(LDFLAGS) -lThread
+LDFLAGS := $(LDFLAGS) -L$(ROOTCORE_BASE)/root/lib -lThread
 </makefile>
 
 <bin file=testEcalBarrelMonitorClient.cpp>
