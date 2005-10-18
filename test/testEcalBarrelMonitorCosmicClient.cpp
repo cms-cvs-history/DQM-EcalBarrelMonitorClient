@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorCosmicClient.cpp
  *
- *  $Date: 2005/10/17 11:00:19 $
- *  $Revision: 1.11 $
+ *  $Date: 2005/10/17 13:07:39 $
+ *  $Revision: 1.12 $
  *  \author G. Della Ricca
  *
  */
@@ -146,7 +146,7 @@ int main(int argc, char** argv) {
   TApplication app("app",&argc,argv);
 
   // default client name
-  string cfuname = "User0";
+  string cfuname = "UserCosmic";
 
   // default collector host name
   string hostname = "localhost";

@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorIntegrityClient.cpp
  *
- *  $Date: 2005/10/17 11:00:19 $
- *  $Revision: 1.14 $
+ *  $Date: 2005/10/17 13:07:39 $
+ *  $Revision: 1.15 $
  *  \author G. Della Ricca
  *
  */
@@ -196,7 +196,7 @@ int main(int argc, char** argv) {
   TApplication app("app",&argc,argv);
 
   // default client name
-  string cfuname = "User0";
+  string cfuname = "UserIntegrity";
 
   // default collector host name
   string hostname = "localhost";
