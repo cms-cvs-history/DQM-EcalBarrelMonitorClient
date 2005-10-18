@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorIntegrityClient.cpp
  *
- *  $Date: 2005/10/18 11:33:41 $
- *  $Revision: 1.16 $
+ *  $Date: 2005/10/18 12:44:27 $
+ *  $Revision: 1.17 $
  *  \author G. Della Ricca
  *
  */
@@ -39,6 +39,7 @@ void *mhs1(void *) {
     bool saveHistograms = false;
   
     // this is the "main" loop where we receive monitoring
+    TThread::Lock();
     stay_in_loop = mui->update();
 
     // subscribe to new monitorable matching pattern
@@ -53,12 +54,14 @@ void *mhs1(void *) {
 
     // # of full monitoring cycles processed
     int updates = mui->getNumUpdates();
+    TThread::UnLock();
 
     MonitorElement* me;
 
     // draw monitoring objects every 2 monitoring cycles
     if ( updates % 2 == 0 && updates != last_plotting ) {
 
+      TThread::Lock();
       me = mui->get("Collector/FU0/EcalBarrel/STATUS");
       if ( me ) {
         string s = me->valueString();
@@ -163,20 +166,22 @@ void *mhs1(void *) {
       c2->Modified();
       c2->Update();
 
+      TThread::UnLock();
       last_plotting = updates;
     }
 
     // come here every 100 monitoring cycles, operate on Monitoring Elements
     if ( updates % 100 == 0 && updates != last_save ) {
-
       saveHistograms = true;
-
       last_save = updates;
     }
 
     // save monitoring structure in root-file
-    if ( saveHistograms ) mui->save("EcalBarrelMonitorClient.root");
-
+    if ( saveHistograms ) {
+      TThread::Lock();
+      mui->save("EcalBarrelMonitorIntegrityClient.root");
+      TThread::UnLock();
+    }
     TThread::CancelPoint();
   }
 
