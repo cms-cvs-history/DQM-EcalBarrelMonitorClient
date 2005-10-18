@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorTestPulseClient.cpp
  *
- *  $Date: 2005/10/18 11:33:41 $
- *  $Revision: 1.12 $
+ *  $Date: 2005/10/18 12:44:27 $
+ *  $Revision: 1.13 $
  *  \author G. Della Ricca
  *
  */
@@ -93,7 +93,7 @@ void *mhs1(void *) {
           TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
           if ( h ) {
             c1->cd(1);
-            h->SetOption("col");
+            h->SetOption("lego");
             h->Draw();
             c1->Modified();
             c1->Update();
@@ -127,7 +127,7 @@ void *mhs1(void *) {
           TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
           if ( h ) {
             c2->cd(1);
-            h->SetOption("col");
+            h->SetOption("lego");
             h->Draw();
             c2->Modified();
             c2->Update();
@@ -161,7 +161,7 @@ void *mhs1(void *) {
           TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
           if ( h ) {
             c3->cd(1);
-            h->SetOption("col");
+            h->SetOption("lego");
             h->Draw();
             c3->Modified();
             c3->Update();
