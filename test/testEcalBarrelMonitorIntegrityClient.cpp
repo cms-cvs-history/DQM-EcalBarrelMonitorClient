@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorIntegrityClient.cpp
  *
- *  $Date: 2005/10/17 13:07:39 $
- *  $Revision: 1.15 $
+ *  $Date: 2005/10/18 11:33:41 $
+ *  $Revision: 1.16 $
  *  \author G. Della Ricca
  *
  */
@@ -204,11 +204,11 @@ int main(int argc, char** argv) {
   // default port #
   int port_no = 9090;
 
-  c1 = new TCanvas("Ecal Barrel Integrity Monitoring 1","Ecal Barrel Integrity Monitoring 1", 10,10,550,480);
+  c1 = new TCanvas("Ecal Barrel Integrity Monitoring 1","Ecal Barrel Integrity Monitoring 1",  0, 0,400,400);
   c1->Draw();
   c1->Modified();
   c1->Update();
-  c2 = new TCanvas("Ecal Barrel Integrity Monitoring 2","Ecal Barrel Integrity Monitoring 2",600,10,550,480);
+  c2 = new TCanvas("Ecal Barrel Integrity Monitoring 2","Ecal Barrel Integrity Monitoring 2",410, 0,600,600);
   c2->Divide(2,2);
   c2->Draw();
   c2->Modified();

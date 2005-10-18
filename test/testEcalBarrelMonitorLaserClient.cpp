@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorLaserClient.cpp
  *
- *  $Date: 2005/10/17 13:07:39 $
- *  $Revision: 1.7 $
+ *  $Date: 2005/10/18 11:33:41 $
+ *  $Revision: 1.8 $
  *  \author G. Della Ricca
  *
  */
@@ -192,12 +192,12 @@ int main(int argc, char** argv) {
   // default port #
   int port_no = 9090;
 
-  c1 = new TCanvas("Ecal Barrel Laser Monitoring L1","Ecal Barrel Laser Monitoring L1", 70,  0,500,400);
+  c1 = new TCanvas("Ecal Barrel Laser Monitoring L1","Ecal Barrel Laser Monitoring L1",  0,  0,500,800);
   c1->Divide(1,2);
   c1->Draw();
   c1->Modified();
   c1->Update();
-  c2 = new TCanvas("Ecal Barrel Laser Monitoring L2","Ecal Barrel Laser Monitoring L2",600,  0,500,400);
+  c2 = new TCanvas("Ecal Barrel Laser Monitoring L2","Ecal Barrel Laser Monitoring L2",510,  0,500,800);
   c2->Divide(1,2);
   c2->Draw();
   c2->Modified();

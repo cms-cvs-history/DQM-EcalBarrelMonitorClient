@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorTestPulseClient.cpp
  *
- *  $Date: 2005/10/17 13:07:39 $
- *  $Revision: 1.11 $
+ *  $Date: 2005/10/18 11:33:41 $
+ *  $Revision: 1.12 $
  *  \author G. Della Ricca
  *
  */
@@ -231,17 +231,17 @@ int main(int argc, char** argv) {
   // default port #
   int port_no = 9090;
 
-  c1 = new TCanvas("Ecal Barrel Test Pulse Monitoring G01","Ecal Barrel Test Pulse Monitoring G01", 70,  0,500,400);
+  c1 = new TCanvas("Ecal Barrel Test Pulse Monitoring G01","Ecal Barrel Test Pulse Monitoring G01",  0,  0,300,800);
   c1->Divide(1,2);
   c1->Draw();
   c1->Modified();
   c1->Update();
-  c2 = new TCanvas("Ecal Barrel Test Pulse Monitoring G06","Ecal Barrel Test Pulse Monitoring G06",600,  0,500,400);
+  c2 = new TCanvas("Ecal Barrel Test Pulse Monitoring G06","Ecal Barrel Test Pulse Monitoring G06",310,  0,300,800);
   c2->Divide(1,2);
   c2->Draw();
   c2->Modified();
   c2->Update();
-  c3 = new TCanvas("Ecal Barrel Test Pulse Monitoring G12","Ecal Barrel Test Pulse Monitoring G12",600,450,500,400);
+  c3 = new TCanvas("Ecal Barrel Test Pulse Monitoring G12","Ecal Barrel Test Pulse Monitoring G12",620,  0,300,800);
   c3->Divide(1,2);
   c3->Draw();
   c3->Modified();

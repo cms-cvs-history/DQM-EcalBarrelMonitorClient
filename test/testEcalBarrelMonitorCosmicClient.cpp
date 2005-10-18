@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorCosmicClient.cpp
  *
- *  $Date: 2005/10/17 13:07:39 $
- *  $Revision: 1.12 $
+ *  $Date: 2005/10/18 11:33:41 $
+ *  $Revision: 1.13 $
  *  \author G. Della Ricca
  *
  */
@@ -88,7 +88,7 @@ void *mhs1(void *) {
           TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
           if ( h ) {
             c1->cd();
-//            h->SetMaximum(4096.);
+            h->SetMaximum(1000.);
             h->SetOption("lego");
             h->Draw();
             c1->Modified();
@@ -104,7 +104,7 @@ void *mhs1(void *) {
           TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
           if ( h ) {
             c2->cd();
-//            h->SetMaximum(4096.);
+            h->SetMaximum(1000.);
             h->SetOption("lego");
             h->Draw();
             c2->Modified();
@@ -154,11 +154,11 @@ int main(int argc, char** argv) {
   // default port #
   int port_no = 9090;
 
-  c1 = new TCanvas("Ecal Barrel Cosmic Monitoring 1","Ecal Barrel Cosmic Monitoring 1", 10,10,550,480);
+  c1 = new TCanvas("Ecal Barrel Cosmic Monitoring 1","Ecal Barrel Cosmic Monitoring 1",  0, 0,500,800);
   c1->Draw();
   c1->Modified();
   c1->Update();
-  c2 = new TCanvas("Ecal Barrel Cosmic Monitoring 2","Ecal Barrel Cosmic Monitoring 2",600,10,550,480);
+  c2 = new TCanvas("Ecal Barrel Cosmic Monitoring 2","Ecal Barrel Cosmic Monitoring 2",510, 0,500,800);
   c2->Draw();
   c2->Modified();
   c2->Update();
