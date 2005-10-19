@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorLaserClient.cpp
  *
- *  $Date: 2005/10/18 19:34:30 $
- *  $Revision: 1.11 $
+ *  $Date: 2005/10/19 08:16:45 $
+ *  $Revision: 1.12 $
  *  \author G. Della Ricca
  *
  */
@@ -39,7 +39,6 @@ void *mhs1(void *) {
     bool saveHistograms = false;
   
     // this is the "main" loop where we receive monitoring
-    TThread::Lock();
     stay_in_loop = mui->update();
 
     // subscribe to new monitorable matching pattern
@@ -53,16 +52,13 @@ void *mhs1(void *) {
 
     // # of full monitoring cycles processed
     int updates = mui->getNumUpdates();
-    TThread::UnLock();
 
     MonitorElement* me;
 
     // draw monitoring objects every 2 monitoring cycles
     if ( updates % 2 == 0 && updates != last_plotting ) {
 
-      TThread::Lock();
       me = mui->get("Collector/FU0/EcalBarrel/STATUS");
-      TThread::UnLock();
       if ( me ) {
         string s = me->valueString();
         string status = "unknown";
@@ -77,27 +73,21 @@ void *mhs1(void *) {
         }
       }
 
-      TThread::Lock();
       me = mui->get("Collector/FU0/EcalBarrel/RUN");
-      TThread::UnLock();
       if ( me ) {
         string s = me->valueString();
         string run = s.substr(2,s.length()-2);
         cout << "run = " << run << endl;
       }
 
-      TThread::Lock();
       me = mui->get("Collector/FU0/EcalBarrel/EVT");
-      TThread::UnLock();
       if ( me ) {
         string s = me->valueString();
         string evt = s.substr(2,s.length()-2);
         cout << "event = " << evt.c_str() << endl;
       }
 
-      TThread::Lock();
       me = mui->get("Collector/FU0/EcalBarrel/EBLaserTask/Laser1/EBLT shape SM01 L1");
-      TThread::UnLock();
       if ( me ) {
         MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
         if ( ob ) {
@@ -112,9 +102,7 @@ void *mhs1(void *) {
         }
       }
 
-      TThread::Lock();
       me = mui->get("Collector/FU0/EcalBarrel/EBLaserTask/Laser1/EBLT amplitude SM01 L1");
-      TThread::UnLock();
       if ( me ) {
         MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
         if ( ob ) {
@@ -133,9 +121,7 @@ void *mhs1(void *) {
       c1->Modified();
       c1->Update();
 
-      TThread::Lock();
       me = mui->get("Collector/FU0/EcalBarrel/EBLaserTask/Laser2/EBLT shape SM01 L2");
-      TThread::UnLock();
       if ( me ) {
         MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
         if ( ob ) {
@@ -150,9 +136,7 @@ void *mhs1(void *) {
         }
       }
 
-      TThread::Lock();
       me = mui->get("Collector/FU0/EcalBarrel/EBLaserTask/Laser2/EBLT amplitude SM01 L2");
-      TThread::UnLock();
       if ( me ) {
         MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
         if ( ob ) {
