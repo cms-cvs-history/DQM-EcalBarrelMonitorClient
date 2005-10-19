@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorTestPulseClient.cpp
  *
- *  $Date: 2005/10/18 13:11:27 $
- *  $Revision: 1.14 $
+ *  $Date: 2005/10/18 19:34:30 $
+ *  $Revision: 1.15 $
  *  \author G. Della Ricca
  *
  */
@@ -65,6 +65,7 @@ void *mhs1(void *) {
 
       TThread::Lock();
       me = mui->get("Collector/FU0/EcalBarrel/STATUS");
+      TThread::UnLock();
       if ( me ) {
         string s = me->valueString();
         string status = "unknown";
@@ -72,24 +73,34 @@ void *mhs1(void *) {
         if ( s.substr(2,1) == "1" ) status = "running";
         if ( s.substr(2,1) == "2" ) status = "end-of-run";
         cout << "status = " << status << endl;
-//        if ( status == "end-of-run" ) stay_in_loop = false;
+        if ( status == "end-of-run" ) {
+          TThread::Lock();      
+          mui->save("EcalBarrelMonitorTestPulseClient.root");
+          TThread::UnLock();
+        }
       }
 
+      TThread::Lock();
       me = mui->get("Collector/FU0/EcalBarrel/RUN");
+      TThread::UnLock();
       if ( me ) {
         string s = me->valueString();
         string run = s.substr(2,s.length()-2);
         cout << "run = " << run << endl;
       }
 
+      TThread::Lock();
       me = mui->get("Collector/FU0/EcalBarrel/EVT");
+      TThread::UnLock();
       if ( me ) {
         string s = me->valueString();
         string evt = s.substr(2,s.length()-2);
         cout << "event = " << evt.c_str() << endl;
       }
 
+      TThread::Lock();
       me = mui->get("Collector/FU0/EcalBarrel/EBTestPulseTask/Gain01/EBTT shape SM01 G01");
+      TThread::UnLock();
       if ( me ) {
         MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
         if ( ob ) {
@@ -104,7 +115,9 @@ void *mhs1(void *) {
         }
       }
 
+      TThread::Lock();
       me = mui->get("Collector/FU0/EcalBarrel/EBTestPulseTask/Gain01/EBTT amplitude SM01 G01");
+      TThread::UnLock();
       if ( me ) {
         MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
         if ( ob ) {
@@ -123,7 +136,9 @@ void *mhs1(void *) {
       c1->Modified();
       c1->Update();
 
+      TThread::Lock();
       me = mui->get("Collector/FU0/EcalBarrel/EBTestPulseTask/Gain06/EBTT shape SM01 G06");
+      TThread::UnLock();
       if ( me ) {
         MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
         if ( ob ) {
@@ -138,7 +153,9 @@ void *mhs1(void *) {
         }
       }
 
+      TThread::Lock();
       me = mui->get("Collector/FU0/EcalBarrel/EBTestPulseTask/Gain06/EBTT amplitude SM01 G06");
+      TThread::UnLock();
       if ( me ) {
         MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
         if ( ob ) {
@@ -157,7 +174,9 @@ void *mhs1(void *) {
       c2->Modified();
       c2->Update();
 
+      TThread::Lock();
       me = mui->get("Collector/FU0/EcalBarrel/EBTestPulseTask/Gain12/EBTT shape SM01 G12");
+      TThread::UnLock();
       if ( me ) {
         MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
         if ( ob ) {
@@ -172,7 +191,9 @@ void *mhs1(void *) {
         }
       }
 
+      TThread::Lock();
       me = mui->get("Collector/FU0/EcalBarrel/EBTestPulseTask/Gain12/EBTT amplitude SM01 G12");
+      TThread::UnLock();
       if ( me ) {
         MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
         if ( ob ) {
@@ -191,7 +212,6 @@ void *mhs1(void *) {
       c3->Modified();
       c3->Update();
 
-      TThread::UnLock();
       last_plotting = updates;
     }
 

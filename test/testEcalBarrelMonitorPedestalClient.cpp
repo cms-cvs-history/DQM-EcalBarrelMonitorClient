@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorPedestalClient.cpp
  *
- *  $Date: 2005/10/18 12:44:27 $
- *  $Revision: 1.16 $
+ *  $Date: 2005/10/18 19:34:30 $
+ *  $Revision: 1.17 $
  *  \author G. Della Ricca
  *
  */
@@ -62,6 +62,7 @@ void *mhs1(void *) {
 
       TThread::Lock();
       me = mui->get("Collector/FU0/EcalBarrel/STATUS");
+      TThread::UnLock();
       if ( me ) {
         string s = me->valueString();
         string status = "unknown";
@@ -69,24 +70,34 @@ void *mhs1(void *) {
         if ( s.substr(2,1) == "1" ) status = "running";
         if ( s.substr(2,1) == "2" ) status = "end-of-run";
         cout << "status = " << status << endl;
-        if ( status == "end-of-run" ) mui->save("EcalBarrelMonitorClient.root");
+        if ( status == "end-of-run" ) {
+          TThread::Lock();      
+          mui->save("EcalBarrelMonitorPedestalClient.root");
+          TThread::UnLock();
+        }
       }
 
+      TThread::Lock();
       me = mui->get("Collector/FU0/EcalBarrel/RUN");
+      TThread::UnLock();
       if ( me ) {
         string s = me->valueString();
         string run = s.substr(2,s.length()-2);
         cout << "run = " << run << endl;
       }
 
+      TThread::Lock();
       me = mui->get("Collector/FU0/EcalBarrel/EVT");
+      TThread::UnLock();
       if ( me ) {
         string s = me->valueString();
         string evt = s.substr(2,s.length()-2);
         cout << "event = " << evt.c_str() << endl;
       }
 
+      TThread::Lock();
       me = mui->get("Collector/FU0/EcalBarrel/EBPedestalTask/Gain01/EBPT pedestal SM01 G01");
+      TThread::UnLock();
       if ( me ) {
         MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
         if ( ob ) {
@@ -102,7 +113,9 @@ void *mhs1(void *) {
         }
       }
 
+      TThread::Lock();
       me = mui->get("Collector/FU0/EcalBarrel/EBPedestalTask/Gain06/EBPT pedestal SM01 G06");
+      TThread::UnLock();
       if ( me ) {
         MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
         if ( ob ) {
@@ -118,7 +131,9 @@ void *mhs1(void *) {
         }
       }
 
+      TThread::Lock();
       me = mui->get("Collector/FU0/EcalBarrel/EBPedestalTask/Gain12/EBPT pedestal SM01 G12");
+      TThread::UnLock();
       if ( me ) {
         MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
         if ( ob ) {
@@ -134,7 +149,6 @@ void *mhs1(void *) {
         }
       }
 
-      TThread::UnLock();
       last_plotting = updates;
     }
 
