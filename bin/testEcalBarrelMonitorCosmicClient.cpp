@@ -1,8 +1,8 @@
 /*
- * \file EcalBarrelMonitorIntegrityClient.cpp
+ * \file EcalBarrelMonitorCosmicClient.cpp
  *
- *  $Date: 2005/10/19 08:16:45 $
- *  $Revision: 1.19 $
+ *  $Date: 2005/10/19 08:33:11 $
+ *  $Revision: 1.17 $
  *  \author G. Della Ricca
  *
  */
@@ -45,11 +45,8 @@ void *mhs1(void *) {
     mui->subscribeNew("*/EcalBarrel/STATUS");
     mui->subscribeNew("*/EcalBarrel/RUN");
     mui->subscribeNew("*/EcalBarrel/EVT");
-    mui->subscribeNew("*/EcalIntegrity/Gain/EI gain SM*");
-    mui->subscribeNew("*/EcalIntegrity/ChId/EI ChId SM*");
-    mui->subscribeNew("*/EcalIntegrity/TTId/EI TTId SM*");
-    mui->subscribeNew("*/EcalIntegrity/TTBlockSize/EI TTBlockSize SM*");
-    mui->subscribeNew("*/EcalIntegrity/DCC size error");
+    mui->subscribeNew("*/EcalBarrel/EBCosmicTask/Cut/EBCT amplitude cut SM*");
+    mui->subscribeNew("*/EcalBarrel/EBCosmicTask/Sel/EBCT amplitude sel SM*");
 
     // # of full monitoring cycles processed
     int updates = mui->getNumUpdates();
@@ -69,7 +66,7 @@ void *mhs1(void *) {
         cout << "status = " << status << endl;
         if ( status == "end-of-run" ) {
           TThread::Lock();      
-          mui->save("EcalBarrelMonitorIntegrityClient.root");
+          mui->save("EcalBarrelMonitorCosmicClient.root");
           TThread::UnLock();
         }
       }
@@ -88,14 +85,15 @@ void *mhs1(void *) {
         cout << "event = " << evt.c_str() << endl;
       }
 
-      me = mui->get("Collector/FU0/EcalIntegrity/DCC size error");
+      me = mui->get("Collector/FU0/EcalBarrel/EBCosmicTask/Cut/EBCT amplitude cut SM01");
       if ( me ) {
         MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
         if ( ob ) {
-          TH1F* h = dynamic_cast<TH1F*> (ob->operator->());
+          TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
           if ( h ) {
             c1->cd();
-            h->SetOption("text");
+            h->SetMaximum(1000.);
+            h->SetOption("lego");
             h->Draw();
             c1->Modified();
             c1->Update();
@@ -103,70 +101,21 @@ void *mhs1(void *) {
         }
       }
 
-      me = mui->get("Collector/FU0/EcalIntegrity/Gain/EI gain SM01");
+      me = mui->get("Collector/FU0/EcalBarrel/EBCosmicTask/Sel/EBCT amplitude sel SM01");
       if ( me ) {
         MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
         if ( ob ) {
-          TH2F* h = dynamic_cast<TH2F*> (ob->operator->());
+          TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
           if ( h ) {
-            c2->cd(1);
-            h->SetOption("text");
+            c2->cd();
+            h->SetMaximum(1000.);
+            h->SetOption("lego");
             h->Draw();
             c2->Modified();
             c2->Update();
           }
         }
       }
-
-      me = mui->get("Collector/FU0/EcalIntegrity/ChId/EI ChId SM01");
-      if ( me ) {
-        MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
-        if ( ob ) {
-          TH2F* h = dynamic_cast<TH2F*> (ob->operator->());
-          if ( h ) {
-            c2->cd(2);
-            h->SetOption("text");
-            h->Draw();
-            c2->Modified();
-            c2->Update();
-          }
-        }
-      }
-
-      me = mui->get("Collector/FU0/EcalIntegrity/TTId/EI TTId SM01");
-      if ( me ) {
-        MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
-        if ( ob ) {
-          TH2F* h = dynamic_cast<TH2F*> (ob->operator->());
-          if ( h ) {
-            c2->cd(3);
-            h->SetOption("text");
-            h->Draw();
-            c2->Modified();
-            c2->Update();
-          }
-        }
-      }
-
-      me = mui->get("Collector/FU0/EcalIntegrity/TTBlockSize/EI TTBlockSize SM01");
-      if ( me ) {
-        MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
-        if ( ob ) {
-          TH2F* h = dynamic_cast<TH2F*> (ob->operator->());
-          if ( h ) {
-            c2->cd(4);
-            h->SetOption("text");
-            h->Draw();
-            c2->Modified();
-            c2->Update();
-          }
-        }
-      }
-
-      c2->cd();
-      c2->Modified();
-      c2->Update();
-
       last_plotting = updates;
     }
 
@@ -179,7 +128,7 @@ void *mhs1(void *) {
     // save monitoring structure in root-file
     if ( saveHistograms ) {
       TThread::Lock();
-      mui->save("EcalBarrelMonitorIntegrityClient.root");
+      mui->save("EcalBarrelMonitorCosmicClient.root");
       TThread::UnLock();
     }
     TThread::CancelPoint();
@@ -195,13 +144,13 @@ void *mhs1(void *) {
 
 int main(int argc, char** argv) {
   cout << endl;
-  cout << " *** Ecal Barrel Monitor Integrity Client ***" << endl;
+  cout << " *** Ecal Barrel Monitor Cosmic Client ***" << endl;
   cout << endl;
 
   TApplication app("app",&argc,argv);
 
   // default client name
-  string cfuname = "UserIntegrity";
+  string cfuname = "UserCosmic";
 
   // default collector host name
   string hostname = "localhost";
@@ -209,12 +158,11 @@ int main(int argc, char** argv) {
   // default port #
   int port_no = 9090;
 
-  c1 = new TCanvas("Ecal Barrel Integrity Monitoring 1","Ecal Barrel Integrity Monitoring 1",  0, 0,400,400);
+  c1 = new TCanvas("Ecal Barrel Cosmic Monitoring 1","Ecal Barrel Cosmic Monitoring 1",  0, 0,500,800);
   c1->Draw();
   c1->Modified();
   c1->Update();
-  c2 = new TCanvas("Ecal Barrel Integrity Monitoring 2","Ecal Barrel Integrity Monitoring 2",410, 0,600,600);
-  c2->Divide(2,2);
+  c2 = new TCanvas("Ecal Barrel Cosmic Monitoring 2","Ecal Barrel Cosmic Monitoring 2",510, 0,500,800);
   c2->Draw();
   c2->Modified();
   c2->Update();
@@ -237,11 +185,8 @@ int main(int argc, char** argv) {
   mui->subscribe("*/EcalBarrel/STATUS");
   mui->subscribe("*/EcalBarrel/RUN");
   mui->subscribe("*/EcalBarrel/EVT");
-  mui->subscribe("*/EcalIntegrity/Gain/EI gain SM*");
-  mui->subscribe("*/EcalIntegrity/ChId/EI ChId SM*");
-  mui->subscribe("*/EcalIntegrity/TTId/EI TTId SM*");
-  mui->subscribe("*/EcalIntegrity/TTBlockSize/EI TTBlockSize SM*");
-  mui->subscribe("*/EcalIntegrity/DCC size error");
+  mui->subscribe("*/EcalBarrel/EBCosmicTask/Cut/EBCT amplitude cut SM*");
+  mui->subscribe("*/EcalBarrel/EBCosmicTask/Sel/EBCT amplitude sel SM*");
 
   TThread *th1 = new TThread("th1",mhs1);
 

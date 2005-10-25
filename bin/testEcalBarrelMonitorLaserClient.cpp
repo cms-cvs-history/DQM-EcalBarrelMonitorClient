@@ -1,8 +1,8 @@
 /*
- * \file EcalBarrelMonitorPedestalClient.cpp
+ * \file EcalBarrelMonitorLaserClient.cpp
  *
- *  $Date: 2005/10/19 08:16:45 $
- *  $Revision: 1.18 $
+ *  $Date: 2005/10/19 08:33:11 $
+ *  $Revision: 1.13 $
  *  \author G. Della Ricca
  *
  */
@@ -21,7 +21,6 @@ using namespace std;
 
 TCanvas* c1;
 TCanvas* c2;
-TCanvas* c3;
 
 MonitorUserInterface* mui;
 
@@ -46,9 +45,10 @@ void *mhs1(void *) {
     mui->subscribeNew("*/EcalBarrel/STATUS");
     mui->subscribeNew("*/EcalBarrel/RUN"); 
     mui->subscribeNew("*/EcalBarrel/EVT");
-    mui->subscribeNew("*/EcalBarrel/EBPedestalTask/Gain01/EBPT pedestal SM*");
-    mui->subscribeNew("*/EcalBarrel/EBPedestalTask/Gain06/EBPT pedestal SM*");
-    mui->subscribeNew("*/EcalBarrel/EBPedestalTask/Gain12/EBPT pedestal SM*");
+    mui->subscribeNew("*/EcalBarrel/EBLaserTask/Laser1/EBLT shape SM*");
+    mui->subscribeNew("*/EcalBarrel/EBLaserTask/Laser1/EBLT amplitude SM*");
+    mui->subscribeNew("*/EcalBarrel/EBLaserTask/Laser2/EBLT shape SM*");
+    mui->subscribeNew("*/EcalBarrel/EBLaserTask/Laser2/EBLT amplitude SM*");
 
     // # of full monitoring cycles processed
     int updates = mui->getNumUpdates();
@@ -68,7 +68,7 @@ void *mhs1(void *) {
         cout << "status = " << status << endl;
         if ( status == "end-of-run" ) {
           TThread::Lock();      
-          mui->save("EcalBarrelMonitorPedestalClient.root");
+          mui->save("EcalBarrelMonitorLaserClient.root");
           TThread::UnLock();
         }
       }
@@ -87,14 +87,28 @@ void *mhs1(void *) {
         cout << "event = " << evt.c_str() << endl;
       }
 
-      me = mui->get("Collector/FU0/EcalBarrel/EBPedestalTask/Gain01/EBPT pedestal SM01 G01");
+      me = mui->get("Collector/FU0/EcalBarrel/EBLaserTask/Laser1/EBLT shape SM01 L1");
       if ( me ) {
         MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
         if ( ob ) {
           TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
           if ( h ) {
-            c1->cd();
-            h->SetMaximum(4096.);
+            c1->cd(1);
+            h->SetOption("lego");
+            h->Draw();
+            c1->Modified();
+            c1->Update();
+          }
+        }
+      }
+
+      me = mui->get("Collector/FU0/EcalBarrel/EBLaserTask/Laser1/EBLT amplitude SM01 L1");
+      if ( me ) {
+        MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
+        if ( ob ) {
+          TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
+          if ( h ) {
+            c1->cd(2);
             h->SetOption("col");
             h->Draw();
             c1->Modified();
@@ -103,14 +117,32 @@ void *mhs1(void *) {
         }
       }
 
-      me = mui->get("Collector/FU0/EcalBarrel/EBPedestalTask/Gain06/EBPT pedestal SM01 G06");
+      c1->cd();
+      c1->Modified();
+      c1->Update();
+
+      me = mui->get("Collector/FU0/EcalBarrel/EBLaserTask/Laser2/EBLT shape SM01 L2");
       if ( me ) {
         MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
         if ( ob ) {
           TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
           if ( h ) {
-            c2->cd();
-            h->SetMaximum(4096.);
+            c2->cd(1);
+            h->SetOption("lego");
+            h->Draw();
+            c2->Modified();
+            c2->Update();
+          }
+        }
+      }
+
+      me = mui->get("Collector/FU0/EcalBarrel/EBLaserTask/Laser2/EBLT amplitude SM01 L2");
+      if ( me ) {
+        MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
+        if ( ob ) {
+          TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
+          if ( h ) {
+            c2->cd(2);
             h->SetOption("col");
             h->Draw();
             c2->Modified();
@@ -119,21 +151,9 @@ void *mhs1(void *) {
         }
       }
 
-      me = mui->get("Collector/FU0/EcalBarrel/EBPedestalTask/Gain12/EBPT pedestal SM01 G12");
-      if ( me ) {
-        MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
-        if ( ob ) {
-          TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
-          if ( h ) {
-            c3->cd();
-            h->SetMaximum(4096.);
-            h->SetOption("col");
-            h->Draw();
-            c3->Modified();
-            c3->Update();
-          }
-        }
-      }
+      c2->cd();
+      c2->Modified();
+      c2->Update();
 
       last_plotting = updates;
     }
@@ -147,7 +167,7 @@ void *mhs1(void *) {
     // save monitoring structure in root-file
     if ( saveHistograms ) {
       TThread::Lock();
-      mui->save("EcalBarrelMonitorPedestalClient.root");
+      mui->save("EcalBarrelMonitorLaserClient.root");
       TThread::UnLock();
     }
     TThread::CancelPoint();
@@ -157,21 +177,19 @@ void *mhs1(void *) {
   c1->Update(); 
   c2->Modified();
   c2->Update(); 
-  c3->Modified();
-  c3->Update(); 
 
   return 0;
 }
 
 int main(int argc, char** argv) {
   cout << endl;
-  cout << " *** Ecal Barrel Pedestal Monitor Client ***" << endl;
+  cout << " *** Ecal Barrel Laser Monitor Client ***" << endl;
   cout << endl;
 
   TApplication app("app",&argc,argv);
 
   // default client name
-  string cfuname = "UserPedestal";
+  string cfuname = "UserLaser";
 
   // default collector host name
   string hostname = "localhost";
@@ -179,18 +197,16 @@ int main(int argc, char** argv) {
   // default port #
   int port_no = 9090;
 
-  c1 = new TCanvas("Ecal Barrel Pedestal Monitoring G01","Ecal Barrel Pedestal Monitoring G01",  0,  0,300,800);
+  c1 = new TCanvas("Ecal Barrel Laser Monitoring L1","Ecal Barrel Laser Monitoring L1",  0,  0,500,800);
+  c1->Divide(1,2);
   c1->Draw();
   c1->Modified();
   c1->Update();
-  c2 = new TCanvas("Ecal Barrel Pedestal Monitoring G06","Ecal Barrel Pedestal Monitoring G06",310,  0,300,800);
+  c2 = new TCanvas("Ecal Barrel Laser Monitoring L2","Ecal Barrel Laser Monitoring L2",510,  0,500,800);
+  c2->Divide(1,2);
   c2->Draw();
   c2->Modified();
   c2->Update();
-  c3 = new TCanvas("Ecal Barrel Pedestal Monitoring G12","Ecal Barrel Pedestal Monitoring G12",620,  0,300,800);
-  c3->Draw();
-  c3->Modified();
-  c3->Update();
 
   if(argc >= 2) cfuname = argv[1];
   if(argc >= 3) hostname = argv[2];
@@ -210,9 +226,10 @@ int main(int argc, char** argv) {
   mui->subscribe("*/EcalBarrel/STATUS");
   mui->subscribe("*/EcalBarrel/RUN");
   mui->subscribe("*/EcalBarrel/EVT");
-  mui->subscribe("*/EcalBarrel/EBPedestalTask/Gain01/EBPT pedestal SM*");
-  mui->subscribe("*/EcalBarrel/EBPedestalTask/Gain06/EBPT pedestal SM*");
-  mui->subscribe("*/EcalBarrel/EBPedestalTask/Gain12/EBPT pedestal SM*");
+  mui->subscribe("*/EcalBarrel/EBLaserTask/Laser1/EBLT shape SM*");
+  mui->subscribe("*/EcalBarrel/EBLaserTask/Laser1/EBLT amplitude SM*");
+  mui->subscribe("*/EcalBarrel/EBLaserTask/Laser2/EBLT shape SM*");
+  mui->subscribe("*/EcalBarrel/EBLaserTask/Laser2/EBLT amplitude SM*");
 
   TThread *th1 = new TThread("th1",mhs1);
 

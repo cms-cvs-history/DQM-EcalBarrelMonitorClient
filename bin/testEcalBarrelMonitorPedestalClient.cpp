@@ -1,8 +1,8 @@
 /*
- * \file EcalBarrelMonitorTestPulseClient.cpp
+ * \file EcalBarrelMonitorPedestalClient.cpp
  *
- *  $Date: 2005/10/19 08:16:45 $
- *  $Revision: 1.16 $
+ *  $Date: 2005/10/19 08:33:11 $
+ *  $Revision: 1.19 $
  *  \author G. Della Ricca
  *
  */
@@ -46,12 +46,9 @@ void *mhs1(void *) {
     mui->subscribeNew("*/EcalBarrel/STATUS");
     mui->subscribeNew("*/EcalBarrel/RUN"); 
     mui->subscribeNew("*/EcalBarrel/EVT");
-    mui->subscribeNew("*/EcalBarrel/EBTestPulseTask/Gain01/EBTT shape SM*");
-    mui->subscribeNew("*/EcalBarrel/EBTestPulseTask/Gain01/EBTT amplitude SM*");
-    mui->subscribeNew("*/EcalBarrel/EBTestPulseTask/Gain06/EBTT shape SM*");
-    mui->subscribeNew("*/EcalBarrel/EBTestPulseTask/Gain06/EBTT amplitude SM*");
-    mui->subscribeNew("*/EcalBarrel/EBTestPulseTask/Gain12/EBTT shape SM*");
-    mui->subscribeNew("*/EcalBarrel/EBTestPulseTask/Gain12/EBTT amplitude SM*");
+    mui->subscribeNew("*/EcalBarrel/EBPedestalTask/Gain01/EBPT pedestal SM*");
+    mui->subscribeNew("*/EcalBarrel/EBPedestalTask/Gain06/EBPT pedestal SM*");
+    mui->subscribeNew("*/EcalBarrel/EBPedestalTask/Gain12/EBPT pedestal SM*");
 
     // # of full monitoring cycles processed
     int updates = mui->getNumUpdates();
@@ -71,7 +68,7 @@ void *mhs1(void *) {
         cout << "status = " << status << endl;
         if ( status == "end-of-run" ) {
           TThread::Lock();      
-          mui->save("EcalBarrelMonitorTestPulseClient.root");
+          mui->save("EcalBarrelMonitorPedestalClient.root");
           TThread::UnLock();
         }
       }
@@ -90,28 +87,14 @@ void *mhs1(void *) {
         cout << "event = " << evt.c_str() << endl;
       }
 
-      me = mui->get("Collector/FU0/EcalBarrel/EBTestPulseTask/Gain01/EBTT shape SM01 G01");
+      me = mui->get("Collector/FU0/EcalBarrel/EBPedestalTask/Gain01/EBPT pedestal SM01 G01");
       if ( me ) {
         MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
         if ( ob ) {
           TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
           if ( h ) {
-            c1->cd(1);
-            h->SetOption("lego");
-            h->Draw();
-            c1->Modified();
-            c1->Update();
-          }
-        }
-      }
-
-      me = mui->get("Collector/FU0/EcalBarrel/EBTestPulseTask/Gain01/EBTT amplitude SM01 G01");
-      if ( me ) {
-        MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
-        if ( ob ) {
-          TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
-          if ( h ) {
-            c1->cd(2);
+            c1->cd();
+            h->SetMaximum(4096.);
             h->SetOption("col");
             h->Draw();
             c1->Modified();
@@ -120,32 +103,14 @@ void *mhs1(void *) {
         }
       }
 
-      c1->cd();
-      c1->Modified();
-      c1->Update();
-
-      me = mui->get("Collector/FU0/EcalBarrel/EBTestPulseTask/Gain06/EBTT shape SM01 G06");
+      me = mui->get("Collector/FU0/EcalBarrel/EBPedestalTask/Gain06/EBPT pedestal SM01 G06");
       if ( me ) {
         MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
         if ( ob ) {
           TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
           if ( h ) {
-            c2->cd(1);
-            h->SetOption("lego");
-            h->Draw();
-            c2->Modified();
-            c2->Update();
-          }
-        }
-      }
-
-      me = mui->get("Collector/FU0/EcalBarrel/EBTestPulseTask/Gain06/EBTT amplitude SM01 G06");
-      if ( me ) {
-        MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
-        if ( ob ) {
-          TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
-          if ( h ) {
-            c2->cd(2);
+            c2->cd();
+            h->SetMaximum(4096.);
             h->SetOption("col");
             h->Draw();
             c2->Modified();
@@ -154,32 +119,14 @@ void *mhs1(void *) {
         }
       }
 
-      c2->cd();
-      c2->Modified();
-      c2->Update();
-
-      me = mui->get("Collector/FU0/EcalBarrel/EBTestPulseTask/Gain12/EBTT shape SM01 G12");
+      me = mui->get("Collector/FU0/EcalBarrel/EBPedestalTask/Gain12/EBPT pedestal SM01 G12");
       if ( me ) {
         MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
         if ( ob ) {
           TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
           if ( h ) {
-            c3->cd(1);
-            h->SetOption("lego");
-            h->Draw();
-            c3->Modified();
-            c3->Update();
-          }
-        }
-      }
-
-      me = mui->get("Collector/FU0/EcalBarrel/EBTestPulseTask/Gain12/EBTT amplitude SM01 G12");
-      if ( me ) {
-        MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
-        if ( ob ) {
-          TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
-          if ( h ) {
-            c3->cd(2);
+            c3->cd();
+            h->SetMaximum(4096.);
             h->SetOption("col");
             h->Draw();
             c3->Modified();
@@ -187,10 +134,6 @@ void *mhs1(void *) {
           }
         }
       }
-
-      c3->cd();
-      c3->Modified();
-      c3->Update();
 
       last_plotting = updates;
     }
@@ -204,31 +147,31 @@ void *mhs1(void *) {
     // save monitoring structure in root-file
     if ( saveHistograms ) {
       TThread::Lock();
-      mui->save("EcalBarrelMonitorTestPulseClient.root");
+      mui->save("EcalBarrelMonitorPedestalClient.root");
       TThread::UnLock();
     }
     TThread::CancelPoint();
   }
-  
+
   c1->Modified();
   c1->Update(); 
   c2->Modified();
   c2->Update(); 
   c3->Modified();
-  c3->Update();
-  
+  c3->Update(); 
+
   return 0;
 }
 
 int main(int argc, char** argv) {
   cout << endl;
-  cout << " *** Ecal Barrel Test Pulse Monitor Client ***" << endl;
+  cout << " *** Ecal Barrel Pedestal Monitor Client ***" << endl;
   cout << endl;
 
   TApplication app("app",&argc,argv);
 
   // default client name
-  string cfuname = "UserTestPulse";
+  string cfuname = "UserPedestal";
 
   // default collector host name
   string hostname = "localhost";
@@ -236,18 +179,15 @@ int main(int argc, char** argv) {
   // default port #
   int port_no = 9090;
 
-  c1 = new TCanvas("Ecal Barrel Test Pulse Monitoring G01","Ecal Barrel Test Pulse Monitoring G01",  0,  0,300,800);
-  c1->Divide(1,2);
+  c1 = new TCanvas("Ecal Barrel Pedestal Monitoring G01","Ecal Barrel Pedestal Monitoring G01",  0,  0,300,800);
   c1->Draw();
   c1->Modified();
   c1->Update();
-  c2 = new TCanvas("Ecal Barrel Test Pulse Monitoring G06","Ecal Barrel Test Pulse Monitoring G06",310,  0,300,800);
-  c2->Divide(1,2);
+  c2 = new TCanvas("Ecal Barrel Pedestal Monitoring G06","Ecal Barrel Pedestal Monitoring G06",310,  0,300,800);
   c2->Draw();
   c2->Modified();
   c2->Update();
-  c3 = new TCanvas("Ecal Barrel Test Pulse Monitoring G12","Ecal Barrel Test Pulse Monitoring G12",620,  0,300,800);
-  c3->Divide(1,2);
+  c3 = new TCanvas("Ecal Barrel Pedestal Monitoring G12","Ecal Barrel Pedestal Monitoring G12",620,  0,300,800);
   c3->Draw();
   c3->Modified();
   c3->Update();
@@ -270,12 +210,9 @@ int main(int argc, char** argv) {
   mui->subscribe("*/EcalBarrel/STATUS");
   mui->subscribe("*/EcalBarrel/RUN");
   mui->subscribe("*/EcalBarrel/EVT");
-  mui->subscribe("*/EcalBarrel/EBTestPulseTask/Gain01/EBTT shape SM*");
-  mui->subscribe("*/EcalBarrel/EBTestPulseTask/Gain01/EBTT amplitude SM*");
-  mui->subscribe("*/EcalBarrel/EBTestPulseTask/Gain06/EBTT shape SM*");
-  mui->subscribe("*/EcalBarrel/EBTestPulseTask/Gain06/EBTT amplitude SM*");
-  mui->subscribe("*/EcalBarrel/EBTestPulseTask/Gain12/EBTT shape SM*");
-  mui->subscribe("*/EcalBarrel/EBTestPulseTask/Gain12/EBTT amplitude SM*");
+  mui->subscribe("*/EcalBarrel/EBPedestalTask/Gain01/EBPT pedestal SM*");
+  mui->subscribe("*/EcalBarrel/EBPedestalTask/Gain06/EBPT pedestal SM*");
+  mui->subscribe("*/EcalBarrel/EBPedestalTask/Gain12/EBPT pedestal SM*");
 
   TThread *th1 = new TThread("th1",mhs1);
 
