@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorClient.cpp
  *
- *  $Date: 2005/10/25 13:03:50 $
- *  $Revision: 1.1 $
+ *  $Date: 2005/10/27 09:39:59 $
+ *  $Revision: 1.2 $
  *  \author G. Della Ricca
  *
  */
@@ -17,11 +17,21 @@
 #include <iostream>
 #include <math.h>
 
+#include <signal.h>
+
 using namespace std;
 
 TCanvas* c1;
 
 MonitorUserInterface* mui;
+
+void ctr_c_intr(int sig) {
+
+  cout << "*** Exit the program by selecting Quit from the File menu ***" << endl;
+  signal(SIGINT, ctr_c_intr);
+
+  return;
+}
 
 void *mhs1(void *) {
 
@@ -124,9 +134,12 @@ void *mhs1(void *) {
 }
 
 int main(int argc, char** argv) {
+
   cout << endl;
   cout << " *** Ecal Barrel Generic Monitor Client ***" << endl;
   cout << endl;
+
+  signal(SIGINT, ctr_c_intr);
 
   TApplication app("app",&argc,argv);
 
