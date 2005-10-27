@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorCosmicClient.cpp
  *
- *  $Date: 2005/10/19 08:33:11 $
- *  $Revision: 1.17 $
+ *  $Date: 2005/10/25 13:03:50 $
+ *  $Revision: 1.1 $
  *  \author G. Della Ricca
  *
  */
@@ -176,7 +176,7 @@ int main(int argc, char** argv) {
   // start user interface instance
   mui = new MonitorUIRoot(hostname,port_no,cfuname);
 
-  mui->setVerbose(0);
+  mui->setVerbose(1);
 
   // will attempt to reconnect upon connection problems (w/ a 5-sec delay)
   mui->setReconnectDelay(5);
