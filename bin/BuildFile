@@ -38,3 +38,9 @@ LDFLAGS := $(LDFLAGS) -L$(ROOTSYS)/lib -lThread
  <use name=root>
 </bin>
 
+<bin file=testEcalBarrelMonitorWritePedestalClient.cpp>
+ <use name=DQMServices/NodeROOT>
+ <use name=DQMServices/UI>
+ <use name=root>
+</bin>
+

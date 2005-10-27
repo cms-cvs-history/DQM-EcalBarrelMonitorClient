@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorPedestalClient.cpp
  *
- *  $Date: 2005/10/27 09:39:59 $
- *  $Revision: 1.2 $
+ *  $Date: 2005/10/27 12:33:48 $
+ *  $Revision: 1.3 $
  *  \author G. Della Ricca
  *
  */
@@ -231,13 +231,13 @@ int main(int argc, char** argv) {
 
   th1->Run();
 
-  app.Run(kTRUE);
+  try { app.Run(kTRUE); } catch (...) { throw; }
 
   th1->SetCancelDeferred();
 
   th1->Kill();
 
-  gSystem->Sleep(1000);
+  gSystem->Sleep(100);
 
   delete mui;
 
