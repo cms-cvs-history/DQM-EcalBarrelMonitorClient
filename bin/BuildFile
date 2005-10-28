@@ -1,3 +1,9 @@
+<bin file=testEcalBarrelMonitorWritePedestalClient.cpp>
+ <use name=DQMServices/NodeROOT>
+ <use name=DQMServices/UI>
+ <use name=root>
+</bin>
+
 <makefile>
 LDFLAGS := $(LDFLAGS) -L$(ROOTSYS)/lib -lThread
 </makefile>
@@ -33,12 +39,6 @@ LDFLAGS := $(LDFLAGS) -L$(ROOTSYS)/lib -lThread
 </bin>
 
 <bin file=testEcalBarrelMonitorLaserClient.cpp>
- <use name=DQMServices/NodeROOT>
- <use name=DQMServices/UI>
- <use name=root>
-</bin>
-
-<bin file=testEcalBarrelMonitorWritePedestalClient.cpp>
  <use name=DQMServices/NodeROOT>
  <use name=DQMServices/UI>
  <use name=root>

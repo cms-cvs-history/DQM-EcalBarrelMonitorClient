@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorPedestalClient.cpp
  *
- *  $Date: 2005/10/27 12:33:48 $
- *  $Revision: 1.3 $
+ *  $Date: 2005/10/27 13:04:57 $
+ *  $Revision: 1.4 $
  *  \author G. Della Ricca
  *
  */
@@ -27,9 +27,12 @@ TCanvas* c3;
 
 MonitorUserInterface* mui;
 
+bool exit_now = false;
+
 void ctr_c_intr(int sig) {
         
   cout << "*** Exit the program by selecting Quit from the File menu ***" << endl;
+//  exit_now = true;
   signal(SIGINT, ctr_c_intr);
 
   return;
@@ -45,7 +48,7 @@ void *mhs1(void *) {
   // last time root-file was saved
   int last_save = -1;
 
-  while ( stay_in_loop ) {
+  while ( stay_in_loop && ! exit_now ) {
 
     bool saveHistograms = false;
   
@@ -65,8 +68,8 @@ void *mhs1(void *) {
 
     MonitorElement* me;
 
-    // draw monitoring objects every 2 monitoring cycles
-    if ( updates % 2 == 0 && updates != last_plotting ) {
+    // draw monitoring objects every 5 monitoring cycles
+    if ( updates % 5 == 0 && updates != last_plotting ) {
 
       me = mui->get("Collector/FU0/EcalBarrel/STATUS");
       if ( me ) {
@@ -104,7 +107,7 @@ void *mhs1(void *) {
           TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
           if ( h ) {
             c1->cd();
-            h->SetMaximum(4096.);
+            h->SetMaximum(400.);
             h->SetOption("col");
             h->Draw();
             c1->Modified();
@@ -120,7 +123,7 @@ void *mhs1(void *) {
           TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
           if ( h ) {
             c2->cd();
-            h->SetMaximum(4096.);
+            h->SetMaximum(100.);
             h->SetOption("col");
             h->Draw();
             c2->Modified();
@@ -136,7 +139,7 @@ void *mhs1(void *) {
           TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
           if ( h ) {
             c3->cd();
-            h->SetMaximum(4096.);
+            h->SetMaximum( 50.);
             h->SetOption("col");
             h->Draw();
             c3->Modified();
@@ -192,15 +195,15 @@ int main(int argc, char** argv) {
   // default port #
   int port_no = 9090;
 
-  c1 = new TCanvas("Ecal Barrel Pedestal Monitoring G01","Ecal Barrel Pedestal Monitoring G01",  0,  0,300,800);
+  c1 = new TCanvas("Ecal Barrel Pedestal Monitoring G01","Ecal Barrel Pedestal Monitoring G01", 0,  0,800,250);
   c1->Draw();
   c1->Modified();
   c1->Update();
-  c2 = new TCanvas("Ecal Barrel Pedestal Monitoring G06","Ecal Barrel Pedestal Monitoring G06",310,  0,300,800);
+  c2 = new TCanvas("Ecal Barrel Pedestal Monitoring G06","Ecal Barrel Pedestal Monitoring G06", 0,310,800,250);
   c2->Draw();
   c2->Modified();
   c2->Update();
-  c3 = new TCanvas("Ecal Barrel Pedestal Monitoring G12","Ecal Barrel Pedestal Monitoring G12",620,  0,300,800);
+  c3 = new TCanvas("Ecal Barrel Pedestal Monitoring G12","Ecal Barrel Pedestal Monitoring G12", 0,620,800,250);
   c3->Draw();
   c3->Modified();
   c3->Update();

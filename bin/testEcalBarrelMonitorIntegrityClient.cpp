@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorIntegrityClient.cpp
  *
- *  $Date: 2005/10/27 12:33:48 $
- *  $Revision: 1.3 $
+ *  $Date: 2005/10/27 13:04:57 $
+ *  $Revision: 1.4 $
  *  \author G. Della Ricca
  *
  */
@@ -26,9 +26,12 @@ TCanvas* c2;
 
 MonitorUserInterface* mui;
 
+bool exit_now = false;
+
 void ctr_c_intr(int sig) {
         
   cout << "*** Exit the program by selecting Quit from the File menu ***" << endl;
+//  exit_now = true;
   signal(SIGINT, ctr_c_intr);
 
   return;
@@ -44,7 +47,7 @@ void *mhs1(void *) {
   // last time root-file was saved
   int last_save = -1;
 
-  while ( stay_in_loop ) {
+  while ( stay_in_loop && ! exit_now ) {
 
     bool saveHistograms = false;
   
@@ -66,8 +69,8 @@ void *mhs1(void *) {
 
     MonitorElement* me;
 
-    // draw monitoring objects every 2 monitoring cycles
-    if ( updates % 2 == 0 && updates != last_plotting ) {
+    // draw monitoring objects every 5 monitoring cycles
+    if ( updates % 5 == 0 && updates != last_plotting ) {
 
       me = mui->get("Collector/FU0/EcalBarrel/STATUS");
       if ( me ) {
@@ -226,7 +229,7 @@ int main(int argc, char** argv) {
   c1->Draw();
   c1->Modified();
   c1->Update();
-  c2 = new TCanvas("Ecal Barrel Integrity Monitoring 2","Ecal Barrel Integrity Monitoring 2",410, 0,600,600);
+  c2 = new TCanvas("Ecal Barrel Integrity Monitoring 2","Ecal Barrel Integrity Monitoring 2",430, 0,600,600);
   c2->Divide(2,2);
   c2->Draw();
   c2->Modified();

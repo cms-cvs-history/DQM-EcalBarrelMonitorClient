@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorTestPulseClient.cpp
  *
- *  $Date: 2005/10/27 12:33:48 $
- *  $Revision: 1.3 $
+ *  $Date: 2005/10/27 13:04:57 $
+ *  $Revision: 1.4 $
  *  \author G. Della Ricca
  *
  */
@@ -24,12 +24,18 @@ using namespace std;
 TCanvas* c1;
 TCanvas* c2;
 TCanvas* c3;
+TCanvas* c4;
+TCanvas* c5;
+TCanvas* c6;
 
 MonitorUserInterface* mui;
+
+bool exit_now = false;
 
 void ctr_c_intr(int sig) {
         
   cout << "*** Exit the program by selecting Quit from the File menu ***" << endl;
+//  exit_now = true;
   signal(SIGINT, ctr_c_intr);
 
   return;
@@ -45,7 +51,7 @@ void *mhs1(void *) {
   // last time root-file was saved
   int last_save = -1;
 
-  while ( stay_in_loop ) {
+  while ( stay_in_loop && ! exit_now ) {
 
     bool saveHistograms = false;
   
@@ -68,8 +74,8 @@ void *mhs1(void *) {
 
     MonitorElement* me;
 
-    // draw monitoring objects every 2 monitoring cycles
-    if ( updates % 2 == 0 && updates != last_plotting ) {
+    // draw monitoring objects every 5 monitoring cycles
+    if ( updates % 5 == 0 && updates != last_plotting ) {
 
       me = mui->get("Collector/FU0/EcalBarrel/STATUS");
       if ( me ) {
@@ -100,51 +106,17 @@ void *mhs1(void *) {
         cout << "event = " << evt.c_str() << endl;
       }
 
-      me = mui->get("Collector/FU0/EcalBarrel/EBTestPulseTask/Gain01/EBTT shape SM01 G01");
-      if ( me ) {
-        MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
-        if ( ob ) {
-          TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
-          if ( h ) {
-            c1->cd(1);
-            h->SetOption("lego");
-            h->Draw();
-            c1->Modified();
-            c1->Update();
-          }
-        }
-      }
-
       me = mui->get("Collector/FU0/EcalBarrel/EBTestPulseTask/Gain01/EBTT amplitude SM01 G01");
       if ( me ) {
         MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
         if ( ob ) {
           TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
           if ( h ) {
-            c1->cd(2);
+            c1->cd();
             h->SetOption("col");
             h->Draw();
             c1->Modified();
             c1->Update();
-          }
-        }
-      }
-
-      c1->cd();
-      c1->Modified();
-      c1->Update();
-
-      me = mui->get("Collector/FU0/EcalBarrel/EBTestPulseTask/Gain06/EBTT shape SM01 G06");
-      if ( me ) {
-        MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
-        if ( ob ) {
-          TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
-          if ( h ) {
-            c2->cd(1);
-            h->SetOption("lego");
-            h->Draw();
-            c2->Modified();
-            c2->Update();
           }
         }
       }
@@ -155,30 +127,11 @@ void *mhs1(void *) {
         if ( ob ) {
           TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
           if ( h ) {
-            c2->cd(2);
+            c2->cd();
             h->SetOption("col");
             h->Draw();
             c2->Modified();
             c2->Update();
-          }
-        }
-      }
-
-      c2->cd();
-      c2->Modified();
-      c2->Update();
-
-      me = mui->get("Collector/FU0/EcalBarrel/EBTestPulseTask/Gain12/EBTT shape SM01 G12");
-      if ( me ) {
-        MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
-        if ( ob ) {
-          TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
-          if ( h ) {
-            c3->cd(1);
-            h->SetOption("lego");
-            h->Draw();
-            c3->Modified();
-            c3->Update();
           }
         }
       }
@@ -189,7 +142,7 @@ void *mhs1(void *) {
         if ( ob ) {
           TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
           if ( h ) {
-            c3->cd(2);
+            c3->cd();
             h->SetOption("col");
             h->Draw();
             c3->Modified();
@@ -198,9 +151,50 @@ void *mhs1(void *) {
         }
       }
 
-      c3->cd();
-      c3->Modified();
-      c3->Update();
+      me = mui->get("Collector/FU0/EcalBarrel/EBTestPulseTask/Gain01/EBTT shape SM01 G01");
+      if ( me ) {
+        MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
+        if ( ob ) {
+          TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
+          if ( h ) {
+            c4->cd();
+            h->SetOption("lego");
+            h->Draw();
+            c4->Modified();
+            c4->Update();
+          }
+        }
+      }
+
+      me = mui->get("Collector/FU0/EcalBarrel/EBTestPulseTask/Gain06/EBTT shape SM01 G06");
+      if ( me ) {
+        MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
+        if ( ob ) {
+          TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
+          if ( h ) {
+            c5->cd();
+            h->SetOption("lego");
+            h->Draw();
+            c5->Modified();
+            c5->Update();
+          }
+        }
+      }
+
+      me = mui->get("Collector/FU0/EcalBarrel/EBTestPulseTask/Gain12/EBTT shape SM01 G12");
+      if ( me ) {
+        MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
+        if ( ob ) {
+          TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
+          if ( h ) {
+            c6->cd();
+            h->SetOption("lego");
+            h->Draw();
+            c6->Modified();
+            c6->Update();
+          }
+        }
+      }
 
       last_plotting = updates;
     }
@@ -226,6 +220,12 @@ void *mhs1(void *) {
   c2->Update(); 
   c3->Modified();
   c3->Update();
+  c4->Modified();
+  c4->Update(); 
+  c5->Modified();
+  c5->Update(); 
+  c6->Modified();
+  c6->Update();
   
   return 0;
 }
@@ -249,22 +249,30 @@ int main(int argc, char** argv) {
   // default port #
   int port_no = 9090;
 
-  c1 = new TCanvas("Ecal Barrel Test Pulse Monitoring G01","Ecal Barrel Test Pulse Monitoring G01",  0,  0,300,800);
-  c1->Divide(1,2);
+  c1 = new TCanvas("Ecal Barrel Test Pulse Monitoring amplitude G01","Ecal Barrel Test Pulse Monitoring amplitude G01", 0,  0,800,250);
   c1->Draw();
   c1->Modified();
   c1->Update();
-  c2 = new TCanvas("Ecal Barrel Test Pulse Monitoring G06","Ecal Barrel Test Pulse Monitoring G06",310,  0,300,800);
-  c2->Divide(1,2);
+  c2 = new TCanvas("Ecal Barrel Test Pulse Monitoring amplitude G06","Ecal Barrel Test Pulse Monitoring amplitude G06", 0,310,800,250);
   c2->Draw();
   c2->Modified();
   c2->Update();
-  c3 = new TCanvas("Ecal Barrel Test Pulse Monitoring G12","Ecal Barrel Test Pulse Monitoring G12",620,  0,300,800);
-  c3->Divide(1,2);
+  c3 = new TCanvas("Ecal Barrel Test Pulse Monitoring amplitude G12","Ecal Barrel Test Pulse Monitoring amplitude G12", 0,620,800,250);
   c3->Draw();
   c3->Modified();
   c3->Update();
-
+  c4 = new TCanvas("Ecal Barrel Test Pulse Monitoring shape G01","Ecal Barrel Test Pulse Monitoring shape G01",820,  0,250,250);
+  c4->Draw();
+  c4->Modified();
+  c4->Update();
+  c5 = new TCanvas("Ecal Barrel Test Pulse Monitoring shape G06","Ecal Barrel Test Pulse Monitoring shape G06",820,310,250,250);
+  c5->Draw();
+  c5->Modified();
+  c5->Update();
+  c6 = new TCanvas("Ecal Barrel Test Pulse Monitoring shape G12","Ecal Barrel Test Pulse Monitoring shape G12",820,620,250,250);
+  c6->Draw();
+  c6->Modified();
+  c6->Update();
   if(argc >= 2) cfuname = argv[1];
   if(argc >= 3) hostname = argv[2];
 

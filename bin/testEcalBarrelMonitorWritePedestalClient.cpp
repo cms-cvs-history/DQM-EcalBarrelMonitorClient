@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorPedestalClient.cpp
  *
- *  $Date: 2005/10/27 12:33:48 $
- *  $Revision: 1.3 $
+ *  $Date: 2005/10/27 13:04:57 $
+ *  $Revision: 1.1 $
  *  \author G. Della Ricca
  *
  */
@@ -11,19 +11,35 @@
 #include "DQMServices/UI/interface/MonitorUIRoot.h"
 
 #include "TROOT.h"
+#include "TSystem.h"
 
 #include <iostream>
 #include <math.h>
 
+#include <signal.h>
+
 using namespace std;
 
 MonitorUserInterface* mui;
+
+bool exit_now = false;
+
+void ctr_c_intr(int sig) {
+
+  exit_now = true;
+  cout << "Exiting ..." << endl;
+  signal(SIGINT, ctr_c_intr);
+
+  return;
+}
 
 int main(int argc, char** argv) {
 
   cout << endl;
   cout << " *** Ecal Barrel Pedestal Monitor Client ***" << endl;
   cout << endl;
+
+  signal(SIGINT, ctr_c_intr);
 
   // default client name
   string cfuname = "UserPedestal";
@@ -58,7 +74,7 @@ int main(int argc, char** argv) {
 
   bool stay_in_loop = true;
 
-  while ( stay_in_loop ) {
+  while ( stay_in_loop && ! exit_now ) {
 
     // this is the "main" loop where we receive monitoring
     stay_in_loop = mui->update();
@@ -76,8 +92,8 @@ int main(int argc, char** argv) {
 
     MonitorElement* me;
 
-    // draw monitoring objects every 2 monitoring cycles
-    if ( updates % 2 == 0 ) {
+    // draw monitoring objects every 5 monitoring cycles
+    if ( updates % 5 == 0 ) {
 
       me = mui->get("Collector/FU0/EcalBarrel/STATUS");
       if ( me ) {
@@ -138,6 +154,8 @@ int main(int argc, char** argv) {
 
     }
   }
+
+  gSystem->Sleep(100);
 
   delete mui;
 
