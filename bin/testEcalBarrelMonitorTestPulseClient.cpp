@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorTestPulseClient.cpp
  *
- *  $Date: 2005/10/28 13:28:14 $
- *  $Revision: 1.6 $
+ *  $Date: 2005/10/28 16:08:55 $
+ *  $Revision: 1.7 $
  *  \author G. Della Ricca
  *
  */
@@ -115,6 +115,7 @@ void *pth1(void *) {
             c1->cd();
             h->SetOption("col");
             h->Draw();
+            c1->Update();
           }
         }
       }
@@ -128,6 +129,7 @@ void *pth1(void *) {
             c2->cd();
             h->SetOption("col");
             h->Draw();
+            c2->Update();
           }
         }
       }
@@ -141,6 +143,7 @@ void *pth1(void *) {
             c3->cd();
             h->SetOption("col");
             h->Draw();
+            c3->Update();
           }
         }
       }
@@ -154,6 +157,7 @@ void *pth1(void *) {
             c4->cd();
             h->SetOption("lego");
             h->Draw();
+            c4->Update();
           }
         }
       }
@@ -167,6 +171,7 @@ void *pth1(void *) {
             c5->cd();
             h->SetOption("lego");
             h->Draw();
+            c5->Update();
           }
         }
       }
@@ -180,6 +185,7 @@ void *pth1(void *) {
             c6->cd();
             h->SetOption("lego");
             h->Draw();
+            c6->Update();
           }
         }
       }

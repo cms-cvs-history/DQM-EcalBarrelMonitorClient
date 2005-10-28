@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorIntegrityClient.cpp
  *
- *  $Date: 2005/10/28 13:28:14 $
- *  $Revision: 1.6 $
+ *  $Date: 2005/10/28 16:14:37 $
+ *  $Revision: 1.7 $
  *  \author G. Della Ricca
  *
  */
@@ -110,6 +110,7 @@ void *pth1(void *) {
             c1->cd();
             h->SetOption("text");
             h->Draw();
+            c1->Update();
           }
         }
       }
@@ -123,6 +124,7 @@ void *pth1(void *) {
             c2->cd(1);
             h->SetOption("text");
             h->Draw();
+            c2->Update();
           }
         }
       }
@@ -136,6 +138,7 @@ void *pth1(void *) {
             c2->cd(2);
             h->SetOption("text");
             h->Draw();
+            c2->Update();
           }
         }
       }
@@ -149,6 +152,7 @@ void *pth1(void *) {
             c2->cd(3);
             h->SetOption("text");
             h->Draw();
+            c2->Update();
           }
         }
       }
@@ -162,6 +166,7 @@ void *pth1(void *) {
             c2->cd(4);
             h->SetOption("text");
             h->Draw();
+            c2->Update();
           }
         }
       }

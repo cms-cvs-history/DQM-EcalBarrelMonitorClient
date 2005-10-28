@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorClient.cpp
  *
- *  $Date: 2005/10/28 15:46:10 $
- *  $Revision: 1.7 $
+ *  $Date: 2005/10/28 16:14:37 $
+ *  $Revision: 1.8 $
  *  \author G. Della Ricca
  *
  */
@@ -106,6 +106,7 @@ void *pth1(void *) {
             h->SetMaximum(4096.);
             h->SetOption("box");
             h->Draw();
+            c1->Update();
           }
         }
       }
@@ -125,9 +126,6 @@ void *pth1(void *) {
       TThread::UnLock();
     }
   }
-
-  c1->Modified();
-  c1->Update();
 
   exit_done = true;
 
