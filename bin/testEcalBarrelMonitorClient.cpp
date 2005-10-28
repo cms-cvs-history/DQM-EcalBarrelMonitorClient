@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorClient.cpp
  *
- *  $Date: 2005/10/28 13:28:14 $
- *  $Revision: 1.6 $
+ *  $Date: 2005/10/28 15:46:10 $
+ *  $Revision: 1.7 $
  *  \author G. Della Ricca
  *
  */
@@ -32,7 +32,6 @@ void ctr_c_intr(int sig) {
 
   cout << "*** Exit the program by selecting Quit from the File menu ***" << endl;
 //  exit_now = true;
-  signal(SIGINT, ctr_c_intr);
 
   return;
 }
@@ -107,8 +106,6 @@ void *pth1(void *) {
             h->SetMaximum(4096.);
             h->SetOption("box");
             h->Draw();
-            c1->Modified();
-            c1->Update();
           }
         }
       }
@@ -157,7 +154,6 @@ int main(int argc, char** argv) {
   int port_no = 9090;
 
   c1 = new TCanvas("Ecal Barrel Generic Monitoring","Ecal Barrel Generic Monitoring", 0, 0,1000,400);
-  c1->Draw();
   c1->Modified();
   c1->Update();
 

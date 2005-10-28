@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorCosmicClient.cpp
  *
- *  $Date: 2005/10/28 10:22:18 $
- *  $Revision: 1.5 $
+ *  $Date: 2005/10/28 13:28:14 $
+ *  $Revision: 1.6 $
  *  \author G. Della Ricca
  *
  */
@@ -33,7 +33,6 @@ void ctr_c_intr(int sig) {
         
   cout << "*** Exit the program by selecting Quit from the File menu ***" << endl;
 //  exit_now = true;
-  signal(SIGINT, ctr_c_intr);
 
   return;
 }
@@ -109,8 +108,6 @@ void *pth1(void *) {
             h->SetMaximum(1000.);
             h->SetOption("col");
             h->Draw();
-            c1->Modified();
-            c1->Update();
           }
         }
       }
@@ -125,8 +122,6 @@ void *pth1(void *) {
             h->SetMaximum(1000.);
             h->SetOption("col");
             h->Draw();
-            c2->Modified();
-            c2->Update();
           }
         }
       }
@@ -146,11 +141,6 @@ void *pth1(void *) {
       TThread::UnLock();
     }
   }
-
-  c1->Modified();
-  c1->Update(); 
-  c2->Modified();
-  c2->Update(); 
 
   exit_done = true;
 
@@ -177,11 +167,9 @@ int main(int argc, char** argv) {
   int port_no = 9090;
 
   c1 = new TCanvas("Ecal Barrel Cosmic Monitoring 1","Ecal Barrel Cosmic Monitoring 1", 0,  0,1000,400);
-  c1->Draw();
   c1->Modified();
   c1->Update();
   c2 = new TCanvas("Ecal Barrel Cosmic Monitoring 2","Ecal Barrel Cosmic Monitoring 2", 0,460,1000,400);
-  c2->Draw();
   c2->Modified();
   c2->Update();
 

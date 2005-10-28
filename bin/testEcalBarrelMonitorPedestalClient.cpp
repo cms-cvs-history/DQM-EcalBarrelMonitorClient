@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorPedestalClient.cpp
  *
- *  $Date: 2005/10/28 10:22:18 $
- *  $Revision: 1.5 $
+ *  $Date: 2005/10/28 13:28:14 $
+ *  $Revision: 1.6 $
  *  \author G. Della Ricca
  *
  */
@@ -34,7 +34,6 @@ void ctr_c_intr(int sig) {
         
   cout << "*** Exit the program by selecting Quit from the File menu ***" << endl;
 //  exit_now = true;
-  signal(SIGINT, ctr_c_intr);
 
   return;
 }
@@ -111,8 +110,6 @@ void *pth1(void *) {
             h->SetMaximum(400.);
             h->SetOption("col");
             h->Draw();
-            c1->Modified();
-            c1->Update();
           }
         }
       }
@@ -127,8 +124,6 @@ void *pth1(void *) {
             h->SetMaximum(100.);
             h->SetOption("col");
             h->Draw();
-            c2->Modified();
-            c2->Update();
           }
         }
       }
@@ -143,8 +138,6 @@ void *pth1(void *) {
             h->SetMaximum( 50.);
             h->SetOption("col");
             h->Draw();
-            c3->Modified();
-            c3->Update();
           }
         }
       }
@@ -165,13 +158,6 @@ void *pth1(void *) {
       TThread::UnLock();
     }
   }
-
-  c1->Modified();
-  c1->Update(); 
-  c2->Modified();
-  c2->Update(); 
-  c3->Modified();
-  c3->Update(); 
 
   exit_done = true;
 
@@ -198,15 +184,12 @@ int main(int argc, char** argv) {
   int port_no = 9090;
 
   c1 = new TCanvas("Ecal Barrel Pedestal Monitoring G01","Ecal Barrel Pedestal Monitoring G01", 0,  0,800,250);
-  c1->Draw();
   c1->Modified();
   c1->Update();
   c2 = new TCanvas("Ecal Barrel Pedestal Monitoring G06","Ecal Barrel Pedestal Monitoring G06", 0,310,800,250);
-  c2->Draw();
   c2->Modified();
   c2->Update();
   c3 = new TCanvas("Ecal Barrel Pedestal Monitoring G12","Ecal Barrel Pedestal Monitoring G12", 0,620,800,250);
-  c3->Draw();
   c3->Modified();
   c3->Update();
 

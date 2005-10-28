@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorLaserClient.cpp
  *
- *  $Date: 2005/10/28 10:22:18 $
- *  $Revision: 1.5 $
+ *  $Date: 2005/10/28 13:28:14 $
+ *  $Revision: 1.6 $
  *  \author G. Della Ricca
  *
  */
@@ -33,7 +33,6 @@ void ctr_c_intr(int sig) {
         
   cout << "*** Exit the program by selecting Quit from the File menu ***" << endl;
 //  exit_now = true;
-  signal(SIGINT, ctr_c_intr);
 
   return;
 }
@@ -108,8 +107,6 @@ void *pth1(void *) {
             c1->cd();
             h->SetOption("lego");
             h->Draw();
-            c1->Modified();
-            c1->Update();
           }
         }
       }
@@ -123,8 +120,6 @@ void *pth1(void *) {
             c2->cd();
             h->SetOption("col");
             h->Draw();
-            c2->Modified();
-            c2->Update();
           }
         }
       }
@@ -145,11 +140,6 @@ void *pth1(void *) {
       TThread::UnLock();
     }
   }
-
-  c1->Modified();
-  c1->Update(); 
-  c2->Modified();
-  c2->Update(); 
 
   exit_done = true;
 
@@ -176,11 +166,9 @@ int main(int argc, char** argv) {
   int port_no = 9090;
 
   c1 = new TCanvas("Ecal Barrel Laser Monitoring Amplitude L1","Ecal Barrel Laser Monitoring Amplitude L1", 0,310,500,500);
-  c1->Draw();
   c1->Modified();
   c1->Update();
   c2 = new TCanvas("Ecal Barrel Laser Monitoring Shape L1","Ecal Barrel Laser Monitoring Shape L1", 0, 0,800,250);
-  c2->Draw();
   c2->Modified();
   c2->Update();
 
