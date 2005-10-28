@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorPedestalClient.cpp
  *
- *  $Date: 2005/10/27 13:04:57 $
- *  $Revision: 1.1 $
+ *  $Date: 2005/10/28 10:22:18 $
+ *  $Revision: 1.2 $
  *  \author G. Della Ricca
  *
  */
@@ -11,7 +11,6 @@
 #include "DQMServices/UI/interface/MonitorUIRoot.h"
 
 #include "TROOT.h"
-#include "TSystem.h"
 
 #include <iostream>
 #include <math.h>
@@ -50,14 +49,14 @@ int main(int argc, char** argv) {
   // default port #
   int port_no = 9090;
 
-  if(argc >= 2) cfuname = argv[1];
-  if(argc >= 3) hostname = argv[2];
+  if ( argc >= 2 ) cfuname = argv[1];
+  if ( argc >= 3 ) hostname = argv[2];
 
   cout << " Client " << cfuname
        << " begins requesting monitoring from host " << hostname << endl;
 
   // start user interface instance
-  mui = new MonitorUIRoot(hostname,port_no,cfuname);
+  mui = new MonitorUIRoot(hostname, port_no, cfuname);
 
   mui->setVerbose(1);
 
@@ -155,7 +154,9 @@ int main(int argc, char** argv) {
     }
   }
 
-  gSystem->Sleep(100);
+  mui->unsubscribe("*");
+
+  usleep(100);
 
   delete mui;
 

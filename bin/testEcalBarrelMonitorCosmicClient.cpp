@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorCosmicClient.cpp
  *
- *  $Date: 2005/10/27 13:04:57 $
- *  $Revision: 1.4 $
+ *  $Date: 2005/10/28 10:22:18 $
+ *  $Revision: 1.5 $
  *  \author G. Della Ricca
  *
  */
@@ -27,6 +27,7 @@ TCanvas* c2;
 MonitorUserInterface* mui;
 
 bool exit_now = false;
+bool exit_done = false;
 
 void ctr_c_intr(int sig) {
         
@@ -37,7 +38,7 @@ void ctr_c_intr(int sig) {
   return;
 }
 
-void *mhs1(void *) {
+void *pth1(void *) {
 
   bool stay_in_loop = true;
 
@@ -144,13 +145,14 @@ void *mhs1(void *) {
       mui->save("EcalBarrelMonitorCosmicClient.root");
       TThread::UnLock();
     }
-    TThread::CancelPoint();
   }
 
   c1->Modified();
   c1->Update(); 
   c2->Modified();
   c2->Update(); 
+
+  exit_done = true;
 
   return 0;
 }
@@ -163,7 +165,7 @@ int main(int argc, char** argv) {
 
   signal(SIGINT, ctr_c_intr);
 
-  TApplication app("app",&argc,argv);
+  TApplication app("app", &argc, argv);
 
   // default client name
   string cfuname = "UserCosmic";
@@ -183,14 +185,14 @@ int main(int argc, char** argv) {
   c2->Modified();
   c2->Update();
 
-  if(argc >= 2) cfuname = argv[1];
-  if(argc >= 3) hostname = argv[2];
+  if ( argc >= 2 ) cfuname = argv[1];
+  if ( argc >= 3 ) hostname = argv[2];
 
   cout << " Client " << cfuname
        << " begins requesting monitoring from host " << hostname << endl;
 
   // start user interface instance
-  mui = new MonitorUIRoot(hostname,port_no,cfuname);
+  mui = new MonitorUIRoot(hostname, port_no, cfuname);
 
   mui->setVerbose(1);
 
@@ -204,17 +206,19 @@ int main(int argc, char** argv) {
   mui->subscribe("*/EcalBarrel/EBCosmicTask/Cut/EBCT amplitude cut SM*");
   mui->subscribe("*/EcalBarrel/EBCosmicTask/Sel/EBCT amplitude sel SM*");
 
-  TThread *th1 = new TThread("th1",mhs1);
+  TThread *th1 = new TThread("th1",pth1);
 
   th1->Run();
 
   try { app.Run(kTRUE); } catch (...) { throw; }
 
-  th1->SetCancelDeferred();
+  mui->unsubscribe("*");
 
-  th1->Kill();
+  exit_now = true;
 
-  gSystem->Sleep(100);
+  while ( ! exit_done ) { usleep(100); }
+
+  th1->Delete();
 
   delete mui;
 
