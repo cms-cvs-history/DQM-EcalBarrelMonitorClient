@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorClient.cpp
  *
- *  $Date: 2005/10/28 10:22:18 $
- *  $Revision: 1.5 $
+ *  $Date: 2005/10/28 13:28:14 $
+ *  $Revision: 1.6 $
  *  \author G. Della Ricca
  *
  */
@@ -65,8 +65,8 @@ void *pth1(void *) {
 
     MonitorElement* me;
 
-    // draw monitoring objects every 5 monitoring cycles
-    if ( updates % 5 == 0 && updates != last_plotting ) {
+    // draw monitoring objects every monitoring cycle
+    if ( updates != last_plotting ) {
 
       me = mui->get("Collector/FU0/EcalBarrel/STATUS");
       if ( me ) {
