@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorIntegrityClient.cpp
  *
- *  $Date: 2005/10/28 17:09:01 $
- *  $Revision: 1.8 $
+ *  $Date: 2005/10/30 16:29:55 $
+ *  $Revision: 1.9 $
  *  \author G. Della Ricca
  *
  */
@@ -58,10 +58,10 @@ void *pth1(void *) {
     mui->subscribeNew("*/EcalBarrel/STATUS");
     mui->subscribeNew("*/EcalBarrel/RUN");
     mui->subscribeNew("*/EcalBarrel/EVT");
-    mui->subscribeNew("*/EcalIntegrity/Gain/EI gain SM*");
-    mui->subscribeNew("*/EcalIntegrity/ChId/EI ChId SM*");
-    mui->subscribeNew("*/EcalIntegrity/TTId/EI TTId SM*");
-    mui->subscribeNew("*/EcalIntegrity/TTBlockSize/EI TTBlockSize SM*");
+    mui->subscribeNew("*/EcalIntegrity/Gain/EI gain SM01*");
+    mui->subscribeNew("*/EcalIntegrity/ChId/EI ChId SM01*");
+    mui->subscribeNew("*/EcalIntegrity/TTId/EI TTId SM01*");
+    mui->subscribeNew("*/EcalIntegrity/TTBlockSize/EI TTBlockSize SM01*");
     mui->subscribeNew("*/EcalIntegrity/DCC size error");
 
     // # of full monitoring cycles processed
@@ -242,10 +242,10 @@ int main(int argc, char** argv) {
   mui->subscribe("*/EcalBarrel/STATUS");
   mui->subscribe("*/EcalBarrel/RUN");
   mui->subscribe("*/EcalBarrel/EVT");
-  mui->subscribe("*/EcalIntegrity/Gain/EI gain SM*");
-  mui->subscribe("*/EcalIntegrity/ChId/EI ChId SM*");
-  mui->subscribe("*/EcalIntegrity/TTId/EI TTId SM*");
-  mui->subscribe("*/EcalIntegrity/TTBlockSize/EI TTBlockSize SM*");
+  mui->subscribe("*/EcalIntegrity/Gain/EI gain SM01*");
+  mui->subscribe("*/EcalIntegrity/ChId/EI ChId SM01*");
+  mui->subscribe("*/EcalIntegrity/TTId/EI TTId SM01*");
+  mui->subscribe("*/EcalIntegrity/TTBlockSize/EI TTBlockSize SM01*");
   mui->subscribe("*/EcalIntegrity/DCC size error");
 
   TThread *th1 = new TThread("th1",pth1);

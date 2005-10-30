@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorCosmicClient.cpp
  *
- *  $Date: 2005/10/28 17:09:01 $
- *  $Revision: 1.8 $
+ *  $Date: 2005/10/30 16:29:55 $
+ *  $Revision: 1.9 $
  *  \author G. Della Ricca
  *
  */
@@ -58,8 +58,8 @@ void *pth1(void *) {
     mui->subscribeNew("*/EcalBarrel/STATUS");
     mui->subscribeNew("*/EcalBarrel/RUN");
     mui->subscribeNew("*/EcalBarrel/EVT");
-    mui->subscribeNew("*/EcalBarrel/EBCosmicTask/Cut/EBCT amplitude cut SM*");
-    mui->subscribeNew("*/EcalBarrel/EBCosmicTask/Sel/EBCT amplitude sel SM*");
+    mui->subscribeNew("*/EcalBarrel/EBCosmicTask/Cut/EBCT amplitude cut SM01*");
+    mui->subscribeNew("*/EcalBarrel/EBCosmicTask/Sel/EBCT amplitude sel SM01*");
 
     // # of full monitoring cycles processed
     int updates = mui->getNumUpdates();
@@ -194,8 +194,8 @@ int main(int argc, char** argv) {
   mui->subscribe("*/EcalBarrel/STATUS");
   mui->subscribe("*/EcalBarrel/RUN");
   mui->subscribe("*/EcalBarrel/EVT");
-  mui->subscribe("*/EcalBarrel/EBCosmicTask/Cut/EBCT amplitude cut SM*");
-  mui->subscribe("*/EcalBarrel/EBCosmicTask/Sel/EBCT amplitude sel SM*");
+  mui->subscribe("*/EcalBarrel/EBCosmicTask/Cut/EBCT amplitude cut SM01*");
+  mui->subscribe("*/EcalBarrel/EBCosmicTask/Sel/EBCT amplitude sel SM01*");
 
   TThread *th1 = new TThread("th1",pth1);
 
