@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorIntegrityClient.cpp
  *
- *  $Date: 2005/10/30 16:29:55 $
- *  $Revision: 1.9 $
+ *  $Date: 2005/10/30 17:12:05 $
+ *  $Revision: 1.10 $
  *  \author G. Della Ricca
  *
  */
@@ -109,6 +109,7 @@ void *pth1(void *) {
           if ( h ) {
             c1->cd();
             h->SetOption("text");
+            h->SetMinimum(0.);
             h->Draw();
             c1->Update();
           }
