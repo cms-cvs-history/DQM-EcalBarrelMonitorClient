@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorIntegrityClient.cpp
  *
- *  $Date: 2005/10/30 17:12:05 $
- *  $Revision: 1.10 $
+ *  $Date: 2005/10/30 17:49:29 $
+ *  $Revision: 1.11 $
  *  \author G. Della Ricca
  *
  */
@@ -17,8 +17,6 @@
 #include <iostream>
 #include <math.h>
 
-#include <signal.h>
-
 using namespace std;
 
 TCanvas* c1;
@@ -28,14 +26,6 @@ MonitorUserInterface* mui;
 
 bool exit_now = false;
 bool exit_done = false;
-
-void ctr_c_intr(int sig) {
-        
-  cout << "*** Exit the program by selecting Quit from the File menu ***" << endl;
-//  exit_now = true;
-
-  return;
-}
 
 void *pth1(void *) {
 
@@ -109,7 +99,6 @@ void *pth1(void *) {
           if ( h ) {
             c1->cd();
             h->SetOption("text");
-            h->SetMinimum(0.);
             h->Draw();
             c1->Update();
           }
@@ -203,8 +192,6 @@ int main(int argc, char** argv) {
   cout << endl;
   cout << " *** Ecal Barrel Monitor Integrity Client ***" << endl;
   cout << endl;
-
-  signal(SIGINT, ctr_c_intr);
 
   TApplication app("app", &argc, argv);
 

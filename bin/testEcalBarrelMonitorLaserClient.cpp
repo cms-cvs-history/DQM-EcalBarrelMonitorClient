@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorLaserClient.cpp
  *
- *  $Date: 2005/10/30 16:29:55 $
- *  $Revision: 1.9 $
+ *  $Date: 2005/10/30 17:12:05 $
+ *  $Revision: 1.10 $
  *  \author G. Della Ricca
  *
  */
@@ -17,8 +17,6 @@
 #include <iostream>
 #include <math.h>
 
-#include <signal.h>
-
 using namespace std;
 
 TCanvas* c1;
@@ -28,14 +26,6 @@ MonitorUserInterface* mui;
 
 bool exit_now = false;
 bool exit_done = false;
-
-void ctr_c_intr(int sig) {
-        
-  cout << "*** Exit the program by selecting Quit from the File menu ***" << endl;
-//  exit_now = true;
-
-  return;
-}
 
 void *pth1(void *) {
 
@@ -153,8 +143,6 @@ int main(int argc, char** argv) {
   cout << endl;
   cout << " *** Ecal Barrel Laser Monitor Client ***" << endl;
   cout << endl;
-
-  signal(SIGINT, ctr_c_intr);
 
   TApplication app("app", &argc, argv);
 

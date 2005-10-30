@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorPedestalClient.cpp
  *
- *  $Date: 2005/10/28 13:28:14 $
- *  $Revision: 1.3 $
+ *  $Date: 2005/10/30 16:29:55 $
+ *  $Revision: 1.4 $
  *  \author G. Della Ricca
  *
  */
@@ -23,11 +23,10 @@ MonitorUserInterface* mui;
 
 bool exit_now = false;
 
-void ctr_c_intr(int sig) {
+void ctrl_c_intr(int sig) {
 
   exit_now = true;
   cout << "Exiting ..." << endl;
-  signal(SIGINT, ctr_c_intr);
 
   return;
 }
@@ -38,7 +37,7 @@ int main(int argc, char** argv) {
   cout << " *** Ecal Barrel Pedestal Monitor Client ***" << endl;
   cout << endl;
 
-  signal(SIGINT, ctr_c_intr);
+  signal(SIGINT, ctrl_c_intr);
 
   // default client name
   string cfuname = "UserPedestal";
