@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorPedestalClient.cpp
  *
- *  $Date: 2005/10/28 10:22:18 $
- *  $Revision: 1.2 $
+ *  $Date: 2005/10/28 13:28:14 $
+ *  $Revision: 1.3 $
  *  \author G. Della Ricca
  *
  */
@@ -91,7 +91,7 @@ int main(int argc, char** argv) {
 
     MonitorElement* me;
 
-    // draw monitoring objects every 5 monitoring cycles
+    // access monitoring objects every 5 monitoring cycles
     if ( updates % 5 == 0 ) {
 
       me = mui->get("Collector/FU0/EcalBarrel/STATUS");

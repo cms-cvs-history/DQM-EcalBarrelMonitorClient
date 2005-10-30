@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorClient.cpp
  *
- *  $Date: 2005/10/28 16:14:37 $
- *  $Revision: 1.8 $
+ *  $Date: 2005/10/28 17:09:01 $
+ *  $Revision: 1.9 $
  *  \author G. Della Ricca
  *
  */
@@ -110,6 +110,7 @@ void *pth1(void *) {
           }
         }
       }
+
       last_plotting = updates;
     }
 
