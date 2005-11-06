@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorWriteTestPulseClient.cpp
  *
- *  $Date: 2005/11/06 14:53:55 $
- *  $Revision: 1.2 $
+ *  $Date: 2005/11/06 18:16:33 $
+ *  $Revision: 1.1 $
  *  \author G. Della Ricca
  *
  */
@@ -138,6 +138,8 @@ void adc_analysis(MonitorElement** me01, MonitorElement** me02) {
         num01  = -1.;
         mean01 = -1.;
         rms01  = -1.;
+
+        sample.clear();
 
         bool update_channel = false;
 
