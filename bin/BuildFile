@@ -8,6 +8,16 @@
  <lib name=occi>
 </bin>
 
+<bin file=testEcalBarrelMonitorWriteLaserClient.cpp>
+ <use name=DQMServices/NodeROOT>
+ <use name=DQMServices/UI>
+ <use name=root>
+ <use name=CalibCalorimetry/EcalDBInterface>
+ <use name=oracle>
+ <lib name=nnz10>
+ <lib name=occi>
+</bin>
+
 <makefile>
 LDFLAGS := $(LDFLAGS) -L$(ROOTSYS)/lib -lThread
 </makefile>

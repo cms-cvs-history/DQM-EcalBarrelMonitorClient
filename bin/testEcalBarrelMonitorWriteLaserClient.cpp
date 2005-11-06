@@ -1,5 +1,5 @@
 /*
- * \file EcalBarrelMonitorWritePedestalClient.cpp
+ * \file EcalBarrelMonitorLaserClient.cpp
  *
  *  $Date: 2005/11/05 12:16:47 $
  *  $Revision: 1.6 $
@@ -13,7 +13,7 @@
 #include "CalibCalorimetry/EcalDBInterface/interface/EcalCondDBInterface.h"
 #include "CalibCalorimetry/EcalDBInterface/interface/RunTag.h"
 #include "CalibCalorimetry/EcalDBInterface/interface/RunIOV.h"
-#include "CalibCalorimetry/EcalDBInterface/interface/MonPedestalsDat.h"
+#include "CalibCalorimetry/EcalDBInterface/interface/MonLaserRedDat.h"
 
 #include "TROOT.h"
 
@@ -43,7 +43,7 @@ void ctrl_c_intr(int sig) {
   return;
 }
 
-void pedestals_analysis(MonitorElement** me01, MonitorElement** me06, MonitorElement** me12) {
+void apd_analysis(MonitorElement** me01, MonitorElement** me02) {
 
   try {
     cout << "Making connection ... " << flush;
@@ -69,16 +69,16 @@ void pedestals_analysis(MonitorElement** me01, MonitorElement** me06, MonitorEle
 //  startTm.setToString("2007-01-01 00:00:00");
   uint64_t microseconds = startTm.microsTime();
 
-  run_t run = 14316;
+  run_t run = 14317;
 
   cout << "Setting run " << run << " start_time " << startTm.str() << endl;
 
   EcalLogicID ecid;
-  MonPedestalsDat ped;
-  map<EcalLogicID, MonPedestalsDat> dataset;
+  MonLaserRedDat apd;
+  map<EcalLogicID, MonLaserRedDat> dataset;
 
   // Set the properties of the tag
-  runtag.setRunType("Pedestals");
+  runtag.setRunType("Laser");
   runtag.setLocation("H4");
   runtag.setMonitoringVersion("version 1");
 
@@ -95,22 +95,21 @@ void pedestals_analysis(MonitorElement** me01, MonitorElement** me06, MonitorEle
   float n_min_bin = 50.;
 
   TProfile2D* h01;
-  TProfile2D* h06;
-  TProfile2D* h12;
+  TProfile2D* h02;
 
-  cout << "Writing MonPedestalsDatObjects to database ..." << endl;
+  cout << "Writing MonLaserRedDatObjects to database ..." << endl;
 
   MonitorElementT<TNamed>* ob;
 
   for ( int ism = 1; ism <= 36; ism++ ) {
 
-    float num01, num06, num12;
-    float mean01, mean06, mean12;
-    float rms01, rms06, rms12;
+    float num01, num02;
+    float mean01, mean02;
+    float rms01, rms02;
 
-    h01 = h06 = h12 = 0;
+    h01 = h02 = 0;
 
-    if ( me01[ism-1] || me06[ism-1] || me12[ism-1] ) {
+    if ( me01[ism-1] || me02[ism-1] ) {
 
       if ( me01[ism-1] ) {
         ob = dynamic_cast<MonitorElementT<TNamed>*> (me01[ism-1]);
@@ -119,17 +118,10 @@ void pedestals_analysis(MonitorElement** me01, MonitorElement** me06, MonitorEle
         }
       }
 
-      if ( me06[ism-1] ) {
-        ob = dynamic_cast<MonitorElementT<TNamed>*> (me06[ism-1]);
+      if ( me02[ism-1] ) {
+        ob = dynamic_cast<MonitorElementT<TNamed>*> (me02[ism-1]);
         if ( ob ) {
-          h06 = dynamic_cast<TProfile2D*> (ob->operator->());
-        }
-      }
-
-      if ( me12[ism-1] ) {
-        ob = dynamic_cast<MonitorElementT<TNamed>*> (me12[ism-1]);
-        if ( ob ) {
-          h12 = dynamic_cast<TProfile2D*> (ob->operator->());
+          h02 = dynamic_cast<TProfile2D*> (ob->operator->());
         }
       }
 
@@ -138,9 +130,9 @@ void pedestals_analysis(MonitorElement** me01, MonitorElement** me06, MonitorEle
     for ( int ie = 1; ie <= 85; ie++ ) {
       for ( int ip = 1; ip <= 20; ip++ ) {
 
-        num01  = num06  = num12  = -1.;
-        mean01 = mean06 = mean12 = -1.;
-        rms01  = rms06  = rms12  = -1.;
+        num01  = num02  = -1.;
+        mean01 = mean02 = -1.;
+        rms01  = rms02  = -1.;
 
         bool update_channel = false;
 
@@ -153,20 +145,11 @@ void pedestals_analysis(MonitorElement** me01, MonitorElement** me06, MonitorEle
           }
         }
 
-        if ( h06 && h06->GetEntries() >= n_min_tot ) {
-          num06 = h06->GetBinEntries(h06->GetBin(ie, ip));
-          if ( num06 >= n_min_bin ) {
-            mean06 = h06->GetBinContent(h06->GetBin(ie, ip));
-            rms06  = h06->GetBinError(h06->GetBin(ie, ip));
-            update_channel = true;
-          }
-        }
-
-        if ( h12 && h12->GetEntries() >= n_min_tot ) {
-          num12 = h12->GetBinEntries(h12->GetBin(ie, ip));
-          if ( num12 >= n_min_bin ) {
-            mean12 = h12->GetBinContent(h12->GetBin(ie, ip));
-            rms12  = h12->GetBinError(h12->GetBin(ie, ip));
+        if ( h02 && h02->GetEntries() >= n_min_tot ) {
+          num02 = h02->GetBinEntries(h02->GetBin(ie, ip));
+          if ( num02 >= n_min_bin ) {
+            mean02 = h02->GetBinContent(h02->GetBin(ie, ip));
+            rms02  = h02->GetBinError(h02->GetBin(ie, ip));
             update_channel = true;
           }
         }
@@ -176,26 +159,22 @@ void pedestals_analysis(MonitorElement** me01, MonitorElement** me06, MonitorEle
 //          if ( ie == 1 && ip == 1 ) {
 
             cout << "Inserting dataset for SM=" << ism << endl;
-            cout << "G01 (" << ie << "," << ip << ") " << num01 << " " << mean01 << " " << rms01 << endl;
-            cout << "G06 (" << ie << "," << ip << ") " << num06 << " " << mean06 << " " << rms06 << endl;
-            cout << "G12 (" << ie << "," << ip << ") " << num12 << " " << mean12 << " " << rms12 << endl;
+            cout << "L1 (" << ie << "," << ip << ") " << num01 << " " << mean01 << " " << rms01 << endl;
+            cout << "L6 (" << ie << "," << ip << ") " << num02 << " " << mean02 << " " << rms02 << endl;
 
 //          }
 
-          ped.setPedMeanG1(mean01);
-          ped.setPedRMSG1(rms01);
+          apd.setAPDMean(mean01);
+          apd.setAPDRMS(rms01);
 
-          ped.setPedMeanG6(mean06);
-          ped.setPedRMSG6(rms06);
+          apd.setAPDOverPNMean(mean02);
+          apd.setAPDOverPNRMS(rms02);
 
-          ped.setPedMeanG12(mean12);
-          ped.setPedRMSG12(rms12);
-
-          ped.setTaskStatus(1);
+          apd.setTaskStatus(1);
 
           try {
             ecid = econn->getEcalLogicID("EB_crystal_index", ism, ie-1, ip-1);
-            dataset[ecid] = ped;
+            dataset[ecid] = apd;
           } catch (runtime_error &e) {
             cerr << e.what() << endl;
           }
@@ -224,13 +203,13 @@ void pedestals_analysis(MonitorElement** me01, MonitorElement** me06, MonitorEle
 int main(int argc, char** argv) {
 
   cout << endl;
-  cout << " *** Ecal Barrel Write Pedestal Monitor Client ***" << endl;
+  cout << " *** Ecal Barrel Write Laser Monitor Client ***" << endl;
   cout << endl;
 
   signal(SIGINT, ctrl_c_intr);
 
   // default client name
-  string cfuname = "UserWritePedestal";
+  string cfuname = "UserWriteLaser";
 
   // default collector host name
   string hostname = "localhost";
@@ -256,9 +235,8 @@ int main(int argc, char** argv) {
   mui->subscribe("*/EcalBarrel/STATUS");
   mui->subscribe("*/EcalBarrel/RUN");
   mui->subscribe("*/EcalBarrel/EVT");
-  mui->subscribe("*/EcalBarrel/EBPedestalTask/Gain01/EBPT pedestal SM*");
-  mui->subscribe("*/EcalBarrel/EBPedestalTask/Gain06/EBPT pedestal SM*");
-  mui->subscribe("*/EcalBarrel/EBPedestalTask/Gain12/EBPT pedestal SM*");
+  mui->subscribe("*/EcalBarrel/EcalBarrel/EBLaserTask/Laser1/EBLT amplitude SM*");
+  mui->subscribe("*/EcalBarrel/EcalBarrel/EBLaserTask/Laser1/EBLT amplitude over PN SM*");
 
   int last_update = -1;
   int last_update2 = -1;
@@ -274,9 +252,8 @@ int main(int argc, char** argv) {
     mui->subscribeNew("*/EcalBarrel/STATUS");
     mui->subscribeNew("*/EcalBarrel/RUN"); 
     mui->subscribeNew("*/EcalBarrel/EVT");
-    mui->subscribeNew("*/EcalBarrel/EBPedestalTask/Gain01/EBPT pedestal SM*");
-    mui->subscribeNew("*/EcalBarrel/EBPedestalTask/Gain06/EBPT pedestal SM*");
-    mui->subscribeNew("*/EcalBarrel/EBPedestalTask/Gain12/EBPT pedestal SM*");
+    mui->subscribeNew("*/EcalBarrel/EcalBarrel/EBLaserTask/Laser1/EBLT amplitude SM*");
+    mui->subscribeNew("*/EcalBarrel/EcalBarrel/EBLaserTask/Laser1/EBLT amplitude over PN SM*");
 
     // # of full monitoring cycles processed
     int updates = mui->getNumUpdates();
@@ -289,8 +266,7 @@ int main(int argc, char** argv) {
     string evt;
 
     MonitorElement* me01[36];
-    MonitorElement* me06[36];
-    MonitorElement* me12[36];
+    MonitorElement* me02[36];
 
     bool update_db = false;
 
@@ -329,37 +305,31 @@ int main(int argc, char** argv) {
     if ( ( updates % 50 == 0 && updates != last_update ) ||
          ( status == "end-of-run" ) ) {
 
-      for ( int ism = 1; ism <= 36; ism++ ) me01[ism-1] = me06[ism-1] = me12[ism-1] = 0;
+      for ( int ism = 1; ism <= 36; ism++ ) me01[ism-1] = me02[ism-1] = 0;
 
       Char_t histo[150];
 
       for ( int ism = 1; ism <= 36; ism++ ) {
 
-        sprintf(histo, "Collector/FU0/EcalBarrel/EBPedestalTask/Gain01/EBPT pedestal SM%02d G01", ism);
+        sprintf(histo, "Collector/FU0/EcalBarrel/EcalBarrel/EBLaserTask/Laser1/EBLT amplitude SM%02d L1", ism);
         me01[ism-1] = mui->get(histo);
         if ( me01[ism-1] ) {
           cout << "Found '" << histo << "'" << endl;
           update_db = true;
         }
 
-        sprintf(histo, "Collector/FU0/EcalBarrel/EBPedestalTask/Gain06/EBPT pedestal SM%02d G06", ism);
-        me06[ism-1] = mui->get(histo);
-        if ( me06[ism-1] ) {
+        sprintf(histo, "Collector/FU0/EcalBarrel/EcalBarrel/EBLaserTask/Laser1/EBLT amplitude over PN SM%02d L1", ism);
+        me02[ism-1] = mui->get(histo);
+        if ( me02[ism-1] ) {
           cout << "Found '" << histo << "'" << endl;
           update_db = true;
         }
 
-        sprintf(histo, "Collector/FU0/EcalBarrel/EBPedestalTask/Gain12/EBPT pedestal SM%02d G12", ism);
-        me12[ism-1] = mui->get(histo);
-        if ( me12[ism-1] ) {
-          cout << "Found '" << histo << "'" << endl;
-          update_db = true;
-        }
       }
 
       last_update = updates;
 
-      if ( update_db && status == "end-of-run" ) pedestals_analysis(me01, me06, me12);
+      if ( update_db && status == "end-of-run" ) apd_analysis(me01, me02);
     }
   }
 
