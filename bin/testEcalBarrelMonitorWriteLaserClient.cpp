@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorLaserClient.cpp
  *
- *  $Date: 2005/11/05 12:16:47 $
- *  $Revision: 1.6 $
+ *  $Date: 2005/11/06 14:22:58 $
+ *  $Revision: 1.1 $
  *  \author G. Della Ricca
  *
  */
@@ -235,8 +235,8 @@ int main(int argc, char** argv) {
   mui->subscribe("*/EcalBarrel/STATUS");
   mui->subscribe("*/EcalBarrel/RUN");
   mui->subscribe("*/EcalBarrel/EVT");
-  mui->subscribe("*/EcalBarrel/EcalBarrel/EBLaserTask/Laser1/EBLT amplitude SM*");
-  mui->subscribe("*/EcalBarrel/EcalBarrel/EBLaserTask/Laser1/EBLT amplitude over PN SM*");
+  mui->subscribe("*/EcalBarrel/EBLaserTask/Laser1/EBLT amplitude SM*");
+  mui->subscribe("*/EcalBarrel/EBLaserTask/Laser1/EBLT amplitude over PN SM*");
 
   int last_update = -1;
   int last_update2 = -1;
@@ -252,8 +252,8 @@ int main(int argc, char** argv) {
     mui->subscribeNew("*/EcalBarrel/STATUS");
     mui->subscribeNew("*/EcalBarrel/RUN"); 
     mui->subscribeNew("*/EcalBarrel/EVT");
-    mui->subscribeNew("*/EcalBarrel/EcalBarrel/EBLaserTask/Laser1/EBLT amplitude SM*");
-    mui->subscribeNew("*/EcalBarrel/EcalBarrel/EBLaserTask/Laser1/EBLT amplitude over PN SM*");
+    mui->subscribeNew("*/EcalBarrel/EBLaserTask/Laser1/EBLT amplitude SM*");
+    mui->subscribeNew("*/EcalBarrel/EBLaserTask/Laser1/EBLT amplitude over PN SM*");
 
     // # of full monitoring cycles processed
     int updates = mui->getNumUpdates();
@@ -311,14 +311,14 @@ int main(int argc, char** argv) {
 
       for ( int ism = 1; ism <= 36; ism++ ) {
 
-        sprintf(histo, "Collector/FU0/EcalBarrel/EcalBarrel/EBLaserTask/Laser1/EBLT amplitude SM%02d L1", ism);
+        sprintf(histo, "Collector/FU0/EcalBarrel/EBLaserTask/Laser1/EBLT amplitude SM%02d L1", ism);
         me01[ism-1] = mui->get(histo);
         if ( me01[ism-1] ) {
           cout << "Found '" << histo << "'" << endl;
           update_db = true;
         }
 
-        sprintf(histo, "Collector/FU0/EcalBarrel/EcalBarrel/EBLaserTask/Laser1/EBLT amplitude over PN SM%02d L1", ism);
+        sprintf(histo, "Collector/FU0/EcalBarrel/EBLaserTask/Laser1/EBLT amplitude over PN SM%02d L1", ism);
         me02[ism-1] = mui->get(histo);
         if ( me02[ism-1] ) {
           cout << "Found '" << histo << "'" << endl;
