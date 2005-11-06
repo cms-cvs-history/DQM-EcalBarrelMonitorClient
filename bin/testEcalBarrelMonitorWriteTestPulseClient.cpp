@@ -1,5 +1,5 @@
 /*
- * \file EcalBarrelMonitorWriteLaserClient.cpp
+ * \file EcalBarrelMonitorWriteTestPulseClient.cpp
  *
  *  $Date: 2005/11/06 14:53:55 $
  *  $Revision: 1.2 $
@@ -13,7 +13,8 @@
 #include "CalibCalorimetry/EcalDBInterface/interface/EcalCondDBInterface.h"
 #include "CalibCalorimetry/EcalDBInterface/interface/RunTag.h"
 #include "CalibCalorimetry/EcalDBInterface/interface/RunIOV.h"
-#include "CalibCalorimetry/EcalDBInterface/interface/MonLaserRedDat.h"
+#include "CalibCalorimetry/EcalDBInterface/interface/MonTestPulseDat.h"
+#include "CalibCalorimetry/EcalDBInterface/interface/MonPulseShapeDat.h"
 
 #include "TROOT.h"
 
@@ -43,7 +44,7 @@ void ctrl_c_intr(int sig) {
   return;
 }
 
-void apd_analysis(MonitorElement** me01, MonitorElement** me02) {
+void adc_analysis(MonitorElement** me01, MonitorElement** me02) {
 
   try {
     cout << "Making connection ... " << flush;
@@ -69,16 +70,18 @@ void apd_analysis(MonitorElement** me01, MonitorElement** me02) {
 //  startTm.setToString("2007-01-01 00:00:00");
   uint64_t microseconds = startTm.microsTime();
 
-  run_t run = 14317;
+  run_t run = 14318;
 
   cout << "Setting run " << run << " start_time " << startTm.str() << endl;
 
   EcalLogicID ecid;
-  MonLaserRedDat apd;
-  map<EcalLogicID, MonLaserRedDat> dataset;
+  MonTestPulseDat adc;
+  map<EcalLogicID, MonTestPulseDat> dataset1;
+  MonPulseShapeDat shape;
+  map<EcalLogicID, MonPulseShapeDat> dataset2;
 
   // Set the properties of the tag
-  runtag.setRunType("Laser");
+  runtag.setRunType("TestPulse");
   runtag.setLocation("H4");
   runtag.setMonitoringVersion("version 1");
 
@@ -92,20 +95,22 @@ void apd_analysis(MonitorElement** me01, MonitorElement** me02) {
   runiov.setRunEnd(endTm);
 
   float n_min_tot = 1000.;
-  float n_min_bin = 50.;
+  float n_min_bin = 40.;
 
   TProfile2D* h01;
   TProfile2D* h02;
 
-  cout << "Writing MonLaserRedDatObjects to database ..." << endl;
+  cout << "Writing MonTestPulseDatObjects to database ..." << endl;
 
   MonitorElementT<TNamed>* ob;
 
   for ( int ism = 1; ism <= 36; ism++ ) {
 
-    float num01, num02;
-    float mean01, mean02;
-    float rms01, rms02;
+    float num01;
+    float mean01;
+    float rms01;
+
+    vector<int> sample;
 
     h01 = h02 = 0;
 
@@ -130,9 +135,9 @@ void apd_analysis(MonitorElement** me01, MonitorElement** me02) {
     for ( int ie = 1; ie <= 85; ie++ ) {
       for ( int ip = 1; ip <= 20; ip++ ) {
 
-        num01  = num02  = -1.;
-        mean01 = mean02 = -1.;
-        rms01  = rms02  = -1.;
+        num01  = -1.;
+        mean01 = -1.;
+        rms01  = -1.;
 
         bool update_channel = false;
 
@@ -145,36 +150,42 @@ void apd_analysis(MonitorElement** me01, MonitorElement** me02) {
           }
         }
 
-        if ( h02 && h02->GetEntries() >= n_min_tot ) {
-          num02 = h02->GetBinEntries(h02->GetBin(ie, ip));
-          if ( num02 >= n_min_bin ) {
-            mean02 = h02->GetBinContent(h02->GetBin(ie, ip));
-            rms02  = h02->GetBinError(h02->GetBin(ie, ip));
-            update_channel = true;
-          }
-        }
-
         if ( update_channel ) {
 
 //          if ( ie == 1 && ip == 1 ) {
 
             cout << "Inserting dataset for SM=" << ism << endl;
-            cout << "L1 (" << ie << "," << ip << ") " << num01 << " " << mean01 << " " << rms01 << endl;
-            cout << "L1 (" << ie << "," << ip << ") " << num02 << " " << mean02 << " " << rms02 << endl;
+            cout << "G01 (" << ie << "," << ip << ") " << num01 << " " << mean01 << " " << rms01 << endl;
 
 //          }
 
-          apd.setAPDMean(mean01);
-          apd.setAPDRMS(rms01);
+          adc.setADCMean(mean01);
+          adc.setADCRMS(rms01);
 
-          apd.setAPDOverPNMean(mean02);
-          apd.setAPDOverPNRMS(rms02);
+          adc.setTaskStatus(1);
 
-          apd.setTaskStatus(1);
+          if ( ie == 1 && ip == 1 ) {
+
+            if ( h02 && h02->GetEntries() >= n_min_tot ) {
+              for ( int i = 1; i <= 10; i++ ) {
+                sample.push_back(int(h02->GetBinContent(h02->GetBin(1, i))));
+              }
+            }
+
+            cout << "sample= " << flush;
+            for ( unsigned int i = 0; i < sample.size(); i++ ) {
+              cout << sample[i] << " " << flush;
+            }
+            cout << endl;
+
+            shape.setSamples(sample);
+
+          }
 
           try {
             ecid = econn->getEcalLogicID("EB_crystal_index", ism, ie-1, ip-1);
-            dataset[ecid] = apd;
+            dataset1[ecid] = adc;
+            if ( ie == 1 && ip == 1 ) dataset2[ecid] = shape;
           } catch (runtime_error &e) {
             cerr << e.what() << endl;
           }
@@ -188,7 +199,8 @@ void apd_analysis(MonitorElement** me01, MonitorElement** me02) {
 
   try {
     cout << "Inserting dataset ... " << flush;
-    econn->insertDataSet(&dataset, &runiov, &runtag );
+    econn->insertDataSet(&dataset1, &runiov, &runtag );
+    econn->insertDataSet(&dataset2, &runiov, &runtag );
     cout << "done." << endl;
   } catch (runtime_error &e) {
     cerr << e.what() << endl;
@@ -203,13 +215,13 @@ void apd_analysis(MonitorElement** me01, MonitorElement** me02) {
 int main(int argc, char** argv) {
 
   cout << endl;
-  cout << " *** Ecal Barrel Write Laser Monitor Client ***" << endl;
+  cout << " *** Ecal Barrel Write TestPulse Monitor Client ***" << endl;
   cout << endl;
 
   signal(SIGINT, ctrl_c_intr);
 
   // default client name
-  string cfuname = "UserWriteLaser";
+  string cfuname = "UserWriteTestPulse";
 
   // default collector host name
   string hostname = "localhost";
@@ -235,8 +247,8 @@ int main(int argc, char** argv) {
   mui->subscribe("*/EcalBarrel/STATUS");
   mui->subscribe("*/EcalBarrel/RUN");
   mui->subscribe("*/EcalBarrel/EVT");
-  mui->subscribe("*/EcalBarrel/EBLaserTask/Laser1/EBLT amplitude SM*");
-  mui->subscribe("*/EcalBarrel/EBLaserTask/Laser1/EBLT amplitude over PN SM*");
+  mui->subscribe("*/EcalBarrel/EBTestPulseTask/Gain01/EBTT amplitude SM*");
+  mui->subscribe("*/EcalBarrel/EBTestPulseTask/Gain01/EBTT shape SM*");
 
   int last_update = -1;
   int last_update2 = -1;
@@ -252,8 +264,8 @@ int main(int argc, char** argv) {
     mui->subscribeNew("*/EcalBarrel/STATUS");
     mui->subscribeNew("*/EcalBarrel/RUN"); 
     mui->subscribeNew("*/EcalBarrel/EVT");
-    mui->subscribeNew("*/EcalBarrel/EBLaserTask/Laser1/EBLT amplitude SM*");
-    mui->subscribeNew("*/EcalBarrel/EBLaserTask/Laser1/EBLT amplitude over PN SM*");
+    mui->subscribeNew("*/EcalBarrel/EBTestPulseTask/Gain01/EBTT amplitude SM*");
+    mui->subscribeNew("*/EcalBarrel/EBTestPulseTask/Gain01/EBTT shape SM*");
 
     // # of full monitoring cycles processed
     int updates = mui->getNumUpdates();
@@ -311,14 +323,14 @@ int main(int argc, char** argv) {
 
       for ( int ism = 1; ism <= 36; ism++ ) {
 
-        sprintf(histo, "Collector/FU0/EcalBarrel/EBLaserTask/Laser1/EBLT amplitude SM%02d L1", ism);
+        sprintf(histo, "Collector/FU0/EcalBarrel/EBTestPulseTask/Gain01/EBTT amplitude SM%02d G01", ism);
         me01[ism-1] = mui->get(histo);
         if ( me01[ism-1] ) {
           cout << "Found '" << histo << "'" << endl;
           update_db = true;
         }
 
-        sprintf(histo, "Collector/FU0/EcalBarrel/EBLaserTask/Laser1/EBLT amplitude over PN SM%02d L1", ism);
+        sprintf(histo, "Collector/FU0/EcalBarrel/EBTestPulseTask/Gain01/EBTT shape SM%02d G01", ism);
         me02[ism-1] = mui->get(histo);
         if ( me02[ism-1] ) {
           cout << "Found '" << histo << "'" << endl;
@@ -329,7 +341,7 @@ int main(int argc, char** argv) {
 
       last_update = updates;
 
-      if ( update_db && status == "end-of-run" ) apd_analysis(me01, me02);
+      if ( update_db && status == "end-of-run" ) adc_analysis(me01, me02);
     }
   }
 

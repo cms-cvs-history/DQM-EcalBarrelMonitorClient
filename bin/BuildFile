@@ -1,3 +1,14 @@
+
+<bin file=testEcalBarrelMonitorWriteLaserClient.cpp>
+ <use name=DQMServices/NodeROOT>
+ <use name=DQMServices/UI>
+ <use name=root>
+ <use name=CalibCalorimetry/EcalDBInterface>
+ <use name=oracle>
+ <lib name=nnz10>
+ <lib name=occi>
+</bin>
+
 <bin file=testEcalBarrelMonitorWritePedestalClient.cpp>
  <use name=DQMServices/NodeROOT>
  <use name=DQMServices/UI>
@@ -8,7 +19,7 @@
  <lib name=occi>
 </bin>
 
-<bin file=testEcalBarrelMonitorWriteLaserClient.cpp>
+<bin file=testEcalBarrelMonitorWriteTestPulseClient.cpp>
  <use name=DQMServices/NodeROOT>
  <use name=DQMServices/UI>
  <use name=root>
