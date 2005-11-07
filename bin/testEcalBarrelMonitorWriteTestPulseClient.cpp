@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorWriteTestPulseClient.cpp
  *
- *  $Date: 2005/11/06 18:16:33 $
- *  $Revision: 1.1 $
+ *  $Date: 2005/11/06 18:36:31 $
+ *  $Revision: 1.2 $
  *  \author G. Della Ricca
  *
  */
@@ -95,7 +95,7 @@ void adc_analysis(MonitorElement** me01, MonitorElement** me02) {
   runiov.setRunEnd(endTm);
 
   float n_min_tot = 1000.;
-  float n_min_bin = 40.;
+  float n_min_bin = 30.;
 
   TProfile2D* h01;
   TProfile2D* h02;
