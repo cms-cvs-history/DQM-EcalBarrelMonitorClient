@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorLaserClient.cpp
  *
- *  $Date: 2005/11/07 10:03:31 $
- *  $Revision: 1.12 $
+ *  $Date: 2005/11/07 10:06:22 $
+ *  $Revision: 1.13 $
  *  \author G. Della Ricca
  *
  */
@@ -99,7 +99,7 @@ void *pth1(void *) {
           TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
           if ( h ) {
             c1->cd();
-            h->SetOption("lego");
+            h->SetOption("col");
             h->Draw();
             c1->Update();
           }
@@ -113,7 +113,7 @@ void *pth1(void *) {
           TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
           if ( h ) {
             c2->cd();
-            h->SetOption("lego");
+            h->SetOption("col");
             h->Draw();
             c2->Update();
           }
@@ -127,7 +127,7 @@ void *pth1(void *) {
           TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
           if ( h ) {
             c3->cd();
-            h->SetOption("col");
+            h->SetOption("lego");
             h->Draw();
             c3->Update();
           }
@@ -141,7 +141,7 @@ void *pth1(void *) {
           TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
           if ( h ) {
             c4->cd();
-            h->SetOption("col");
+            h->SetOption("lego");
             h->Draw();
             c4->Update();
           }
