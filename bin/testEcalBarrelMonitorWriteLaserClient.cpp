@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorWriteLaserClient.cpp
  *
- *  $Date: 2005/11/06 14:53:55 $
- *  $Revision: 1.2 $
+ *  $Date: 2005/11/06 18:16:33 $
+ *  $Revision: 1.3 $
  *  \author G. Della Ricca
  *
  */
@@ -13,6 +13,9 @@
 #include "CalibCalorimetry/EcalDBInterface/interface/EcalCondDBInterface.h"
 #include "CalibCalorimetry/EcalDBInterface/interface/RunTag.h"
 #include "CalibCalorimetry/EcalDBInterface/interface/RunIOV.h"
+#include "CalibCalorimetry/EcalDBInterface/interface/MonLaserBlueDat.h"
+#include "CalibCalorimetry/EcalDBInterface/interface/MonLaserGreenDat.h"
+#include "CalibCalorimetry/EcalDBInterface/interface/MonLaserInfraredDat.h"
 #include "CalibCalorimetry/EcalDBInterface/interface/MonLaserRedDat.h"
 
 #include "TROOT.h"
@@ -43,7 +46,7 @@ void ctrl_c_intr(int sig) {
   return;
 }
 
-void apd_analysis(MonitorElement** me01, MonitorElement** me02) {
+void apd_analysis(MonitorElement** me01, MonitorElement** me02, MonitorElement** me03, MonitorElement** me04) {
 
   try {
     cout << "Making connection ... " << flush;
@@ -74,8 +77,14 @@ void apd_analysis(MonitorElement** me01, MonitorElement** me02) {
   cout << "Setting run " << run << " start_time " << startTm.str() << endl;
 
   EcalLogicID ecid;
-  MonLaserRedDat apd;
-  map<EcalLogicID, MonLaserRedDat> dataset;
+  MonLaserBlueDat apdb;
+  map<EcalLogicID, MonLaserBlueDat> datasetb;
+  MonLaserGreenDat apdg;
+  map<EcalLogicID, MonLaserGreenDat> datasetg;
+  MonLaserInfraredDat apdi;
+  map<EcalLogicID, MonLaserInfraredDat> dataseti;
+  MonLaserRedDat apdr;
+  map<EcalLogicID, MonLaserRedDat> datasetr;
 
   // Set the properties of the tag
   runtag.setRunType("Laser");
@@ -96,18 +105,20 @@ void apd_analysis(MonitorElement** me01, MonitorElement** me02) {
 
   TProfile2D* h01;
   TProfile2D* h02;
+  TProfile2D* h03;
+  TProfile2D* h04;
 
-  cout << "Writing MonLaserRedDatObjects to database ..." << endl;
+  cout << "Writing MonLaserDatObjects to database ..." << endl;
 
   MonitorElementT<TNamed>* ob;
 
   for ( int ism = 1; ism <= 36; ism++ ) {
 
-    float num01, num02;
-    float mean01, mean02;
-    float rms01, rms02;
+    float num01, num02, num03, num04;
+    float mean01, mean02, mean03, mean04;
+    float rms01, rms02, rms03, rms04;
 
-    h01 = h02 = 0;
+    h01 = h02 = h03 = h04 = 0;
 
     if ( me01[ism-1] || me02[ism-1] ) {
 
@@ -130,9 +141,9 @@ void apd_analysis(MonitorElement** me01, MonitorElement** me02) {
     for ( int ie = 1; ie <= 85; ie++ ) {
       for ( int ip = 1; ip <= 20; ip++ ) {
 
-        num01  = num02  = -1.;
-        mean01 = mean02 = -1.;
-        rms01  = rms02  = -1.;
+        num01  = num02  = num03  = num04  = -1.;
+        mean01 = mean02 = mean03 = mean04 = -1.;
+        rms01  = rms02  = rms03  = rms04  = -1.;
 
         bool update_channel = false;
 
@@ -154,27 +165,54 @@ void apd_analysis(MonitorElement** me01, MonitorElement** me02) {
           }
         }
 
+        if ( h03 && h03->GetEntries() >= n_min_tot ) {
+          num03 = h01->GetBinEntries(h03->GetBin(ie, ip));
+          if ( num03 >= n_min_bin ) {
+            mean01 = h03->GetBinContent(h03->GetBin(ie, ip));
+            rms01  = h03->GetBinError(h03->GetBin(ie, ip));
+            update_channel = true;
+          }
+        }
+
+        if ( h04 && h04->GetEntries() >= n_min_tot ) {
+          num04 = h02->GetBinEntries(h04->GetBin(ie, ip));
+          if ( num04 >= n_min_bin ) {
+            mean04 = h02->GetBinContent(h04->GetBin(ie, ip));
+            rms04  = h02->GetBinError(h04->GetBin(ie, ip));
+            update_channel = true;
+          }
+        }
+
         if ( update_channel ) {
 
 //          if ( ie == 1 && ip == 1 ) {
 
             cout << "Inserting dataset for SM=" << ism << endl;
             cout << "L1 (" << ie << "," << ip << ") " << num01 << " " << mean01 << " " << rms01 << endl;
-            cout << "L1 (" << ie << "," << ip << ") " << num02 << " " << mean02 << " " << rms02 << endl;
+            cout << "L2 (" << ie << "," << ip << ") " << num03 << " " << mean03 << " " << rms03 << endl;
 
 //          }
 
-          apd.setAPDMean(mean01);
-          apd.setAPDRMS(rms01);
+          apdb.setAPDMean(mean01);
+          apdb.setAPDRMS(rms01);
 
-          apd.setAPDOverPNMean(mean02);
-          apd.setAPDOverPNRMS(rms02);
+          apdb.setAPDOverPNMean(mean02);
+          apdb.setAPDOverPNRMS(rms02);
 
-          apd.setTaskStatus(1);
+          apdb.setTaskStatus(1);
+
+          apdr.setAPDMean(mean03);
+          apdr.setAPDRMS(rms03);
+
+          apdr.setAPDOverPNMean(mean04);
+          apdr.setAPDOverPNRMS(rms04);
+
+          apdr.setTaskStatus(1);
 
           try {
             ecid = econn->getEcalLogicID("EB_crystal_index", ism, ie-1, ip-1);
-            dataset[ecid] = apd;
+            datasetb[ecid] = apdb;
+            datasetr[ecid] = apdr;
           } catch (runtime_error &e) {
             cerr << e.what() << endl;
           }
@@ -188,7 +226,8 @@ void apd_analysis(MonitorElement** me01, MonitorElement** me02) {
 
   try {
     cout << "Inserting dataset ... " << flush;
-    econn->insertDataSet(&dataset, &runiov, &runtag );
+    econn->insertDataSet(&datasetb, &runiov, &runtag );
+    econn->insertDataSet(&datasetr, &runiov, &runtag );
     cout << "done." << endl;
   } catch (runtime_error &e) {
     cerr << e.what() << endl;
@@ -237,6 +276,8 @@ int main(int argc, char** argv) {
   mui->subscribe("*/EcalBarrel/EVT");
   mui->subscribe("*/EcalBarrel/EBLaserTask/Laser1/EBLT amplitude SM*");
   mui->subscribe("*/EcalBarrel/EBLaserTask/Laser1/EBLT amplitude over PN SM*");
+  mui->subscribe("*/EcalBarrel/EBLaserTask/Laser2/EBLT amplitude SM*");
+  mui->subscribe("*/EcalBarrel/EBLaserTask/Laser2/EBLT amplitude over PN SM*");
 
   int last_update = -1;
   int last_update2 = -1;
@@ -254,6 +295,8 @@ int main(int argc, char** argv) {
     mui->subscribeNew("*/EcalBarrel/EVT");
     mui->subscribeNew("*/EcalBarrel/EBLaserTask/Laser1/EBLT amplitude SM*");
     mui->subscribeNew("*/EcalBarrel/EBLaserTask/Laser1/EBLT amplitude over PN SM*");
+    mui->subscribeNew("*/EcalBarrel/EBLaserTask/Laser2/EBLT amplitude SM*");
+    mui->subscribeNew("*/EcalBarrel/EBLaserTask/Laser2/EBLT amplitude over PN SM*");
 
     // # of full monitoring cycles processed
     int updates = mui->getNumUpdates();
@@ -267,6 +310,8 @@ int main(int argc, char** argv) {
 
     MonitorElement* me01[36];
     MonitorElement* me02[36];
+    MonitorElement* me03[36];
+    MonitorElement* me04[36];
 
     bool update_db = false;
 
@@ -325,11 +370,25 @@ int main(int argc, char** argv) {
           update_db = true;
         }
 
+        sprintf(histo, "Collector/FU0/EcalBarrel/EBLaserTask/Laser2/EBLT amplitude SM%02d L2", ism);
+        me03[ism-1] = mui->get(histo);
+        if ( me04[ism-1] ) {
+          cout << "Found '" << histo << "'" << endl;
+          update_db = true;
+        }
+
+        sprintf(histo, "Collector/FU0/EcalBarrel/EBLaserTask/Laser2/EBLT amplitude over PN SM%02d L2", ism);
+        me04[ism-1] = mui->get(histo);
+        if ( me04[ism-1] ) {
+          cout << "Found '" << histo << "'" << endl;
+          update_db = true;
+        }
+
       }
 
       last_update = updates;
 
-      if ( update_db && status == "end-of-run" ) apd_analysis(me01, me02);
+      if ( update_db && status == "end-of-run" ) apd_analysis(me01, me02, me03, me04);
     }
   }
 
