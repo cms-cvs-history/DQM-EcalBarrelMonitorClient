@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorLaserClient.cpp
  *
- *  $Date: 2005/10/30 17:12:05 $
- *  $Revision: 1.10 $
+ *  $Date: 2005/10/30 18:00:24 $
+ *  $Revision: 1.11 $
  *  \author G. Della Ricca
  *
  */
@@ -21,6 +21,8 @@ using namespace std;
 
 TCanvas* c1;
 TCanvas* c2;
+TCanvas* c3;
+TCanvas* c4;
 
 MonitorUserInterface* mui;
 
@@ -50,6 +52,8 @@ void *pth1(void *) {
     mui->subscribeNew("*/EcalBarrel/EVT");
     mui->subscribeNew("*/EcalBarrel/EBLaserTask/Laser1/EBLT shape SM01*");
     mui->subscribeNew("*/EcalBarrel/EBLaserTask/Laser1/EBLT amplitude SM01*");
+    mui->subscribeNew("*/EcalBarrel/EBLaserTask/Laser2/EBLT shape SM01*");
+    mui->subscribeNew("*/EcalBarrel/EBLaserTask/Laser2/EBLT amplitude SM01*");
 
     // # of full monitoring cycles processed
     int updates = mui->getNumUpdates();
@@ -102,16 +106,44 @@ void *pth1(void *) {
         }
       }
 
-      me = mui->get("Collector/FU0/EcalBarrel/EBLaserTask/Laser1/EBLT amplitude SM01 L1");
+      me = mui->get("Collector/FU0/EcalBarrel/EBLaserTask/Laser2/EBLT shape SM01 L2");
       if ( me ) {
         MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
         if ( ob ) {
           TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
           if ( h ) {
             c2->cd();
-            h->SetOption("col");
+            h->SetOption("lego");
             h->Draw();
             c2->Update();
+          }
+        }
+      }
+
+      me = mui->get("Collector/FU0/EcalBarrel/EBLaserTask/Laser1/EBLT amplitude SM01 L1");
+      if ( me ) {
+        MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
+        if ( ob ) {
+          TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
+          if ( h ) {
+            c3->cd();
+            h->SetOption("col");
+            h->Draw();
+            c3->Update();
+          }
+        }
+      }
+
+      me = mui->get("Collector/FU0/EcalBarrel/EBLaserTask/Laser2/EBLT amplitude SM01 L2");
+      if ( me ) {
+        MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
+        if ( ob ) {
+          TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
+          if ( h ) {
+            c4->cd();
+            h->SetOption("col");
+            h->Draw();
+            c4->Update();
           }
         }
       }
@@ -155,12 +187,18 @@ int main(int argc, char** argv) {
   // default port #
   int port_no = 9090;
 
-  c1 = new TCanvas("Ecal Barrel Laser Monitoring Amplitude L1","Ecal Barrel Laser Monitoring Amplitude L1", 0,310,500,500);
+  c1 = new TCanvas("Ecal Barrel Laser Monitoring Amplitude L1","Ecal Barrel Laser Monitoring Amplitude L1", 0,  0,800,250);
   c1->Modified();
   c1->Update();
-  c2 = new TCanvas("Ecal Barrel Laser Monitoring Shape L1","Ecal Barrel Laser Monitoring Shape L1", 0, 0,800,250);
+  c2 = new TCanvas("Ecal Barrel Laser Monitoring Amplitude L2","Ecal Barrel Laser Monitoring Amplitude L2", 0,310,800,250);
   c2->Modified();
   c2->Update();
+  c3 = new TCanvas("Ecal Barrel Laser Monitoring Shape L1","Ecal Barrel Laser Monitoring Shape L1",820,  0,250,250);
+  c3->Modified();
+  c3->Update();
+  c4 = new TCanvas("Ecal Barrel Laser Monitoring Shape L2","Ecal Barrel Laser Monitoring Shape L2",820,310,250,250);
+  c4->Modified();
+  c4->Update();
 
   if ( argc >= 2 ) cfuname = argv[1];
   if ( argc >= 3 ) hostname = argv[2];
@@ -182,6 +220,8 @@ int main(int argc, char** argv) {
   mui->subscribe("*/EcalBarrel/EVT");
   mui->subscribe("*/EcalBarrel/EBLaserTask/Laser1/EBLT shape SM01*");
   mui->subscribe("*/EcalBarrel/EBLaserTask/Laser1/EBLT amplitude SM01*");
+  mui->subscribe("*/EcalBarrel/EBLaserTask/Laser2/EBLT shape SM01*");
+  mui->subscribe("*/EcalBarrel/EBLaserTask/Laser2/EBLT amplitude SM01*");
 
   TThread *th1 = new TThread("th1",pth1);
 
