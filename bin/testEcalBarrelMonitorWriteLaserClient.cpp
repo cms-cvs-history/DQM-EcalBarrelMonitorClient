@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorWriteLaserClient.cpp
  *
- *  $Date: 2005/11/07 11:35:31 $
- *  $Revision: 1.4 $
+ *  $Date: 2005/11/07 12:33:53 $
+ *  $Revision: 1.5 $
  *  \author G. Della Ricca
  *
  */
@@ -72,7 +72,7 @@ void apd_analysis(MonitorElement** me01, MonitorElement** me02, MonitorElement**
 //  startTm.setToString("2007-01-01 00:00:00");
   uint64_t microseconds = startTm.microsTime();
 
-  run_t run = 14357;
+  run_t run = 14358;
 
   cout << "Setting run " << run << " start_time " << startTm.str() << endl;
 
@@ -166,19 +166,19 @@ void apd_analysis(MonitorElement** me01, MonitorElement** me02, MonitorElement**
         }
 
         if ( h03 && h03->GetEntries() >= n_min_tot ) {
-          num03 = h01->GetBinEntries(h03->GetBin(ie, ip));
+          num03 = h03->GetBinEntries(h03->GetBin(ie, ip));
           if ( num03 >= n_min_bin ) {
-            mean01 = h03->GetBinContent(h03->GetBin(ie, ip));
-            rms01  = h03->GetBinError(h03->GetBin(ie, ip));
+            mean03 = h03->GetBinContent(h03->GetBin(ie, ip));
+            rms03  = h03->GetBinError(h03->GetBin(ie, ip));
             update_channel = true;
           }
         }
 
         if ( h04 && h04->GetEntries() >= n_min_tot ) {
-          num04 = h02->GetBinEntries(h04->GetBin(ie, ip));
+          num04 = h04->GetBinEntries(h04->GetBin(ie, ip));
           if ( num04 >= n_min_bin ) {
-            mean04 = h02->GetBinContent(h04->GetBin(ie, ip));
-            rms04  = h02->GetBinError(h04->GetBin(ie, ip));
+            mean04 = h04->GetBinContent(h04->GetBin(ie, ip));
+            rms04  = h04->GetBinError(h04->GetBin(ie, ip));
             update_channel = true;
           }
         }
@@ -372,7 +372,7 @@ int main(int argc, char** argv) {
 
         sprintf(histo, "Collector/FU0/EcalBarrel/EBLaserTask/Laser2/EBLT amplitude SM%02d L2", ism);
         me03[ism-1] = mui->get(histo);
-        if ( me04[ism-1] ) {
+        if ( me03[ism-1] ) {
           cout << "Found '" << histo << "'" << endl;
           update_db = true;
         }
