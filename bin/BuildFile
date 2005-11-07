@@ -29,43 +29,45 @@
  <lib name=occi>
 </bin>
 
-<makefile>
-LDFLAGS := $(LDFLAGS) -L$(ROOTSYS)/lib -lThread
-</makefile>
-
 <bin file=testEcalBarrelMonitorClient.cpp>
  <use name=DQMServices/NodeROOT>
  <use name=DQMServices/UI>
  <use name=root>
+ <lib name=Thread>
 </bin>
 
 <bin file=testEcalBarrelMonitorIntegrityClient.cpp>
  <use name=DQMServices/NodeROOT>
  <use name=DQMServices/UI>
  <use name=root>
+ <lib name=Thread>
 </bin>
 
 <bin file=testEcalBarrelMonitorPedestalClient.cpp>
  <use name=DQMServices/NodeROOT>
  <use name=DQMServices/UI>
  <use name=root>
+ <lib name=Thread>
 </bin>
 
 <bin file=testEcalBarrelMonitorTestPulseClient.cpp>
  <use name=DQMServices/NodeROOT>
  <use name=DQMServices/UI>
  <use name=root>
+ <lib name=Thread>
 </bin>
 
 <bin file=testEcalBarrelMonitorCosmicClient.cpp>
  <use name=DQMServices/NodeROOT>
  <use name=DQMServices/UI>
  <use name=root>
+ <lib name=Thread>
 </bin>
 
 <bin file=testEcalBarrelMonitorLaserClient.cpp>
  <use name=DQMServices/NodeROOT>
  <use name=DQMServices/UI>
  <use name=root>
+ <lib name=Thread>
 </bin>
 
