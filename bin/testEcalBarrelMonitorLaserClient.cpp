@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorLaserClient.cpp
  *
- *  $Date: 2005/10/30 18:00:24 $
- *  $Revision: 1.11 $
+ *  $Date: 2005/11/07 10:03:31 $
+ *  $Revision: 1.12 $
  *  \author G. Della Ricca
  *
  */
@@ -92,7 +92,7 @@ void *pth1(void *) {
         cout << "event = " << evt.c_str() << endl;
       }
 
-      me = mui->get("Collector/FU0/EcalBarrel/EBLaserTask/Laser1/EBLT shape SM01 L1");
+      me = mui->get("Collector/FU0/EcalBarrel/EBLaserTask/Laser1/EBLT amplitude SM01 L1");
       if ( me ) {
         MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
         if ( ob ) {
@@ -106,7 +106,7 @@ void *pth1(void *) {
         }
       }
 
-      me = mui->get("Collector/FU0/EcalBarrel/EBLaserTask/Laser2/EBLT shape SM01 L2");
+      me = mui->get("Collector/FU0/EcalBarrel/EBLaserTask/Laser2/EBLT amplitude SM01 L2");
       if ( me ) {
         MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
         if ( ob ) {
@@ -120,7 +120,7 @@ void *pth1(void *) {
         }
       }
 
-      me = mui->get("Collector/FU0/EcalBarrel/EBLaserTask/Laser1/EBLT amplitude SM01 L1");
+      me = mui->get("Collector/FU0/EcalBarrel/EBLaserTask/Laser1/EBLT shape SM01 L1");
       if ( me ) {
         MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
         if ( ob ) {
@@ -134,7 +134,7 @@ void *pth1(void *) {
         }
       }
 
-      me = mui->get("Collector/FU0/EcalBarrel/EBLaserTask/Laser2/EBLT amplitude SM01 L2");
+      me = mui->get("Collector/FU0/EcalBarrel/EBLaserTask/Laser2/EBLT shape SM01 L2");
       if ( me ) {
         MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
         if ( ob ) {
