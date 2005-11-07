@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorWriteLaserClient.cpp
  *
- *  $Date: 2005/11/06 18:16:33 $
- *  $Revision: 1.3 $
+ *  $Date: 2005/11/07 11:35:31 $
+ *  $Revision: 1.4 $
  *  \author G. Della Ricca
  *
  */
@@ -72,7 +72,7 @@ void apd_analysis(MonitorElement** me01, MonitorElement** me02, MonitorElement**
 //  startTm.setToString("2007-01-01 00:00:00");
   uint64_t microseconds = startTm.microsTime();
 
-  run_t run = 14317;
+  run_t run = 14357;
 
   cout << "Setting run " << run << " start_time " << startTm.str() << endl;
 
