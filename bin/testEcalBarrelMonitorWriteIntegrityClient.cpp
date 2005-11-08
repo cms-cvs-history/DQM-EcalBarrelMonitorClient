@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorWriteIntegrityClient.cpp
  *
- *  $Date: 2005/11/07 16:32:55 $
- *  $Revision: 1.6 $
+ *  $Date: 2005/11/08 14:56:51 $
+ *  $Revision: 1.1 $
  *  \author G. Della Ricca
  *
  */
@@ -92,7 +92,6 @@ void runc_analysis(MonitorElement** me01, MonitorElement** me02, MonitorElement*
   runiov.setRunEnd(endTm);
 
   float n_min_tot = 1000.;
-  float n_min_bin = 50.;
 
   TProfile2D* h01;
   TProfile2D* h02;
@@ -105,7 +104,7 @@ void runc_analysis(MonitorElement** me01, MonitorElement** me02, MonitorElement*
 
   for ( int ism = 1; ism <= 36; ism++ ) {
 
-    float num01, num02, num03, num04, num05;
+    int num01, num02, num03, num04, num05;
 
     h01 = h02 = h03 = h04 = 0;
 
@@ -130,27 +129,27 @@ void runc_analysis(MonitorElement** me01, MonitorElement** me02, MonitorElement*
     for ( int ie = 1; ie <= 85; ie++ ) {
       for ( int ip = 1; ip <= 20; ip++ ) {
 
-        num01  = num02  = num03  = num04  = num05  = -1.;
+        num01  = num02  = num03  = num04  = num05  = -1;
 
         bool update_channel = false;
 
         if ( h01 && h01->GetEntries() >= n_min_tot ) {
-          num01 = h01->GetBinEntries(h01->GetBin(ie, ip));
+          num01 = int(h01->GetBinEntries(h01->GetBin(ie, ip)));
           update_channel = true;
         }
 
         if ( h02 && h02->GetEntries() >= n_min_tot ) {
-          num02 = h02->GetBinEntries(h02->GetBin(ie, ip));
+          num02 = int(h02->GetBinEntries(h02->GetBin(ie, ip)));
           update_channel = true;
         }
 
         if ( h03 && h03->GetEntries() >= n_min_tot ) {
-          num03 = h03->GetBinEntries(h03->GetBin(ie, ip));
+          num03 = int(h03->GetBinEntries(h03->GetBin(ie, ip)));
           update_channel = true;
         }
 
         if ( h04 && h04->GetEntries() >= n_min_tot ) {
-          num04 = h04->GetBinEntries(h04->GetBin(ie, ip));
+          num04 = int(h04->GetBinEntries(h04->GetBin(ie, ip)));
           update_channel = true;
         }
 
@@ -233,6 +232,7 @@ int main(int argc, char** argv) {
   mui->subscribe("*/EcalBarrel/STATUS");
   mui->subscribe("*/EcalBarrel/RUN");
   mui->subscribe("*/EcalBarrel/EVT");
+  mui->subscribe("*/EcalBarrel/RUNTYPE");
   mui->subscribe("*/EcalIntegrity/Gain/EI gain SM*");
   mui->subscribe("*/EcalIntegrity/ChId/EI ChId SM*");
   mui->subscribe("*/EcalIntegrity/TTId/EI TTId SM*");
@@ -253,6 +253,7 @@ int main(int argc, char** argv) {
     mui->subscribeNew("*/EcalBarrel/STATUS");
     mui->subscribeNew("*/EcalBarrel/RUN"); 
     mui->subscribeNew("*/EcalBarrel/EVT");
+    mui->subscribeNew("*/EcalBarrel/RUNTYPE");
     mui->subscribeNew("*/EcalIntegrity/Gain/EI gain SM*");
     mui->subscribeNew("*/EcalIntegrity/ChId/EI ChId SM*");
     mui->subscribeNew("*/EcalIntegrity/TTId/EI TTId SM*");
@@ -268,6 +269,7 @@ int main(int argc, char** argv) {
     string status;
     string run;
     string evt;
+    string type;
 
     MonitorElement* me01[36];
     MonitorElement* me02[36];
@@ -300,7 +302,14 @@ int main(int argc, char** argv) {
       if ( me ) {
         s = me->valueString();
         evt = s.substr(2,s.length()-2);
-        cout << "event = " << evt.c_str() << endl;
+        cout << "event = " << evt << endl;
+      }
+
+      me = mui->get("Collector/FU0/EcalBarrel/RUNTYPE");
+      if ( me ) {
+        s = me->valueString();
+        type = s.substr(2,s.length()-2);
+        cout << "type = " << type << endl;
       }
 
       last_update2 = updates;
@@ -324,14 +333,14 @@ int main(int argc, char** argv) {
           update_db = true;
         }
 
-        sprintf(histo, "??", ism);
+        sprintf(histo, "something here for SM%02d", ism);
         me02[ism-1] = mui->get(histo);
         if ( me02[ism-1] ) {
           cout << "Found '" << histo << "'" << endl;
           update_db = true;
         }
 
-        sprintf(histo, "??", ism);
+        sprintf(histo, "and something here SM%02d", ism);
         me03[ism-1] = mui->get(histo);
         if ( me03[ism-1] ) {
           cout << "Found '" << histo << "'" << endl;

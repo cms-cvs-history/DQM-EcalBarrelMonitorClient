@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorWriteLaserClient.cpp
  *
- *  $Date: 2005/11/07 12:33:53 $
- *  $Revision: 1.5 $
+ *  $Date: 2005/11/07 16:32:55 $
+ *  $Revision: 1.6 $
  *  \author G. Della Ricca
  *
  */
@@ -274,6 +274,7 @@ int main(int argc, char** argv) {
   mui->subscribe("*/EcalBarrel/STATUS");
   mui->subscribe("*/EcalBarrel/RUN");
   mui->subscribe("*/EcalBarrel/EVT");
+  mui->subscribe("*/EcalBarrel/RUNTYPE");
   mui->subscribe("*/EcalBarrel/EBLaserTask/Laser1/EBLT amplitude SM*");
   mui->subscribe("*/EcalBarrel/EBLaserTask/Laser1/EBLT amplitude over PN SM*");
   mui->subscribe("*/EcalBarrel/EBLaserTask/Laser2/EBLT amplitude SM*");
@@ -293,6 +294,7 @@ int main(int argc, char** argv) {
     mui->subscribeNew("*/EcalBarrel/STATUS");
     mui->subscribeNew("*/EcalBarrel/RUN"); 
     mui->subscribeNew("*/EcalBarrel/EVT");
+    mui->subscribeNew("*/EcalBarrel/RUNTYPE");
     mui->subscribeNew("*/EcalBarrel/EBLaserTask/Laser1/EBLT amplitude SM*");
     mui->subscribeNew("*/EcalBarrel/EBLaserTask/Laser1/EBLT amplitude over PN SM*");
     mui->subscribeNew("*/EcalBarrel/EBLaserTask/Laser2/EBLT amplitude SM*");
@@ -307,6 +309,7 @@ int main(int argc, char** argv) {
     string status;
     string run;
     string evt;
+    string type;
 
     MonitorElement* me01[36];
     MonitorElement* me02[36];
@@ -339,7 +342,14 @@ int main(int argc, char** argv) {
       if ( me ) {
         s = me->valueString();
         evt = s.substr(2,s.length()-2);
-        cout << "event = " << evt.c_str() << endl;
+        cout << "event = " << evt << endl;
+      }
+
+      me = mui->get("Collector/FU0/EcalBarrel/RUNTYPE");
+      if ( me ) {
+        s = me->valueString();
+        type = s.substr(2,s.length()-2);
+        cout << "type = " << type << endl;
       }
 
       last_update2 = updates;
@@ -347,8 +357,8 @@ int main(int argc, char** argv) {
 
     // access monitoring objects every 50 monitoring cycles, and
     // in any case at the end of run
-    if ( ( updates % 50 == 0 && updates != last_update ) ||
-         ( status == "end-of-run" ) ) {
+    if ( ( type == "1" ) && 
+         ( ( updates % 50 == 0 && updates != last_update ) || ( status == "end-of-run" )    ) ) {
 
       for ( int ism = 1; ism <= 36; ism++ ) me01[ism-1] = me02[ism-1] = 0;
 

@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorCosmicClient.cpp
  *
- *  $Date: 2005/10/30 17:12:05 $
- *  $Revision: 1.10 $
+ *  $Date: 2005/10/30 18:00:24 $
+ *  $Revision: 1.11 $
  *  \author G. Della Ricca
  *
  */
@@ -48,6 +48,7 @@ void *pth1(void *) {
     mui->subscribeNew("*/EcalBarrel/STATUS");
     mui->subscribeNew("*/EcalBarrel/RUN");
     mui->subscribeNew("*/EcalBarrel/EVT");
+    mui->subscribeNew("*/EcalBarrel/RUNTYPE");
     mui->subscribeNew("*/EcalBarrel/EBCosmicTask/Cut/EBCT amplitude cut SM01*");
     mui->subscribeNew("*/EcalBarrel/EBCosmicTask/Sel/EBCT amplitude sel SM01*");
 
@@ -56,13 +57,19 @@ void *pth1(void *) {
 
     MonitorElement* me;
 
+    string s;
+    string status;
+    string run;
+    string evt;
+    string type;
+
     // draw monitoring objects every monitoring cycle
     if ( updates != last_plotting ) {
 
       me = mui->get("Collector/FU0/EcalBarrel/STATUS");
       if ( me ) {
-        string s = me->valueString();
-        string status = "unknown";
+        s = me->valueString();
+        status = "unknown";
         if ( s.substr(2,1) == "0" ) status = "start-of-run";
         if ( s.substr(2,1) == "1" ) status = "running";
         if ( s.substr(2,1) == "2" ) status = "end-of-run";
@@ -76,16 +83,23 @@ void *pth1(void *) {
 
       me = mui->get("Collector/FU0/EcalBarrel/RUN");
       if ( me ) {
-        string s = me->valueString();
-        string run = s.substr(2,s.length()-2);
+        s = me->valueString();
+        run = s.substr(2,s.length()-2);
         cout << "run = " << run << endl;
       }
 
       me = mui->get("Collector/FU0/EcalBarrel/EVT");
       if ( me ) {
-        string s = me->valueString();
-        string evt = s.substr(2,s.length()-2);
-        cout << "event = " << evt.c_str() << endl;
+        s = me->valueString();
+        evt = s.substr(2,s.length()-2);
+        cout << "event = " << evt << endl;
+      }
+
+      me = mui->get("Collector/FU0/EcalBarrel/RUNTYPE");
+      if ( me ) {
+        s = me->valueString();
+        type = s.substr(2,s.length()-2);
+        cout << "type = " << type << endl;
       }
 
       me = mui->get("Collector/FU0/EcalBarrel/EBCosmicTask/Cut/EBCT amplitude cut SM01");
@@ -182,6 +196,7 @@ int main(int argc, char** argv) {
   mui->subscribe("*/EcalBarrel/STATUS");
   mui->subscribe("*/EcalBarrel/RUN");
   mui->subscribe("*/EcalBarrel/EVT");
+  mui->subscribe("*/EcalBarrel/RUNTYPE");
   mui->subscribe("*/EcalBarrel/EBCosmicTask/Cut/EBCT amplitude cut SM01*");
   mui->subscribe("*/EcalBarrel/EBCosmicTask/Sel/EBCT amplitude sel SM01*");
 
