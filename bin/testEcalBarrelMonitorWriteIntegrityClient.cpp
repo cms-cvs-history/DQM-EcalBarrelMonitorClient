@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorWriteIntegrityClient.cpp
  *
- *  $Date: 2005/11/08 14:56:51 $
- *  $Revision: 1.1 $
+ *  $Date: 2005/11/08 17:52:07 $
+ *  $Revision: 1.2 $
  *  \author G. Della Ricca
  *
  */
@@ -308,7 +308,10 @@ int main(int argc, char** argv) {
       me = mui->get("Collector/FU0/EcalBarrel/RUNTYPE");
       if ( me ) {
         s = me->valueString();
-        type = s.substr(2,s.length()-2);
+        if ( s.substr(2,1) == "0" ) type = "cosmic";
+        if ( s.substr(2,1) == "1" ) type = "laser";
+        if ( s.substr(2,1) == "2" ) type = "pedestal";
+        if ( s.substr(2,1) == "3" ) type = "testpulse";
         cout << "type = " << type << endl;
       }
 

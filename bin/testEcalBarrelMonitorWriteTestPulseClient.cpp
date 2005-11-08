@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorWriteTestPulseClient.cpp
  *
- *  $Date: 2005/11/07 14:58:05 $
- *  $Revision: 1.3 $
+ *  $Date: 2005/11/08 17:52:07 $
+ *  $Revision: 1.4 $
  *  \author G. Della Ricca
  *
  */
@@ -317,7 +317,10 @@ int main(int argc, char** argv) {
       me = mui->get("Collector/FU0/EcalBarrel/RUNTYPE");
       if ( me ) {
         s = me->valueString();
-        type = s.substr(2,s.length()-2);
+        if ( s.substr(2,1) == "0" ) type = "cosmic";
+        if ( s.substr(2,1) == "1" ) type = "laser";
+        if ( s.substr(2,1) == "2" ) type = "pedestal";
+        if ( s.substr(2,1) == "3" ) type = "testpulse";
         cout << "type = " << type << endl;
       }
 
@@ -326,7 +329,7 @@ int main(int argc, char** argv) {
 
     // access monitoring objects every 50 monitoring cycles, and
     // in any case at the end of run
-    if ( ( type == "3" ) && 
+    if ( ( type == "testpulse" ) && 
          ( ( updates % 50 == 0 && updates != last_update ) || ( status == "end-of-run" )    ) ) {
 
       for ( int ism = 1; ism <= 36; ism++ ) me01[ism-1] = me02[ism-1] = 0;

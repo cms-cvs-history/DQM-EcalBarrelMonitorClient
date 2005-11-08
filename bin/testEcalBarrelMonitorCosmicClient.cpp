@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorCosmicClient.cpp
  *
- *  $Date: 2005/10/30 18:00:24 $
- *  $Revision: 1.11 $
+ *  $Date: 2005/11/08 17:52:07 $
+ *  $Revision: 1.12 $
  *  \author G. Della Ricca
  *
  */
@@ -98,7 +98,10 @@ void *pth1(void *) {
       me = mui->get("Collector/FU0/EcalBarrel/RUNTYPE");
       if ( me ) {
         s = me->valueString();
-        type = s.substr(2,s.length()-2);
+        if ( s.substr(2,1) == "0" ) type = "cosmic";
+        if ( s.substr(2,1) == "1" ) type = "laser";
+        if ( s.substr(2,1) == "2" ) type = "pedestal";
+        if ( s.substr(2,1) == "3" ) type = "testpulse";
         cout << "type = " << type << endl;
       }
 
