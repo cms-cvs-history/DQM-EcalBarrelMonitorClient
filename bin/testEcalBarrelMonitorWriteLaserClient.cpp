@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorWriteLaserClient.cpp
  *
- *  $Date: 2005/11/08 17:52:07 $
- *  $Revision: 1.7 $
+ *  $Date: 2005/11/08 18:31:54 $
+ *  $Revision: 1.8 $
  *  \author G. Della Ricca
  *
  */
@@ -17,6 +17,8 @@
 #include "CalibCalorimetry/EcalDBInterface/interface/MonLaserGreenDat.h"
 #include "CalibCalorimetry/EcalDBInterface/interface/MonLaserInfraredDat.h"
 #include "CalibCalorimetry/EcalDBInterface/interface/MonLaserRedDat.h"
+
+#include "testEcalBarrelMonitorUtils.h"
 
 #include "TROOT.h"
 
@@ -110,33 +112,16 @@ void apd_analysis(MonitorElement** me01, MonitorElement** me02, MonitorElement**
 
   cout << "Writing MonLaserDatObjects to database ..." << endl;
 
-  MonitorElementT<TNamed>* ob;
-
   for ( int ism = 1; ism <= 36; ism++ ) {
 
     float num01, num02, num03, num04;
     float mean01, mean02, mean03, mean04;
     float rms01, rms02, rms03, rms04;
 
-    h01 = h02 = h03 = h04 = 0;
-
-    if ( me01[ism-1] || me02[ism-1] ) {
-
-      if ( me01[ism-1] ) {
-        ob = dynamic_cast<MonitorElementT<TNamed>*> (me01[ism-1]);
-        if ( ob ) {
-          h01 = dynamic_cast<TProfile2D*> (ob->operator->());
-        }
-      }
-
-      if ( me02[ism-1] ) {
-        ob = dynamic_cast<MonitorElementT<TNamed>*> (me02[ism-1]);
-        if ( ob ) {
-          h02 = dynamic_cast<TProfile2D*> (ob->operator->());
-        }
-      }
-
-    }
+    h01 = getTProfile2D(me01[ism-1]);
+    h02 = getTProfile2D(me02[ism-1]);
+    h03 = getTProfile2D(me03[ism-1]);
+    h04 = getTProfile2D(me04[ism-1]);
 
     for ( int ie = 1; ie <= 85; ie++ ) {
       for ( int ip = 1; ip <= 20; ip++ ) {

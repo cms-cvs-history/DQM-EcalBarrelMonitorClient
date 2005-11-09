@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorWritePedestalClient.cpp
  *
- *  $Date: 2005/11/08 17:52:07 $
- *  $Revision: 1.8 $
+ *  $Date: 2005/11/08 18:31:54 $
+ *  $Revision: 1.9 $
  *  \author G. Della Ricca
  *
  */
@@ -14,6 +14,8 @@
 #include "CalibCalorimetry/EcalDBInterface/interface/RunTag.h"
 #include "CalibCalorimetry/EcalDBInterface/interface/RunIOV.h"
 #include "CalibCalorimetry/EcalDBInterface/interface/MonPedestalsDat.h"
+
+#include "testEcalBarrelMonitorUtils.h"
 
 #include "TROOT.h"
 
@@ -43,7 +45,7 @@ void ctrl_c_intr(int sig) {
   return;
 }
 
-void pedestals_analysis(MonitorElement** me01, MonitorElement** me06, MonitorElement** me12) {
+void pedestals_analysis(MonitorElement** me01, MonitorElement** me02, MonitorElement** me03) {
 
   try {
     cout << "Making connection ... " << flush;
@@ -95,52 +97,27 @@ void pedestals_analysis(MonitorElement** me01, MonitorElement** me06, MonitorEle
   float n_min_bin = 50.;
 
   TProfile2D* h01;
-  TProfile2D* h06;
-  TProfile2D* h12;
+  TProfile2D* h02;
+  TProfile2D* h03;
 
   cout << "Writing MonPedestalsDatObjects to database ..." << endl;
 
-  MonitorElementT<TNamed>* ob;
-
   for ( int ism = 1; ism <= 36; ism++ ) {
 
-    float num01, num06, num12;
-    float mean01, mean06, mean12;
-    float rms01, rms06, rms12;
+    float num01, num02, num03;
+    float mean01, mean02, mean03;
+    float rms01, rms02, rms03;
 
-    h01 = h06 = h12 = 0;
-
-    if ( me01[ism-1] || me06[ism-1] || me12[ism-1] ) {
-
-      if ( me01[ism-1] ) {
-        ob = dynamic_cast<MonitorElementT<TNamed>*> (me01[ism-1]);
-        if ( ob ) {
-          h01 = dynamic_cast<TProfile2D*> (ob->operator->());
-        }
-      }
-
-      if ( me06[ism-1] ) {
-        ob = dynamic_cast<MonitorElementT<TNamed>*> (me06[ism-1]);
-        if ( ob ) {
-          h06 = dynamic_cast<TProfile2D*> (ob->operator->());
-        }
-      }
-
-      if ( me12[ism-1] ) {
-        ob = dynamic_cast<MonitorElementT<TNamed>*> (me12[ism-1]);
-        if ( ob ) {
-          h12 = dynamic_cast<TProfile2D*> (ob->operator->());
-        }
-      }
-
-    }
+    h01 = getTProfile2D(me01[ism-1]);
+    h02 = getTProfile2D(me02[ism-1]);
+    h03 = getTProfile2D(me03[ism-1]);
 
     for ( int ie = 1; ie <= 85; ie++ ) {
       for ( int ip = 1; ip <= 20; ip++ ) {
 
-        num01  = num06  = num12  = -1.;
-        mean01 = mean06 = mean12 = -1.;
-        rms01  = rms06  = rms12  = -1.;
+        num01  = num02  = num03  = -1.;
+        mean01 = mean02 = mean03 = -1.;
+        rms01  = rms02  = rms03  = -1.;
 
         bool update_channel = false;
 
@@ -153,20 +130,20 @@ void pedestals_analysis(MonitorElement** me01, MonitorElement** me06, MonitorEle
           }
         }
 
-        if ( h06 && h06->GetEntries() >= n_min_tot ) {
-          num06 = h06->GetBinEntries(h06->GetBin(ie, ip));
-          if ( num06 >= n_min_bin ) {
-            mean06 = h06->GetBinContent(h06->GetBin(ie, ip));
-            rms06  = h06->GetBinError(h06->GetBin(ie, ip));
+        if ( h02 && h02->GetEntries() >= n_min_tot ) {
+          num02 = h02->GetBinEntries(h02->GetBin(ie, ip));
+          if ( num02 >= n_min_bin ) {
+            mean02 = h02->GetBinContent(h02->GetBin(ie, ip));
+            rms02  = h02->GetBinError(h02->GetBin(ie, ip));
             update_channel = true;
           }
         }
 
-        if ( h12 && h12->GetEntries() >= n_min_tot ) {
-          num12 = h12->GetBinEntries(h12->GetBin(ie, ip));
-          if ( num12 >= n_min_bin ) {
-            mean12 = h12->GetBinContent(h12->GetBin(ie, ip));
-            rms12  = h12->GetBinError(h12->GetBin(ie, ip));
+        if ( h03 && h03->GetEntries() >= n_min_tot ) {
+          num03 = h03->GetBinEntries(h03->GetBin(ie, ip));
+          if ( num03 >= n_min_bin ) {
+            mean03 = h03->GetBinContent(h03->GetBin(ie, ip));
+            rms03  = h03->GetBinError(h03->GetBin(ie, ip));
             update_channel = true;
           }
         }
@@ -177,19 +154,19 @@ void pedestals_analysis(MonitorElement** me01, MonitorElement** me06, MonitorEle
 
             cout << "Inserting dataset for SM=" << ism << endl;
             cout << "G01 (" << ie << "," << ip << ") " << num01 << " " << mean01 << " " << rms01 << endl;
-            cout << "G06 (" << ie << "," << ip << ") " << num06 << " " << mean06 << " " << rms06 << endl;
-            cout << "G12 (" << ie << "," << ip << ") " << num12 << " " << mean12 << " " << rms12 << endl;
+            cout << "G06 (" << ie << "," << ip << ") " << num02 << " " << mean02 << " " << rms02 << endl;
+            cout << "G12 (" << ie << "," << ip << ") " << num03 << " " << mean03 << " " << rms03 << endl;
 
 //          }
 
           ped.setPedMeanG1(mean01);
           ped.setPedRMSG1(rms01);
 
-          ped.setPedMeanG6(mean06);
-          ped.setPedRMSG6(rms06);
+          ped.setPedMeanG6(mean02);
+          ped.setPedRMSG6(rms02);
 
-          ped.setPedMeanG12(mean12);
-          ped.setPedRMSG12(rms12);
+          ped.setPedMeanG12(mean03);
+          ped.setPedRMSG12(rms03);
 
           ped.setTaskStatus(1);
 
@@ -292,8 +269,8 @@ int main(int argc, char** argv) {
     string type;
 
     MonitorElement* me01[36];
-    MonitorElement* me06[36];
-    MonitorElement* me12[36];
+    MonitorElement* me02[36];
+    MonitorElement* me03[36];
 
     bool update_db = false;
 
@@ -342,7 +319,7 @@ int main(int argc, char** argv) {
     if ( ( type == "pedestal" ) && 
          ( ( updates % 50 == 0 && updates != last_update ) || ( status == "end-of-run" )    ) ) {
 
-      for ( int ism = 1; ism <= 36; ism++ ) me01[ism-1] = me06[ism-1] = me12[ism-1] = 0;
+      for ( int ism = 1; ism <= 36; ism++ ) me01[ism-1] = me02[ism-1] = me03[ism-1] = 0;
 
       Char_t histo[150];
 
@@ -356,15 +333,15 @@ int main(int argc, char** argv) {
         }
 
         sprintf(histo, "Collector/FU0/EcalBarrel/EBPedestalTask/Gain06/EBPT pedestal SM%02d G06", ism);
-        me06[ism-1] = mui->get(histo);
-        if ( me06[ism-1] ) {
+        me02[ism-1] = mui->get(histo);
+        if ( me02[ism-1] ) {
           cout << "Found '" << histo << "'" << endl;
           update_db = true;
         }
 
         sprintf(histo, "Collector/FU0/EcalBarrel/EBPedestalTask/Gain12/EBPT pedestal SM%02d G12", ism);
-        me12[ism-1] = mui->get(histo);
-        if ( me12[ism-1] ) {
+        me03[ism-1] = mui->get(histo);
+        if ( me03[ism-1] ) {
           cout << "Found '" << histo << "'" << endl;
           update_db = true;
         }
@@ -372,7 +349,7 @@ int main(int argc, char** argv) {
 
       last_update = updates;
 
-      if ( update_db && status == "end-of-run" ) pedestals_analysis(me01, me06, me12);
+      if ( update_db && status == "end-of-run" ) pedestals_analysis(me01, me02, me03);
     }
   }
 

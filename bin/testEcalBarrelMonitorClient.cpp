@@ -1,14 +1,16 @@
 /*
  * \file EcalBarrelMonitorClient.cpp
  *
- *  $Date: 2005/11/08 17:52:07 $
- *  $Revision: 1.13 $
+ *  $Date: 2005/11/08 18:31:53 $
+ *  $Revision: 1.14 $
  *  \author G. Della Ricca
  *
  */
 
 #include "DQMServices/Core/interface/MonitorElement.h"
 #include "DQMServices/UI/interface/MonitorUIRoot.h"
+
+#include "testEcalBarrelMonitorUtils.h"
 
 #include "TROOT.h"
 #include "TApplication.h"
@@ -103,19 +105,16 @@ void *pth1(void *) {
         cout << "type = " << type << endl;
       }
 
+      TH2F* h;
+
       me = mui->get("Collector/FU0/EcalBarrel/EBMonitorEvent/EBMM event SM01");
-      if ( me ) {
-        MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
-        if ( ob ) {
-          TH2F* h = dynamic_cast<TH2F*> (ob->operator->());
-          if ( h ) {
-            c1->cd();
-            h->SetMaximum(4096.);
-            h->SetOption("box");
-            h->Draw();
-            c1->Update();
-          }
-        }
+      h = getTH2F(me);
+      if ( h ) {
+        c1->cd();
+        h->SetMaximum(4096.);
+        h->SetOption("box");
+        h->Draw();
+        c1->Update();
       }
 
       last_plotting = updates;

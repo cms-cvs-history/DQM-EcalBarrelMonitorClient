@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorWriteTestPulseClient.cpp
  *
- *  $Date: 2005/11/08 17:52:07 $
- *  $Revision: 1.4 $
+ *  $Date: 2005/11/08 18:31:54 $
+ *  $Revision: 1.5 $
  *  \author G. Della Ricca
  *
  */
@@ -15,6 +15,8 @@
 #include "CalibCalorimetry/EcalDBInterface/interface/RunIOV.h"
 #include "CalibCalorimetry/EcalDBInterface/interface/MonTestPulseDat.h"
 #include "CalibCalorimetry/EcalDBInterface/interface/MonPulseShapeDat.h"
+
+#include "testEcalBarrelMonitorUtils.h"
 
 #include "TROOT.h"
 
@@ -102,8 +104,6 @@ void adc_analysis(MonitorElement** me01, MonitorElement** me02) {
 
   cout << "Writing MonTestPulseDatObjects to database ..." << endl;
 
-  MonitorElementT<TNamed>* ob;
-
   for ( int ism = 1; ism <= 36; ism++ ) {
 
     float num01;
@@ -112,25 +112,8 @@ void adc_analysis(MonitorElement** me01, MonitorElement** me02) {
 
     vector<int> sample;
 
-    h01 = h02 = 0;
-
-    if ( me01[ism-1] || me02[ism-1] ) {
-
-      if ( me01[ism-1] ) {
-        ob = dynamic_cast<MonitorElementT<TNamed>*> (me01[ism-1]);
-        if ( ob ) {
-          h01 = dynamic_cast<TProfile2D*> (ob->operator->());
-        }
-      }
-
-      if ( me02[ism-1] ) {
-        ob = dynamic_cast<MonitorElementT<TNamed>*> (me02[ism-1]);
-        if ( ob ) {
-          h02 = dynamic_cast<TProfile2D*> (ob->operator->());
-        }
-      }
-
-    }
+    h01 = getTProfile2D(me01[ism-1]);
+    h02 = getTProfile2D(me02[ism-1]);
 
     for ( int ie = 1; ie <= 85; ie++ ) {
       for ( int ip = 1; ip <= 20; ip++ ) {

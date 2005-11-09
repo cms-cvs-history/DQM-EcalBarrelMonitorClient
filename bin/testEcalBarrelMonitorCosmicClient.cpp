@@ -1,14 +1,16 @@
 /*
  * \file EcalBarrelMonitorCosmicClient.cpp
  *
- *  $Date: 2005/11/08 17:52:07 $
- *  $Revision: 1.12 $
+ *  $Date: 2005/11/08 18:31:54 $
+ *  $Revision: 1.13 $
  *  \author G. Della Ricca
  *
  */
 
 #include "DQMServices/Core/interface/MonitorElement.h"
 #include "DQMServices/UI/interface/MonitorUIRoot.h"
+
+#include "testEcalBarrelMonitorUtils.h"
 
 #include "TROOT.h"
 #include "TApplication.h"
@@ -105,34 +107,26 @@ void *pth1(void *) {
         cout << "type = " << type << endl;
       }
 
+      TProfile2D* h;
+
       me = mui->get("Collector/FU0/EcalBarrel/EBCosmicTask/Cut/EBCT amplitude cut SM01");
-      if ( me ) {
-        MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
-        if ( ob ) {
-          TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
-          if ( h ) {
-            c1->cd();
-//            h->SetMaximum(1000.);
-            h->SetOption("col");
-            h->Draw();
-            c1->Update();
-          }
-        }
+      h = getTProfile2D(me);
+      if ( h ) {
+        c1->cd();
+//        h->SetMaximum(1000.);
+        h->SetOption("col");
+        h->Draw();
+        c1->Update();
       }
 
       me = mui->get("Collector/FU0/EcalBarrel/EBCosmicTask/Sel/EBCT amplitude sel SM01");
-      if ( me ) {
-        MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
-        if ( ob ) {
-          TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
-          if ( h ) {
-            c2->cd();
-//            h->SetMaximum(1000.);
-            h->SetOption("col");
-            h->Draw();
-            c2->Update();
-          }
-        }
+      h = getTProfile2D(me);
+      if ( h ) {
+        c2->cd();
+//        h->SetMaximum(1000.);
+        h->SetOption("col");
+        h->Draw();
+        c2->Update();
       }
 
       last_plotting = updates;

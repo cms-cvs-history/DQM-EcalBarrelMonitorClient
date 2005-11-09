@@ -1,14 +1,16 @@
 /*
  * \file EcalBarrelMonitorTestPulseClient.cpp
  *
- *  $Date: 2005/11/08 17:52:07 $
- *  $Revision: 1.12 $
+ *  $Date: 2005/11/08 18:31:54 $
+ *  $Revision: 1.13 $
  *  \author G. Della Ricca
  *
  */
 
 #include "DQMServices/Core/interface/MonitorElement.h"
 #include "DQMServices/UI/interface/MonitorUIRoot.h"
+
+#include "testEcalBarrelMonitorUtils.h"
 
 #include "TROOT.h"
 #include "TApplication.h"
@@ -113,88 +115,60 @@ void *pth1(void *) {
         cout << "type = " << type << endl;
       }
 
+      TProfile2D* h;
+
       me = mui->get("Collector/FU0/EcalBarrel/EBTestPulseTask/Gain01/EBTT amplitude SM01 G01");
-      if ( me ) {
-        MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
-        if ( ob ) {
-          TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
-          if ( h ) {
-            c1->cd();
-            h->SetOption("col");
-            h->Draw();
-            c1->Update();
-          }
-        }
+      h = getTProfile2D(me);
+      if ( h ) {
+        c1->cd();
+        h->SetOption("col");
+        h->Draw();
+        c1->Update();
       }
 
       me = mui->get("Collector/FU0/EcalBarrel/EBTestPulseTask/Gain06/EBTT amplitude SM01 G06");
-      if ( me ) {
-        MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
-        if ( ob ) {
-          TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
-          if ( h ) {
-            c2->cd();
-            h->SetOption("col");
-            h->Draw();
-            c2->Update();
-          }
-        }
+      h = getTProfile2D(me);
+      if ( h ) {
+        c2->cd();
+        h->SetOption("col");
+        h->Draw();
+        c2->Update();
       }
 
       me = mui->get("Collector/FU0/EcalBarrel/EBTestPulseTask/Gain12/EBTT amplitude SM01 G12");
-      if ( me ) {
-        MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
-        if ( ob ) {
-          TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
-          if ( h ) {
-            c3->cd();
-            h->SetOption("col");
-            h->Draw();
-            c3->Update();
-          }
-        }
+      h = getTProfile2D(me);
+      if ( h ) {
+        c3->cd();
+        h->SetOption("col");
+        h->Draw();
+        c3->Update();
       }
 
       me = mui->get("Collector/FU0/EcalBarrel/EBTestPulseTask/Gain01/EBTT shape SM01 G01");
-      if ( me ) {
-        MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
-        if ( ob ) {
-          TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
-          if ( h ) {
-            c4->cd();
-            h->SetOption("lego");
-            h->Draw();
-            c4->Update();
-          }
-        }
+      h = getTProfile2D(me);
+      if ( h ) {
+        c4->cd();
+        h->SetOption("lego");
+        h->Draw();
+        c4->Update();
       }
 
       me = mui->get("Collector/FU0/EcalBarrel/EBTestPulseTask/Gain06/EBTT shape SM01 G06");
-      if ( me ) {
-        MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
-        if ( ob ) {
-          TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
-          if ( h ) {
-            c5->cd();
-            h->SetOption("lego");
-            h->Draw();
-            c5->Update();
-          }
-        }
+      h = getTProfile2D(me);
+      if ( h ) {
+        c5->cd();
+        h->SetOption("lego");
+        h->Draw();
+        c5->Update();
       }
 
       me = mui->get("Collector/FU0/EcalBarrel/EBTestPulseTask/Gain12/EBTT shape SM01 G12");
-      if ( me ) {
-        MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
-        if ( ob ) {
-          TProfile2D* h = dynamic_cast<TProfile2D*> (ob->operator->());
-          if ( h ) {
-            c6->cd();
-            h->SetOption("lego");
-            h->Draw();
-            c6->Update();
-          }
-        }
+      h = getTProfile2D(me);
+      if ( h ) {
+        c6->cd();
+        h->SetOption("lego");
+        h->Draw();
+        c6->Update();
       }
 
       last_plotting = updates;

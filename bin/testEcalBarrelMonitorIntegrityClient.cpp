@@ -1,14 +1,16 @@
 /*
  * \file EcalBarrelMonitorIntegrityClient.cpp
  *
- *  $Date: 2005/11/08 17:52:07 $
- *  $Revision: 1.13 $
+ *  $Date: 2005/11/08 18:31:54 $
+ *  $Revision: 1.14 $
  *  \author G. Della Ricca
  *
  */
 
 #include "DQMServices/Core/interface/MonitorElement.h"
 #include "DQMServices/UI/interface/MonitorUIRoot.h"
+
+#include "testEcalBarrelMonitorUtils.h"
 
 #include "TROOT.h"
 #include "TApplication.h"
@@ -108,74 +110,52 @@ void *pth1(void *) {
         cout << "type = " << type << endl;
       }
 
+      TH1F* h1;
+      TH2F* h2;
+
       me = mui->get("Collector/FU0/EcalIntegrity/DCC size error");
-      if ( me ) {
-        MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
-        if ( ob ) {
-          TH1F* h = dynamic_cast<TH1F*> (ob->operator->());
-          if ( h ) {
-            c1->cd();
-            h->SetOption("text");
-            h->Draw();
-            c1->Update();
-          }
-        }
+      h1 = getTH1F(me);
+      if ( h1 ) {
+        c1->cd();
+        h1->SetOption("text");
+        h1->Draw();
+        c1->Update();
       }
 
       me = mui->get("Collector/FU0/EcalIntegrity/Gain/EI gain SM01");
-      if ( me ) {
-        MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
-        if ( ob ) {
-          TH2F* h = dynamic_cast<TH2F*> (ob->operator->());
-          if ( h ) {
-            c2->cd(1);
-            h->SetOption("text");
-            h->Draw();
-            c2->Update();
-          }
-        }
+      h2 = getTH2F(me);
+      if ( h2 ) {
+        c2->cd(1);
+        h2->SetOption("text");
+        h2->Draw();
+        c2->Update();
       }
 
       me = mui->get("Collector/FU0/EcalIntegrity/ChId/EI ChId SM01");
-      if ( me ) {
-        MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
-        if ( ob ) {
-          TH2F* h = dynamic_cast<TH2F*> (ob->operator->());
-          if ( h ) {
-            c2->cd(2);
-            h->SetOption("text");
-            h->Draw();
-            c2->Update();
-          }
-        }
+      h2 = getTH2F(me);
+      if ( h2 ) {
+        c2->cd(2);
+        h2->SetOption("text");
+        h2->Draw();
+        c2->Update();
       }
 
       me = mui->get("Collector/FU0/EcalIntegrity/TTId/EI TTId SM01");
-      if ( me ) {
-        MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
-        if ( ob ) {
-          TH2F* h = dynamic_cast<TH2F*> (ob->operator->());
-          if ( h ) {
-            c2->cd(3);
-            h->SetOption("text");
-            h->Draw();
-            c2->Update();
-          }
-        }
+      h2 = getTH2F(me);
+      if ( h2 ) {
+        c2->cd(3);
+        h2->SetOption("text");
+        h2->Draw();
+        c2->Update();
       }
 
       me = mui->get("Collector/FU0/EcalIntegrity/TTBlockSize/EI TTBlockSize SM01");
-      if ( me ) {
-        MonitorElementT<TNamed>* ob = dynamic_cast<MonitorElementT<TNamed>*> (me);
-        if ( ob ) {
-          TH2F* h = dynamic_cast<TH2F*> (ob->operator->());
-          if ( h ) {
-            c2->cd(4);
-            h->SetOption("text");
-            h->Draw();
-            c2->Update();
-          }
-        }
+      h2 = getTH2F(me);
+      if ( h2 ) {
+        c2->cd(4);
+        h2->SetOption("text");
+        h2->Draw();
+        c2->Update();
       }
 
       c2->cd();
