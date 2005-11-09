@@ -1,0 +1,8 @@
+process CLIENT = {
+
+        module ecalClient = EcalBarrelMonitorClient{ }
+
+        path p = { ecalClient }
+
+        source = EmptySource{ }
+}
