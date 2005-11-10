@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorClient.cpp
  *
- *  $Date: 2005/11/09 08:44:57 $
- *  $Revision: 1.15 $
+ *  $Date: 2005/11/10 10:05:36 $
+ *  $Revision: 1.16 $
  *  \author G. Della Ricca
  *
  */
@@ -50,6 +50,7 @@ void *pth1(void *) {
     mui->subscribeNew("*/EcalBarrel/STATUS");
     mui->subscribeNew("*/EcalBarrel/RUN");
     mui->subscribeNew("*/EcalBarrel/EVT");
+    mui->subscribeNew("*/EcalBarrel/EVTTYPE");
     mui->subscribeNew("*/EcalBarrel/RUNTYPE");
     mui->subscribeNew("*/EcalBarrel/EBMonitorEvent/EBMM event SM01*");
 
@@ -193,6 +194,7 @@ int main(int argc, char** argv) {
   mui->subscribe("*/EcalBarrel/STATUS");
   mui->subscribe("*/EcalBarrel/RUN");
   mui->subscribe("*/EcalBarrel/EVT");
+  mui->subscribe("*/EcalBarrel/EVTTYPE");
   mui->subscribe("*/EcalBarrel/RUNTYPE");
   mui->subscribe("*/EcalBarrel/EBMonitorEvent/EBMM event SM01*");
 
