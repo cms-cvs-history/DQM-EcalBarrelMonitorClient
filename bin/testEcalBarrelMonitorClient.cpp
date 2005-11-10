@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorClient.cpp
  *
- *  $Date: 2005/11/10 10:05:36 $
- *  $Revision: 1.16 $
+ *  $Date: 2005/11/10 10:07:24 $
+ *  $Revision: 1.17 $
  *  \author G. Della Ricca
  *
  */
@@ -113,7 +113,6 @@ void *pth1(void *) {
       h = getTH1F(me);
       if ( h ) {
         c1->cd();
-        h->SetOption("box");
         h->Draw();
         c1->Update();
       }
