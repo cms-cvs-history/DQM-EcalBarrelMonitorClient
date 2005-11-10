@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorClient.cpp
  *
- *  $Date: 2005/11/08 18:31:53 $
- *  $Revision: 1.14 $
+ *  $Date: 2005/11/09 08:44:57 $
+ *  $Revision: 1.15 $
  *  \author G. Della Ricca
  *
  */
@@ -22,6 +22,7 @@
 using namespace std;
 
 TCanvas* c1;
+TCanvas* c2;
 
 MonitorUserInterface* mui;
 
@@ -105,16 +106,27 @@ void *pth1(void *) {
         cout << "type = " << type << endl;
       }
 
-      TH2F* h;
+      TH1F* h;
 
-      me = mui->get("Collector/FU0/EcalBarrel/EBMonitorEvent/EBMM event SM01");
-      h = getTH2F(me);
+      me = mui->get("Collector/FU0/EcalBarrel/EVTTYPE");
+      h = getTH1F(me);
       if ( h ) {
         c1->cd();
-        h->SetMaximum(4096.);
         h->SetOption("box");
         h->Draw();
         c1->Update();
+      }
+
+      TH2F* h2;
+
+      me = mui->get("Collector/FU0/EcalBarrel/EBMonitorEvent/EBMM event SM01");
+      h2 = getTH2F(me);
+      if ( h2 ) {
+        c2->cd();
+        h2->SetMaximum(4096.);
+        h2->SetOption("box");
+        h2->Draw();
+        c2->Update();
       }
 
       last_plotting = updates;
@@ -156,9 +168,12 @@ int main(int argc, char** argv) {
   // default port #
   int port_no = 9090;
 
-  c1 = new TCanvas("Ecal Barrel Generic Monitoring","Ecal Barrel Generic Monitoring", 0, 0,1000,400);
+  c1 = new TCanvas("Ecal Barrel Generic Monitoring - 1","Ecal Barrel Generic Monitoring - 1", 0,   0, 400,400);
   c1->Modified();
   c1->Update();
+  c2 = new TCanvas("Ecal Barrel Generic Monitoring - 2","Ecal Barrel Generic Monitoring - 2", 0, 460,1000,400);
+  c2->Modified();
+  c2->Update();
 
   if ( argc >= 2 ) cfuname = argv[1];
   if ( argc >= 3 ) hostname = argv[2];
