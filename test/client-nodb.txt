@@ -4,10 +4,6 @@ process CLIENT = {
           untracked string clientName = "EcalBarrelMonitorClient"
           untracked string hostName = "localhost"
           untracked int32  hostPort = 9090
-          untracked string dbName = ""
-          untracked string dbHostName = ""
-          untracked string dbUserName = ""
-          untracked string dbPassword = ""
           untracked string baseHtmlDir = "."
         }
 

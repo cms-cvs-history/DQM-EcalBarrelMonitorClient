@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorIntegrityClient.cpp
  *
- *  $Date: 2005/11/08 18:31:54 $
- *  $Revision: 1.14 $
+ *  $Date: 2005/11/09 08:44:57 $
+ *  $Revision: 1.15 $
  *  \author G. Della Ricca
  *
  */
@@ -51,11 +51,11 @@ void *pth1(void *) {
     mui->subscribeNew("*/EcalBarrel/RUN");
     mui->subscribeNew("*/EcalBarrel/EVT");
     mui->subscribeNew("*/EcalBarrel/RUNTYPE");
-    mui->subscribeNew("*/EcalIntegrity/Gain/EI gain SM01*");
-    mui->subscribeNew("*/EcalIntegrity/ChId/EI ChId SM01*");
-    mui->subscribeNew("*/EcalIntegrity/TTId/EI TTId SM01*");
-    mui->subscribeNew("*/EcalIntegrity/TTBlockSize/EI TTBlockSize SM01*");
-    mui->subscribeNew("*/EcalIntegrity/DCC size error");
+    mui->subscribeNew("*/EcalBarrel/EcalIntegrity/Gain/EI gain SM01*");
+    mui->subscribeNew("*/EcalBarrel/EcalIntegrity/ChId/EI ChId SM01*");
+    mui->subscribeNew("*/EcalBarrel/EcalIntegrity/TTId/EI TTId SM01*");
+    mui->subscribeNew("*/EcalBarrel/EcalIntegrity/TTBlockSize/EI TTBlockSize SM01*");
+    mui->subscribeNew("*/EcalBarrel/EcalIntegrity/DCC size error");
 
     // # of full monitoring cycles processed
     int updates = mui->getNumUpdates();
@@ -113,7 +113,7 @@ void *pth1(void *) {
       TH1F* h1;
       TH2F* h2;
 
-      me = mui->get("Collector/FU0/EcalIntegrity/DCC size error");
+      me = mui->get("Collector/FU0/EcalBarrel/EcalIntegrity/DCC size error");
       h1 = getTH1F(me);
       if ( h1 ) {
         c1->cd();
@@ -122,7 +122,7 @@ void *pth1(void *) {
         c1->Update();
       }
 
-      me = mui->get("Collector/FU0/EcalIntegrity/Gain/EI gain SM01");
+      me = mui->get("Collector/FU0/EcalBarrel/EcalIntegrity/Gain/EI gain SM01");
       h2 = getTH2F(me);
       if ( h2 ) {
         c2->cd(1);
@@ -131,7 +131,7 @@ void *pth1(void *) {
         c2->Update();
       }
 
-      me = mui->get("Collector/FU0/EcalIntegrity/ChId/EI ChId SM01");
+      me = mui->get("Collector/FU0/EcalBarrel/EcalIntegrity/ChId/EI ChId SM01");
       h2 = getTH2F(me);
       if ( h2 ) {
         c2->cd(2);
@@ -140,7 +140,7 @@ void *pth1(void *) {
         c2->Update();
       }
 
-      me = mui->get("Collector/FU0/EcalIntegrity/TTId/EI TTId SM01");
+      me = mui->get("Collector/FU0/EcalBarrel/EcalIntegrity/TTId/EI TTId SM01");
       h2 = getTH2F(me);
       if ( h2 ) {
         c2->cd(3);
@@ -149,7 +149,7 @@ void *pth1(void *) {
         c2->Update();
       }
 
-      me = mui->get("Collector/FU0/EcalIntegrity/TTBlockSize/EI TTBlockSize SM01");
+      me = mui->get("Collector/FU0/EcalBarrel/EcalIntegrity/TTBlockSize/EI TTBlockSize SM01");
       h2 = getTH2F(me);
       if ( h2 ) {
         c2->cd(4);
@@ -228,11 +228,11 @@ int main(int argc, char** argv) {
   mui->subscribe("*/EcalBarrel/RUN");
   mui->subscribe("*/EcalBarrel/EVT");
   mui->subscribe("*/EcalBarrel/RUNTYPE");
-  mui->subscribe("*/EcalIntegrity/Gain/EI gain SM01*");
-  mui->subscribe("*/EcalIntegrity/ChId/EI ChId SM01*");
-  mui->subscribe("*/EcalIntegrity/TTId/EI TTId SM01*");
-  mui->subscribe("*/EcalIntegrity/TTBlockSize/EI TTBlockSize SM01*");
-  mui->subscribe("*/EcalIntegrity/DCC size error");
+  mui->subscribe("*/EcalBarrel/EcalIntegrity/Gain/EI gain SM01*");
+  mui->subscribe("*/EcalBarrel/EcalIntegrity/ChId/EI ChId SM01*");
+  mui->subscribe("*/EcalBarrel/EcalIntegrity/TTId/EI TTId SM01*");
+  mui->subscribe("*/EcalBarrel/EcalIntegrity/TTBlockSize/EI TTBlockSize SM01*");
+  mui->subscribe("*/EcalBarrel/EcalIntegrity/DCC size error");
 
   TThread *th1 = new TThread("th1",pth1);
 
