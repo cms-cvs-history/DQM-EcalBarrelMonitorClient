@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorTestPulseClient.cpp
  *
- *  $Date: 2005/11/08 18:31:54 $
- *  $Revision: 1.13 $
+ *  $Date: 2005/11/09 08:44:57 $
+ *  $Revision: 1.14 $
  *  \author G. Della Ricca
  *
  */
@@ -40,13 +40,8 @@ void *pth1(void *) {
   // last time monitoring objects were plotted
   int last_plotting = -1;
 
-  // last time root-file was saved
-  int last_save = -1;
-
   while ( stay_in_loop && ! exit_now ) {
 
-    bool saveHistograms = false;
-  
     // this is the "main" loop where we receive monitoring
     stay_in_loop = mui->update();
 
@@ -84,11 +79,6 @@ void *pth1(void *) {
         if ( s.substr(2,1) == "1" ) status = "running";
         if ( s.substr(2,1) == "2" ) status = "end-of-run";
         cout << "status = " << status << endl;
-        if ( status == "end-of-run" ) {
-          TThread::Lock();      
-          mui->save("EcalBarrelMonitorTestPulseClient.root");
-          TThread::UnLock();
-        }
       }
 
       me = mui->get("Collector/FU0/EcalBarrel/RUN");
@@ -174,18 +164,6 @@ void *pth1(void *) {
       last_plotting = updates;
     }
 
-    // come here every 100 monitoring cycles, operate on Monitoring Elements
-    if ( updates % 100 == 0 && updates != last_save ) {
-      saveHistograms = true;
-      last_save = updates;
-    }
-
-    // save monitoring structure in root-file
-    if ( saveHistograms ) {
-      TThread::Lock();
-      mui->save("EcalBarrelMonitorTestPulseClient.root");
-      TThread::UnLock();
-    }
   }
   
   exit_done = true;
