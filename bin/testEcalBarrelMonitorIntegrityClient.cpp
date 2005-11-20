@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorIntegrityClient.cpp
  *
- *  $Date: 2005/11/14 13:33:33 $
- *  $Revision: 1.16 $
+ *  $Date: 2005/11/20 08:09:17 $
+ *  $Revision: 1.17 $
  *  \author G. Della Ricca
  *
  */
@@ -189,6 +189,7 @@ int main(int argc, char** argv) {
 
   if ( argc >= 2 ) cfuname = argv[1];
   if ( argc >= 3 ) hostname = argv[2];
+  if ( argc >= 4 ) port_no = atoi(argv[3]);
 
   cout << " Client " << cfuname
        << " begins requesting monitoring from host " << hostname << endl;
