@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorPedestalClient.cpp
  *
- *  $Date: 2005/11/20 08:09:17 $
- *  $Revision: 1.15 $
+ *  $Date: 2005/11/20 13:58:45 $
+ *  $Revision: 1.16 $
  *  \author G. Della Ricca
  *
  */
@@ -47,9 +47,9 @@ void *pth1(void *) {
     mui->subscribeNew("*/EcalBarrel/RUN"); 
     mui->subscribeNew("*/EcalBarrel/EVT");
     mui->subscribeNew("*/EcalBarrel/RUNTYPE");
-    mui->subscribeNew("*/EcalBarrel/EBPedestalTask/Gain01/EBPT pedestal SM01*");
-    mui->subscribeNew("*/EcalBarrel/EBPedestalTask/Gain06/EBPT pedestal SM01*");
-    mui->subscribeNew("*/EcalBarrel/EBPedestalTask/Gain12/EBPT pedestal SM01*");
+    mui->subscribeNew("*/EcalBarrel/EBPedestalTask/Gain01/EBPT pedestal SM01 G01");
+    mui->subscribeNew("*/EcalBarrel/EBPedestalTask/Gain06/EBPT pedestal SM01 G06");
+    mui->subscribeNew("*/EcalBarrel/EBPedestalTask/Gain12/EBPT pedestal SM01 G12");
 
     // # of full monitoring cycles processed
     int updates = mui->getNumUpdates();
@@ -101,31 +101,31 @@ void *pth1(void *) {
 
       TProfile2D* h;
 
-      me = mui->get("Collector/FU0/EcalBarrel/EBPedestalTask/Gain01/EBPT pedestal SM01 G01");
+//      me = mui->get("Collector/FU0/EcalBarrel/EBPedestalTask/Gain01/EBPT pedestal SM01 G01");
+      me = mui->get("EcalBarrel/Sums/EBPedestalTask/Gain01/EBPT pedestal SM01 G01");
       h = getTProfile2D(me);
       if ( h ) {
         c1->cd();
-        h->SetMaximum(400.);
         h->SetOption("col");
         h->Draw();
         c1->Update();
       }
 
-      me = mui->get("Collector/FU0/EcalBarrel/EBPedestalTask/Gain06/EBPT pedestal SM01 G06");
+//      me = mui->get("Collector/FU0/EcalBarrel/EBPedestalTask/Gain06/EBPT pedestal SM01 G06");
+      me = mui->get("EcalBarrel/Sums/EBPedestalTask/Gain06/EBPT pedestal SM01 G06");
       h = getTProfile2D(me);
       if ( h ) {
         c2->cd();
-        h->SetMaximum(100.);
         h->SetOption("col");
         h->Draw();
         c2->Update();
       }
 
-      me = mui->get("Collector/FU0/EcalBarrel/EBPedestalTask/Gain12/EBPT pedestal SM01 G12");
+//      me = mui->get("Collector/FU0/EcalBarrel/EBPedestalTask/Gain12/EBPT pedestal SM01 G12");
+      me = mui->get("EcalBarrel/Sums/EBPedestalTask/Gain12/EBPT pedestal SM01 G12");
       h = getTProfile2D(me);
       if ( h ) {
         c3->cd();
-        h->SetMaximum( 50.);
         h->SetOption("col");
         h->Draw();
         c3->Update();
@@ -188,9 +188,20 @@ int main(int argc, char** argv) {
   mui->subscribe("*/EcalBarrel/RUN");
   mui->subscribe("*/EcalBarrel/EVT");
   mui->subscribe("*/EcalBarrel/RUNTYPE");
-  mui->subscribe("*/EcalBarrel/EBPedestalTask/Gain01/EBPT pedestal SM01*");
-  mui->subscribe("*/EcalBarrel/EBPedestalTask/Gain06/EBPT pedestal SM01*");
-  mui->subscribe("*/EcalBarrel/EBPedestalTask/Gain12/EBPT pedestal SM01*");
+  mui->subscribe("*/EcalBarrel/EBPedestalTask/Gain01/EBPT pedestal SM01 G01");
+  mui->subscribe("*/EcalBarrel/EBPedestalTask/Gain06/EBPT pedestal SM01 G06");
+  mui->subscribe("*/EcalBarrel/EBPedestalTask/Gain12/EBPT pedestal SM01 G12");
+
+  CollateMonitorElement* cme;
+
+  cme = mui->collateProf2D("EBPT pedestal SM01 G01", "EBPT pedestal SM01 G01", "EcalBarrel/Sums/EBPedestalTask/Gain01");
+  mui->add(cme, "*/EcalBarrel/EBPedestalTask/Gain01/EBPT pedestal SM01 G01");
+
+  cme = mui->collateProf2D("EBPT pedestal SM01 G06", "EBPT pedestal SM01 G06", "EcalBarrel/Sums/EBPedestalTask/Gain06");
+  mui->add(cme, "*/EcalBarrel/EBPedestalTask/Gain06/EBPT pedestal SM01 G06");
+
+  cme = mui->collateProf2D("EBPT pedestal SM01 G12", "EBPT pedestal SM01 G12", "EcalBarrel/Sums/EBPedestalTask/Gain12");
+  mui->add(cme, "*/EcalBarrel/EBPedestalTask/Gain12/EBPT pedestal SM01 G12");
 
   TThread *th1 = new TThread("th1",pth1);
 

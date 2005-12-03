@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorCosmicClient.cpp
  *
- *  $Date: 2005/11/20 08:09:17 $
- *  $Revision: 1.15 $
+ *  $Date: 2005/11/20 13:58:45 $
+ *  $Revision: 1.16 $
  *  \author G. Della Ricca
  *
  */
@@ -46,8 +46,8 @@ void *pth1(void *) {
     mui->subscribeNew("*/EcalBarrel/RUN");
     mui->subscribeNew("*/EcalBarrel/EVT");
     mui->subscribeNew("*/EcalBarrel/RUNTYPE");
-    mui->subscribeNew("*/EcalBarrel/EBCosmicTask/Cut/EBCT amplitude cut SM01*");
-    mui->subscribeNew("*/EcalBarrel/EBCosmicTask/Sel/EBCT amplitude sel SM01*");
+    mui->subscribeNew("*/EcalBarrel/EBCosmicTask/Cut/EBCT amplitude cut SM01");
+    mui->subscribeNew("*/EcalBarrel/EBCosmicTask/Sel/EBCT amplitude sel SM01");
 
     // # of full monitoring cycles processed
     int updates = mui->getNumUpdates();
@@ -99,21 +99,23 @@ void *pth1(void *) {
 
       TProfile2D* h;
 
-      me = mui->get("Collector/FU0/EcalBarrel/EBCosmicTask/Cut/EBCT amplitude cut SM01");
+//      me = mui->get("Collector/FU0/EcalBarrel/EBCosmicTask/Cut/EBCT amplitude cut SM01");
+      me = mui->get("EcalBarrel/Sums/EBCosmicTask/Cut/EBCT amplitude cut SM01");
       h = getTProfile2D(me);
       if ( h ) {
         c1->cd();
-//        h->SetMaximum(1000.);
+        h->SetMaximum(1000.);
         h->SetOption("col");
         h->Draw();
         c1->Update();
       }
 
-      me = mui->get("Collector/FU0/EcalBarrel/EBCosmicTask/Sel/EBCT amplitude sel SM01");
+//      me = mui->get("Collector/FU0/EcalBarrel/EBCosmicTask/Sel/EBCT amplitude sel SM01");
+      me = mui->get("EcalBarrel/Sums/EBCosmicTask/Sel/EBCT amplitude sel SM01");
       h = getTProfile2D(me);
       if ( h ) {
         c2->cd();
-//        h->SetMaximum(1000.);
+        h->SetMaximum(1000.);
         h->SetOption("col");
         h->Draw();
         c2->Update();
@@ -173,8 +175,16 @@ int main(int argc, char** argv) {
   mui->subscribe("*/EcalBarrel/RUN");
   mui->subscribe("*/EcalBarrel/EVT");
   mui->subscribe("*/EcalBarrel/RUNTYPE");
-  mui->subscribe("*/EcalBarrel/EBCosmicTask/Cut/EBCT amplitude cut SM01*");
-  mui->subscribe("*/EcalBarrel/EBCosmicTask/Sel/EBCT amplitude sel SM01*");
+  mui->subscribe("*/EcalBarrel/EBCosmicTask/Cut/EBCT amplitude cut SM01");
+  mui->subscribe("*/EcalBarrel/EBCosmicTask/Sel/EBCT amplitude sel SM01");
+
+  CollateMonitorElement* cme;
+
+  cme = mui->collateProf2D("EBCT amplitude cut SM01", "EBCT amplitude cut SM01", "EcalBarrel/Sums/EBCosmicTask/Cut");
+  mui->add(cme, "*/EcalBarrel/EBCosmicTask/Cut/EBCT amplitude cut SM01");
+
+  cme = mui->collateProf2D("EBCT amplitude sel SM01", "EBCT amplitude sel SM01", "EcalBarrel/Sums/EBCosmicTask/Sel");
+  mui->add(cme, "*/EcalBarrel/EBCosmicTask/Sel/EBCT amplitude sel SM01");
 
   TThread *th1 = new TThread("th1",pth1);
 
