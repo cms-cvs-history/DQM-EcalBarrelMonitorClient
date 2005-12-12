@@ -9,5 +9,5 @@ process CLIENT = {
 
         path p = { ecalClient }
 
-        source = EmptySource{ }
+        source = DummySource{ }
 }
