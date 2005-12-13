@@ -9,6 +9,8 @@ process CLIENT = {
           untracked string dbUserName = "test06"
           untracked string dbPassword = "oratest06"
           untracked string baseHtmlDir = "."
+#          untracked bool collateSources = true
+#          untracked bool verbose = true
         }
 
         path p = { ecalClient }
