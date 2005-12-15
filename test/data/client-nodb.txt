@@ -6,7 +6,7 @@ process CLIENT = {
           untracked int32  hostPort = 9090
           untracked string baseHtmlDir = "."
 #          untracked bool collateSources = true
-          untracked bool verbose = true
+#          untracked bool verbose = true
         }
 
         path p = { ecalClient }
