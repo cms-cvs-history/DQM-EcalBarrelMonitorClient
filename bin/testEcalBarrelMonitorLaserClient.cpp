@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorLaserClient.cpp
  *
- *  $Date: 2005/11/20 13:58:45 $
- *  $Revision: 1.19 $
+ *  $Date: 2005/12/03 10:42:21 $
+ *  $Revision: 1.20 $
  *  \author G. Della Ricca
  *
  */
@@ -45,7 +45,7 @@ void *pth1(void *) {
 
     // subscribe to new monitorable matching pattern
     mui->subscribeNew("*/EcalBarrel/STATUS");
-    mui->subscribeNew("*/EcalBarrel/RUN"); 
+    mui->subscribeNew("*/EcalBarrel/RUN");
     mui->subscribeNew("*/EcalBarrel/EVT");
     mui->subscribeNew("*/EcalBarrel/RUNTYPE");
     mui->subscribeNew("*/EcalBarrel/EBLaserTask/Laser1/EBLT shape SM01 L1");

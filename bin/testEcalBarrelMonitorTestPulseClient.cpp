@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorTestPulseClient.cpp
  *
- *  $Date: 2005/12/03 10:42:21 $
- *  $Revision: 1.17 $
+ *  $Date: 2005/12/29 19:41:35 $
+ *  $Revision: 1.18 $
  *  \author G. Della Ricca
  *
  */
@@ -47,7 +47,7 @@ void *pth1(void *) {
 
     // subscribe to new monitorable matching pattern
     mui->subscribeNew("*/EcalBarrel/STATUS");
-    mui->subscribeNew("*/EcalBarrel/RUN"); 
+    mui->subscribeNew("*/EcalBarrel/RUN");
     mui->subscribeNew("*/EcalBarrel/EVT");
     mui->subscribeNew("*/EcalBarrel/RUNTYPE");
     mui->subscribeNew("*/EcalBarrel/EBTestPulseTask/Gain01/EBTPT shape SM01 G01");
@@ -171,7 +171,7 @@ void *pth1(void *) {
     }
 
   }
-  
+
   exit_done = true;
 
   return 0;
