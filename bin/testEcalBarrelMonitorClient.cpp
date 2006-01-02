@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorClient.cpp
  *
- *  $Date: 2005/11/20 13:58:45 $
- *  $Revision: 1.20 $
+ *  $Date: 2005/12/03 10:42:21 $
+ *  $Revision: 1.21 $
  *  \author G. Della Ricca
  *
  */
@@ -47,7 +47,7 @@ void *pth1(void *) {
     mui->subscribeNew("*/EcalBarrel/EVT");
     mui->subscribeNew("*/EcalBarrel/EVTTYPE");
     mui->subscribeNew("*/EcalBarrel/RUNTYPE");
-    mui->subscribeNew("*/EcalBarrel/EBMonitorEvent/EBMM event SM01*");
+    mui->subscribeNew("*/EcalBarrel/EcalEvent/EBMM event SM01*");
 
     // # of full monitoring cycles processed
     int updates = mui->getNumUpdates();
@@ -110,8 +110,8 @@ void *pth1(void *) {
 
       TH2F* h2;
 
-//      me = mui->get("Collector/FU0/EcalBarrel/EBMonitorEvent/EBMM event SM01");
-      me = mui->get("EcalBarrel/Sums/EBMonitorEvent/EBMM event SM01");
+//      me = mui->get("Collector/FU0/EcalBarrel/EcalEvent/EBMM event SM01");
+      me = mui->get("EcalBarrel/Sums/EcalEvent/EBMM event SM01");
       h2 = getTH2F(me);
       if ( h2 ) {
         c2->cd();
@@ -176,15 +176,15 @@ int main(int argc, char** argv) {
   mui->subscribe("*/EcalBarrel/EVT");
   mui->subscribe("*/EcalBarrel/EVTTYPE");
   mui->subscribe("*/EcalBarrel/RUNTYPE");
-  mui->subscribe("*/EcalBarrel/EBMonitorEvent/EBMM event SM01");
+  mui->subscribe("*/EcalBarrel/EcalEvent/EBMM event SM01");
 
   CollateMonitorElement* cme;
 
   cme = mui->collate1D("EVTTYPE", "EVTTYPE", "EcalBarrel/Sums");
   mui->add(cme, "*/EcalBarrel/EVTTYPE");
 
-  cme = mui->collate2D("EBMM event SM01", "EBMM event SM01", "EcalBarrel/Sums/EBMonitorEvent");
-  mui->add(cme, "*/EcalBarrel/EBMonitorEvent/EBMM event SM01");
+  cme = mui->collate2D("EBMM event SM01", "EBMM event SM01", "EcalBarrel/Sums/EcalEvent");
+  mui->add(cme, "*/EcalBarrel/EcalEvent/EBMM event SM01");
 
   TThread *th1 = new TThread("th1", pth1);
 
