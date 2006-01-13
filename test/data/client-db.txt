@@ -9,6 +9,7 @@ process CLIENT = {
           untracked string dbHostName = "pccmsecdb.cern.ch"
           untracked string dbUserName = "test06"
           untracked string dbPassword = "oratest06"
+#          untracked bool enableSubRun = true
           untracked string location = "H4"
           untracked string baseHtmlDir = "."
 #          untracked bool collateSources = true
