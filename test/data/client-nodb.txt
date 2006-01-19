@@ -9,6 +9,7 @@ process CLIENT = {
           untracked string location = "H4"
           untracked string baseHtmlDir = "."
 #          untracked bool collateSources = true
+#          untracked bool cloneME = false
 #          untracked bool verbose = true
         }
 
