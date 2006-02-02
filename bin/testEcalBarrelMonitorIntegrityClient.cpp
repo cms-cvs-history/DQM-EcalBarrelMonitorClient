@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorIntegrityClient.cpp
  *
- *  $Date: 2005/12/03 10:42:21 $
- *  $Revision: 1.19 $
+ *  $Date: 2005/12/29 19:41:35 $
+ *  $Revision: 1.20 $
  *  \author G. Della Ricca
  *
  */
@@ -46,11 +46,11 @@ void *pth1(void *) {
     mui->subscribeNew("*/EcalBarrel/RUN");
     mui->subscribeNew("*/EcalBarrel/EVT");
     mui->subscribeNew("*/EcalBarrel/RUNTYPE");
-    mui->subscribeNew("*/EcalBarrel/EcalIntegrity/Gain/EBIT gain SM01");
-    mui->subscribeNew("*/EcalBarrel/EcalIntegrity/ChId/EBIT ChId SM01");
-    mui->subscribeNew("*/EcalBarrel/EcalIntegrity/TTId/EBIT TTId SM01");
-    mui->subscribeNew("*/EcalBarrel/EcalIntegrity/TTBlockSize/EBIT TTBlockSize SM01");
-    mui->subscribeNew("*/EcalBarrel/EcalIntegrity/EBIT DCC size error");
+    mui->subscribeNew("*/EcalBarrel/EBIntegrityTask/Gain/EBIT gain SM01");
+    mui->subscribeNew("*/EcalBarrel/EBIntegrityTask/ChId/EBIT ChId SM01");
+    mui->subscribeNew("*/EcalBarrel/EBIntegrityTask/TTId/EBIT TTId SM01");
+    mui->subscribeNew("*/EcalBarrel/EBIntegrityTask/TTBlockSize/EBIT TTBlockSize SM01");
+    mui->subscribeNew("*/EcalBarrel/EBIntegrityTask/EBIT DCC size error");
 
     // # of full monitoring cycles processed
     int updates = mui->getNumUpdates();
@@ -103,8 +103,8 @@ void *pth1(void *) {
       TH1F* h1;
       TH2F* h2;
 
-//      me = mui->get("Collector/FU0/EcalBarrel/EcalIntegrity/EBIT DCC size error");
-      me = mui->get("EcalBarrel/Sums/EcalIntegrity/EBIT DCC size error");
+//      me = mui->get("Collector/FU0/EcalBarrel/EBIntegrityTask/EBIT DCC size error");
+      me = mui->get("EcalBarrel/Sums/EBIntegrityTask/EBIT DCC size error");
       h1 = getTH1F(me);
       if ( h1 ) {
         c1->cd();
@@ -113,8 +113,8 @@ void *pth1(void *) {
         c1->Update();
       }
 
-//      me = mui->get("Collector/FU0/EcalBarrel/EcalIntegrity/Gain/EBIT gain SM01");
-      me = mui->get("EcalBarrel/Sums/EcalIntegrity/Gain/EBIT gain SM01");
+//      me = mui->get("Collector/FU0/EcalBarrel/EBIntegrityTask/Gain/EBIT gain SM01");
+      me = mui->get("EcalBarrel/Sums/EBIntegrityTask/Gain/EBIT gain SM01");
       h2 = getTH2F(me);
       if ( h2 ) {
         c2->cd(1);
@@ -123,8 +123,8 @@ void *pth1(void *) {
         c2->Update();
       }
 
-//      me = mui->get("Collector/FU0/EcalBarrel/EcalIntegrity/ChId/EBIT ChId SM01");
-      me = mui->get("EcalBarrel/Sums/EcalIntegrity/ChId/EBIT ChId SM01");
+//      me = mui->get("Collector/FU0/EcalBarrel/EBIntegrityTask/ChId/EBIT ChId SM01");
+      me = mui->get("EcalBarrel/Sums/EBIntegrityTask/ChId/EBIT ChId SM01");
       h2 = getTH2F(me);
       if ( h2 ) {
         c2->cd(2);
@@ -133,8 +133,8 @@ void *pth1(void *) {
         c2->Update();
       }
 
-//      me = mui->get("Collector/FU0/EcalBarrel/EcalIntegrity/TTId/EBIT TTId SM01");
-      me = mui->get("EcalBarrel/Sums/EcalIntegrity/TTId/EBIT TTId SM01");
+//      me = mui->get("Collector/FU0/EcalBarrel/EBIntegrityTask/TTId/EBIT TTId SM01");
+      me = mui->get("EcalBarrel/Sums/EBIntegrityTask/TTId/EBIT TTId SM01");
       h2 = getTH2F(me);
       if ( h2 ) {
         c2->cd(3);
@@ -143,8 +143,8 @@ void *pth1(void *) {
         c2->Update();
       }
 
-//      me = mui->get("Collector/FU0/EcalBarrel/EcalIntegrity/TTBlockSize/EBIT TTBlockSize SM01");
-      me = mui->get("EcalBarrel/Sums/EcalIntegrity/TTBlockSize/EBIT TTBlockSize SM01");
+//      me = mui->get("Collector/FU0/EcalBarrel/EBIntegrityTask/TTBlockSize/EBIT TTBlockSize SM01");
+      me = mui->get("EcalBarrel/Sums/EBIntegrityTask/TTBlockSize/EBIT TTBlockSize SM01");
       h2 = getTH2F(me);
       if ( h2 ) {
         c2->cd(4);
@@ -212,28 +212,28 @@ int main(int argc, char** argv) {
   mui->subscribe("*/EcalBarrel/RUN");
   mui->subscribe("*/EcalBarrel/EVT");
   mui->subscribe("*/EcalBarrel/RUNTYPE");
-  mui->subscribe("*/EcalBarrel/EcalIntegrity/Gain/EBIT gain SM01");
-  mui->subscribe("*/EcalBarrel/EcalIntegrity/ChId/EBIT ChId SM01");
-  mui->subscribe("*/EcalBarrel/EcalIntegrity/TTId/EBIT TTId SM01");
-  mui->subscribe("*/EcalBarrel/EcalIntegrity/TTBlockSize/EBIT TTBlockSize SM01");
-  mui->subscribe("*/EcalBarrel/EcalIntegrity/EBIT DCC size error");
+  mui->subscribe("*/EcalBarrel/EBIntegrityTask/Gain/EBIT gain SM01");
+  mui->subscribe("*/EcalBarrel/EBIntegrityTask/ChId/EBIT ChId SM01");
+  mui->subscribe("*/EcalBarrel/EBIntegrityTask/TTId/EBIT TTId SM01");
+  mui->subscribe("*/EcalBarrel/EBIntegrityTask/TTBlockSize/EBIT TTBlockSize SM01");
+  mui->subscribe("*/EcalBarrel/EBIntegrityTask/EBIT DCC size error");
 
   CollateMonitorElement* cme;
 
-  cme = mui->collate2D("EBIT gain SM01", "EBIT gain SM01", "EcalBarrel/Sums/EcalIntegrity/Gain");
-  mui->add(cme, "*/EcalBarrel/EcalIntegrity/Gain/EBIT gain SM01");
+  cme = mui->collate2D("EBIT gain SM01", "EBIT gain SM01", "EcalBarrel/Sums/EBIntegrityTask/Gain");
+  mui->add(cme, "*/EcalBarrel/EBIntegrityTask/Gain/EBIT gain SM01");
 
-  cme = mui->collate2D("EBIT ChId SM01", "EBIT ChId SM01", "EcalBarrel/Sums/EcalIntegrity/ChId");
-  mui->add(cme, "*/EcalBarrel/EcalIntegrity/ChId/EBIT ChId SM01");
+  cme = mui->collate2D("EBIT ChId SM01", "EBIT ChId SM01", "EcalBarrel/Sums/EBIntegrityTask/ChId");
+  mui->add(cme, "*/EcalBarrel/EBIntegrityTask/ChId/EBIT ChId SM01");
 
-  cme = mui->collate2D("EBIT TTId SM01", "EBIT TTId SM01", "EcalBarrel/Sums/EcalIntegrity/TTId");
-  mui->add(cme, "*/EcalBarrel/EcalIntegrity/TTId/EBIT TTId SM01");
+  cme = mui->collate2D("EBIT TTId SM01", "EBIT TTId SM01", "EcalBarrel/Sums/EBIntegrityTask/TTId");
+  mui->add(cme, "*/EcalBarrel/EBIntegrityTask/TTId/EBIT TTId SM01");
 
-  cme = mui->collate2D("EBIT TTBlockSize SM01", "EBIT TTBlockSize SM01", "EcalBarrel/Sums/EcalIntegrity/TTBlockSize");
-  mui->add(cme, "*/EcalBarrel/EcalIntegrity/TTBlockSize/EBIT TTBlockSize SM01");
+  cme = mui->collate2D("EBIT TTBlockSize SM01", "EBIT TTBlockSize SM01", "EcalBarrel/Sums/EBIntegrityTask/TTBlockSize");
+  mui->add(cme, "*/EcalBarrel/EBIntegrityTask/TTBlockSize/EBIT TTBlockSize SM01");
 
-  cme = mui->collate1D("EBIT DCC size error", "DCC size error", "EcalBarrel/Sums/EcalIntegrity");
-  mui->add(cme, "*/EcalBarrel/EcalIntegrity/EBIT DCC size error");
+  cme = mui->collate1D("EBIT DCC size error", "DCC size error", "EcalBarrel/Sums/EBIntegrityTask");
+  mui->add(cme, "*/EcalBarrel/EBIntegrityTask/EBIT DCC size error");
 
   TThread *th1 = new TThread("th1",pth1);
 
