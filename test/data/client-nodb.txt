@@ -10,6 +10,7 @@ process CLIENT = {
         untracked string baseHtmlDir = "."
 #        untracked bool collateSources = true
 #        untracked bool cloneME = false
+#        untracked bool enableExit = false
 #        untracked bool verbose = true
       }
 
