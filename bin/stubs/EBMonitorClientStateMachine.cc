@@ -1,8 +1,8 @@
 /*
  * \file EBMonitorClientStateMachine.cc
  *
- * $Date: 2006/02/03 09:39:06 $
- * $Revision: 1.86 $
+ * $Date: 2006/02/03 11:12:23 $
+ * $Revision: 1.1 $
  * \author G. Della Ricca
  *
 */
@@ -15,7 +15,7 @@ public:
 
 XDAQ_INSTANTIATOR();
 
-EBMonitorClientStateMachine(xdaq::ApplicationStub *s) : DQMBaseClient(s, "test"){ }
+EBMonitorClientStateMachine(xdaq::ApplicationStub *s) : DQMBaseClient(s, "EBMonitorClientStateMachine"){ }
 
 // called by configureAction()
 void configure(){
