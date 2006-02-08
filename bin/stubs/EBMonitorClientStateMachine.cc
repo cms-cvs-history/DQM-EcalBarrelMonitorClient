@@ -1,8 +1,8 @@
 /*
  * \file EBMonitorClientStateMachine.cc
  *
- * $Date: 2006/02/03 11:12:23 $
- * $Revision: 1.1 $
+ * $Date: 2006/02/05 22:19:59 $
+ * $Revision: 1.2 $
  * \author G. Della Ricca
  *
 */
@@ -44,7 +44,7 @@ void configure(){
 
   ps.addUntrackedParameter<bool>("enableExit", false);
 
-//  ps.addUntrackedParameter<bool>("verbose", true);
+  ps.addUntrackedParameter<bool>("verbose", true);
 
   ebmc_ = new EcalBarrelMonitorClient(ps, mui_);
 
