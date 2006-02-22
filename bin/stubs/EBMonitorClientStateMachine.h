@@ -4,11 +4,13 @@
 /*
  * \file EBMonitorClientStateMachine.h
  *
- * $Date: 2006/02/03 09:39:06 $
- * $Revision: 1.34 $
+ * $Date: 2006/02/03 11:12:23 $
+ * $Revision: 1.1 $
  * \author G. Della Ricca
  *
 */
+
+#include "FWCore/MessageLogger/interface/MessageLogger.h"
 
 #include "DQMServices/Components/interface/DQMBaseClient.h"
 #include "DQMServices/Components/interface/Updater.h"
