@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorIntegrityClient.cpp
  *
- *  $Date: 2006/02/02 08:32:43 $
- *  $Revision: 1.21 $
+ *  $Date: 2006/02/23 15:21:37 $
+ *  $Revision: 1.22 $
  *  \author G. Della Ricca
  *
  */
@@ -11,9 +11,6 @@
 #include "DQMServices/UI/interface/MonitorUIRoot.h"
 
 #include "DataFormats/EcalRawData/interface/EcalRawDataCollections.h"
-
-#define COSMIC (PHYSICS+20)
-#define BEAM   (PHYSICS+21)
 
 #include "testEcalBarrelMonitorUtils.h"
 
@@ -98,12 +95,13 @@ void *pth1(void *) {
       me = mui->get("Collector/FU0/EcalBarrel/RUNTYPE");
       if ( me ) {
         s = me->valueString();
-        if ( atoi(s.substr(2,s.size()-2).c_str()) == PHYSICS ) type = "PHYSICS";
         if ( atoi(s.substr(2,s.size()-2).c_str()) == COSMIC ) type = "COSMIC";
         if ( atoi(s.substr(2,s.size()-2).c_str()) == LASER_STD ) type = "LASER";
         if ( atoi(s.substr(2,s.size()-2).c_str()) == PEDESTAL_STD ) type = "PEDESTAL";
         if ( atoi(s.substr(2,s.size()-2).c_str()) == TESTPULSE_MGPA ) type = "TEST_PULSE";
-        if ( atoi(s.substr(2,s.size()-2).c_str()) == BEAM ) type = "BEAM";
+        if ( atoi(s.substr(2,s.size()-2).c_str()) == BEAMH4 ) type = "BEAMH4";
+        if ( atoi(s.substr(2,s.size()-2).c_str()) == BEAMH2 ) type = "BEAMH2";
+        if ( atoi(s.substr(2,s.size()-2).c_str()) == MTCC ) type = "MTCC";
         cout << "type = " << type << endl;
       }
 
