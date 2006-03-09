@@ -9,7 +9,7 @@ TEST_PATH=$(echo "${PWD}" | sed 's/\//\\\//g')
 echo "The current directory is = $PWD"
 
 MWC_LIB1="${LOCALRT}/lib/slc3_ia32_gcc323/libEBMonitorClientStateMachine.so"
-echo "Looking for the MonitorWebClient library... $MWC_LIB1"
+echo "Looking for the EBMonitorClientStateMachine library... $MWC_LIB1"
 if [ ! -f $MWC_LIB1 ]; then
     echo "Not Found! Will pick it up from the release area..."
     MWC_LIB1="${CMSSW_RELEASE_BASE}/lib/slc3_ia32_gcc323/libEBMonitorClientStateMachine.so"
