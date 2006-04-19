@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorIntegrityClient.cpp
  *
- *  $Date: 2006/02/23 15:21:37 $
- *  $Revision: 1.22 $
+ *  $Date: 2006/02/24 08:03:48 $
+ *  $Revision: 1.23 $
  *  \author G. Della Ricca
  *
  */
@@ -25,6 +25,7 @@ using namespace std;
 
 TCanvas* c1;
 TCanvas* c2;
+TCanvas* c3;
 
 MonitorUserInterface* mui;
 
@@ -53,6 +54,12 @@ void *pth1(void *) {
     mui->subscribeNew("*/EcalBarrel/EBIntegrityTask/TTId/EBIT TTId SM01");
     mui->subscribeNew("*/EcalBarrel/EBIntegrityTask/TTBlockSize/EBIT TTBlockSize SM01");
     mui->subscribeNew("*/EcalBarrel/EBIntegrityTask/EBIT DCC size error");
+     mui->subscribeNew("*/EcalBarrel/EBIntegrityTask/MemChId/EBIT MemChId SM01");
+     mui->subscribeNew("*/EcalBarrel/EBIntegrityTask/MemGain/EBIT MemGain SM01");
+     mui->subscribeNew("*/EcalBarrel/EBIntegrityTask/MemTTId/EBIT MemTTId SM01");
+     mui->subscribeNew("*/EcalBarrel/EBIntegrityTask/MemSize/EBIT MemSize SM01");
+
+
 
     // # of full monitoring cycles processed
     int updates = mui->getNumUpdates();
@@ -108,7 +115,7 @@ void *pth1(void *) {
       TH1F* h1;
       TH2F* h2;
 
-//      me = mui->get("Collector/FU0/EcalBarrel/EBIntegrityTask/EBIT DCC size error");
+      //      me = mui->get("Collector/FU0/EcalBarrel/EBIntegrityTask/EBIT DCC size error");
       me = mui->get("EcalBarrel/Sums/EBIntegrityTask/EBIT DCC size error");
       h1 = getTH1F(me);
       if ( h1 ) {
@@ -117,8 +124,8 @@ void *pth1(void *) {
         h1->Draw();
         c1->Update();
       }
-
-//      me = mui->get("Collector/FU0/EcalBarrel/EBIntegrityTask/Gain/EBIT gain SM01");
+    
+      //      me = mui->get("Collector/FU0/EcalBarrel/EBIntegrityTask/Gain/EBIT gain SM01");
       me = mui->get("EcalBarrel/Sums/EBIntegrityTask/Gain/EBIT gain SM01");
       h2 = getTH2F(me);
       if ( h2 ) {
@@ -128,7 +135,7 @@ void *pth1(void *) {
         c2->Update();
       }
 
-//      me = mui->get("Collector/FU0/EcalBarrel/EBIntegrityTask/ChId/EBIT ChId SM01");
+      //      me = mui->get("Collector/FU0/EcalBarrel/EBIntegrityTask/ChId/EBIT ChId SM01");
       me = mui->get("EcalBarrel/Sums/EBIntegrityTask/ChId/EBIT ChId SM01");
       h2 = getTH2F(me);
       if ( h2 ) {
@@ -138,7 +145,7 @@ void *pth1(void *) {
         c2->Update();
       }
 
-//      me = mui->get("Collector/FU0/EcalBarrel/EBIntegrityTask/TTId/EBIT TTId SM01");
+      //      me = mui->get("Collector/FU0/EcalBarrel/EBIntegrityTask/TTId/EBIT TTId SM01");
       me = mui->get("EcalBarrel/Sums/EBIntegrityTask/TTId/EBIT TTId SM01");
       h2 = getTH2F(me);
       if ( h2 ) {
@@ -148,7 +155,7 @@ void *pth1(void *) {
         c2->Update();
       }
 
-//      me = mui->get("Collector/FU0/EcalBarrel/EBIntegrityTask/TTBlockSize/EBIT TTBlockSize SM01");
+      //      me = mui->get("Collector/FU0/EcalBarrel/EBIntegrityTask/TTBlockSize/EBIT TTBlockSize SM01");
       me = mui->get("EcalBarrel/Sums/EBIntegrityTask/TTBlockSize/EBIT TTBlockSize SM01");
       h2 = getTH2F(me);
       if ( h2 ) {
@@ -161,7 +168,38 @@ void *pth1(void *) {
       c2->cd();
       c2->Modified();
       c2->Update();
+      
+      
+      
+      // me = mui->get("EcalBarrel/Sums/EBIntegrityTask/TTBlockSize/EBIT TTBlockSize SM01");
+      me = mui->get("EcalBarrel/Sums/EBIntegrityTask/MemChId/EBIT MemChId SM01");
+       h2 = getTH2F(me);
+       if ( h2 ) {
+         c3->cd(1);
+         h2->SetOption("col");
+         h2->Draw();
+         c3->Update();
+       }
 
+      c3->cd();
+      c3->Modified();
+      c3->Update();
+
+      me = mui->get("EcalBarrel/Sums/EBIntegrityTask/MemGain/EBIT MemGain SM01");
+       h2 = getTH2F(me);
+       if ( h2 ) {
+          c3->cd(2);
+         h2->SetOption("col");
+         h2->Draw();
+         c3->Update();
+       }
+
+      c3->cd();
+      c3->Modified();
+      c3->Update();
+
+
+      
       last_plotting = updates;
     }
 
@@ -171,6 +209,9 @@ void *pth1(void *) {
 
   return 0;
 }
+
+
+
 
 int main(int argc, char** argv) {
 
@@ -196,6 +237,10 @@ int main(int argc, char** argv) {
   c2->Divide(2,2);
   c2->Modified();
   c2->Update();
+  c3 = new TCanvas("Ecal Barrel Integrity Monitoring 3","Ecal Barrel Integrity Monitoring 3", 430,615,600,370);
+  c3->Divide(1,2);
+  c3->Modified();
+  c3->Update();
 
   if ( argc >= 2 ) cfuname = argv[1];
   if ( argc >= 3 ) hostname = argv[2];
@@ -222,9 +267,17 @@ int main(int argc, char** argv) {
   mui->subscribe("*/EcalBarrel/EBIntegrityTask/TTId/EBIT TTId SM01");
   mui->subscribe("*/EcalBarrel/EBIntegrityTask/TTBlockSize/EBIT TTBlockSize SM01");
   mui->subscribe("*/EcalBarrel/EBIntegrityTask/EBIT DCC size error");
+  mui->subscribeNew("*/EcalBarrel/EBIntegrityTask/MemChId/EBIT MemChId SM01");
+  mui->subscribeNew("*/EcalBarrel/EBIntegrityTask/MemGain/EBIT MemGain SM01");
+  mui->subscribeNew("*/EcalBarrel/EBIntegrityTask/MemTTId/EBIT MemTTId SM01");
+  mui->subscribeNew("*/EcalBarrel/EBIntegrityTask/MemSize/EBIT MemSize SM01");
+
+
+
+
 
   CollateMonitorElement* cme;
-
+  
   cme = mui->collate2D("EBIT gain SM01", "EBIT gain SM01", "EcalBarrel/Sums/EBIntegrityTask/Gain");
   mui->add(cme, "*/EcalBarrel/EBIntegrityTask/Gain/EBIT gain SM01");
 
@@ -239,6 +292,19 @@ int main(int argc, char** argv) {
 
   cme = mui->collate1D("EBIT DCC size error", "DCC size error", "EcalBarrel/Sums/EBIntegrityTask");
   mui->add(cme, "*/EcalBarrel/EBIntegrityTask/EBIT DCC size error");
+
+  cme = mui->collate2D("EBIT MemChId SM01", "EBIT MemChId SM01", "EcalBarrel/Sums/EBIntegrityTask/MemChId");
+  mui->add(cme, "*/EcalBarrel/EBIntegrityTask/MemChId/EBIT MemChId SM01");
+
+  cme = mui->collate2D("EBIT MemGain SM01", "EBIT MemGain SM01", "EcalBarrel/Sums/EBIntegrityTask/MemGain");
+  mui->add(cme, "*/EcalBarrel/EBIntegrityTask/MemGain/EBIT MemGain SM01");
+
+  cme = mui->collate2D("EBIT MemTTId SM01", "EBIT MemTTId SM01", "EcalBarrel/Sums/EBIntegrityTask/MemTTId");
+  mui->add(cme, "*/EcalBarrel/EBIntegrityTask/MemTTId/EBIT MemTTId SM01");
+
+  cme = mui->collate2D("EBIT MemSize SM01", "EBIT MemSize SM01", "EcalBarrel/Sums/EBIntegrityTask/MemSize");
+  mui->add(cme, "*/EcalBarrel/EBIntegrityTask/MemSize/EBIT MemSize SM01");
+
 
   TThread *th1 = new TThread("th1",pth1);
 
