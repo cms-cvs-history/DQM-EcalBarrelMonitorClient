@@ -1,11 +1,3 @@
-<library file=stubs/EBMonitorClientStateMachine.cc name=EBMonitorClientStateMachine>
- <use name=DQMServices/Components>
- <use name=DQM/EcalBarrelMonitorClient>
- <use name=root>
- <use name=boost>
- <use name=oracle>
-</library>
-
 <bin file=testEcalBarrelMonitorClient.cpp>
  <use name=DQMServices/NodeROOT>
  <use name=DQMServices/UI>
