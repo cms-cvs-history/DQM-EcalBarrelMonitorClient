@@ -1,20 +1,21 @@
 process CLIENT = {
 
-      module ecalClient = EcalBarrelMonitorClient{
-        untracked string clientName = "EcalBarrelMonitorClient"
-        untracked string hostName = "localhost"
-        untracked int32  hostPort = 9090
+      module ecalMonitorClient = EcalBarrelMonitorClient{
 #        untracked string outputFile = 'EcalBarrelMonitorClient.root'
-        untracked bool enableSubRun = true
         untracked string location = "H4"
         untracked string baseHtmlDir = "."
 #        untracked bool collateSources = true
 #        untracked bool cloneME = false
+#        untracked bool enableSubRun = true
 #        untracked bool enableExit = false
+#        untracked bool enableMonitorDaemon = false
+        untracked string clientName = "EcalBarrelMonitorClient"
+        untracked string hostName = "localhost"
+        untracked int32  hostPort = 9090
 #        untracked bool verbose = true
       }
 
-      path p = { ecalClient }
+      path p = { ecalMonitorClient }
 
       source = DummySource{
         untracked int32 maxEvents = -1
