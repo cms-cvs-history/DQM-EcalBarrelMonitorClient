@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorCosmicClient.cpp
  *
- *  $Date: 2006/02/24 08:03:48 $
- *  $Revision: 1.19 $
+ *  $Date: 2006/03/13 13:00:08 $
+ *  $Revision: 1.20 $
  *  \author G. Della Ricca
  *
  */
@@ -92,13 +92,13 @@ void *pth1(void *) {
       me = mui->get("Collector/FU0/EcalBarrel/RUNTYPE");
       if ( me ) {
         s = me->valueString();
-        if ( atoi(s.substr(2,s.size()-2).c_str()) == COSMIC ) type = "COSMIC";
-        if ( atoi(s.substr(2,s.size()-2).c_str()) == LASER_STD ) type = "LASER";
-        if ( atoi(s.substr(2,s.size()-2).c_str()) == PEDESTAL_STD ) type = "PEDESTAL";
-        if ( atoi(s.substr(2,s.size()-2).c_str()) == TESTPULSE_MGPA ) type = "TEST_PULSE";
-        if ( atoi(s.substr(2,s.size()-2).c_str()) == BEAMH4 ) type = "BEAMH4";
-        if ( atoi(s.substr(2,s.size()-2).c_str()) == BEAMH2 ) type = "BEAMH2";
-        if ( atoi(s.substr(2,s.size()-2).c_str()) == MTCC ) type = "MTCC";
+        if ( atoi(s.substr(2,s.size()-2).c_str()) == EcalDCCHeaderBlock::COSMIC ) type = "COSMIC";
+        if ( atoi(s.substr(2,s.size()-2).c_str()) == EcalDCCHeaderBlock::LASER_STD ) type = "LASER";
+        if ( atoi(s.substr(2,s.size()-2).c_str()) == EcalDCCHeaderBlock::PEDESTAL_STD ) type = "PEDESTAL";
+        if ( atoi(s.substr(2,s.size()-2).c_str()) == EcalDCCHeaderBlock::TESTPULSE_MGPA ) type = "TEST_PULSE";
+        if ( atoi(s.substr(2,s.size()-2).c_str()) == EcalDCCHeaderBlock::BEAMH4 ) type = "BEAMH4";
+        if ( atoi(s.substr(2,s.size()-2).c_str()) == EcalDCCHeaderBlock::BEAMH2 ) type = "BEAMH2";
+        if ( atoi(s.substr(2,s.size()-2).c_str()) == EcalDCCHeaderBlock::MTCC ) type = "MTCC";
         cout << "type = " << type << endl;
       }
 
