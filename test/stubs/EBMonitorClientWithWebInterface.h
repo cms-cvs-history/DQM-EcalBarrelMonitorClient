@@ -20,8 +20,7 @@
 #include <iostream>
 
 
-class EBMonitorClientWithWebInterface : public DQMBaseClient, 
-			       public dqm::UpdateObserver
+class EBMonitorClientWithWebInterface : public DQMBaseClient, public dqm::UpdateObserver
 {
 public:
   
@@ -50,7 +49,6 @@ public:
 
   // this obligatory method is called by the Updater component, whenever there is an update 
   void onUpdate() const;
-
 
 public:
 
