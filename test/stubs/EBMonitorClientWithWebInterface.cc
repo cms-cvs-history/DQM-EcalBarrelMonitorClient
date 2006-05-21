@@ -62,8 +62,6 @@ void EBMonitorClientWithWebInterface::newRun()
 void EBMonitorClientWithWebInterface::endRun()
 {
 
-  ebmc_->endRun();
-
   ebmc_->endJob();
 
   delete ebmc_;
