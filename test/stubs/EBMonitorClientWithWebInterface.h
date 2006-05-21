@@ -45,8 +45,6 @@ public:
   // this obligatory method is called whenever the client enters the "Halted" state:
   void endRun();
 
-  void finalize();
-
   // this obligatory method is called by the Updater component, whenever there is an update 
   void onUpdate() const;
 
