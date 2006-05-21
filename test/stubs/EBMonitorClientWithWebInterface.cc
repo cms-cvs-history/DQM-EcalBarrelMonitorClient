@@ -64,15 +64,19 @@ void EBMonitorClientWithWebInterface::endRun()
 
   ebmc_->endJob();
 
-  delete ebmc_;
-
 }
-
 
 void EBMonitorClientWithWebInterface::onUpdate() const
 {
 
   ebmc_->analyze();
+
+}
+
+void EBMonitorClientWithWebInterface::finalize()
+{
+
+  delete ebmc_;
 
 }
 

@@ -30,23 +30,32 @@ public:
   // The class constructor:  
   EBMonitorClientWithWebInterface(xdaq::ApplicationStub *s);
 
-  // implement the method that outputs the page with the widgets (declared in DQMBaseClient):
+  // implement the method that outputs the page with the
+  // widgets (declared in DQMBaseClient):
   void general(xgi::Input * in, xgi::Output * out ) throw (xgi::exception::Exception);
 
-  // the method which answers all HTTP requests of the form ".../Request?RequestID=..."
+  // the method which answers all HTTP requests of the 
+  // form ".../Request?RequestID=..."
   void handleWebRequest(xgi::Input * in, xgi::Output * out);
 
-  // this obligatory method is called whenever the client enters the "Configured" state:
+  // this obligatory method is called whenever the client
+  // enters the "Configured" state:
   void configure();
 
-  // this obligatory method is called whenever the client enters the "Enabled" state:
+  // this obligatory method is called whenever the client
+  // enters the "Enabled" state:
   void newRun();
 
-  // this obligatory method is called whenever the client enters the "Halted" state:
+  // this obligatory method is called whenever the client
+  // enters the "Halted" state:
   void endRun();
 
-  // this obligatory method is called by the Updater component, whenever there is an update 
+  // this obligatory method is called by the Updater component,
+  // whenever there is an update :
   void onUpdate() const;
+
+  // called by ~DQMBaseClient():
+  void finalize();
 
 public:
 
