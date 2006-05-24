@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorLaserClient.cpp
  *
- *  $Date: 2006/02/24 08:03:48 $
- *  $Revision: 1.23 $
+ *  $Date: 2006/05/05 20:12:01 $
+ *  $Revision: 1.24 $
  *  \author G. Della Ricca
  *
  */
@@ -12,7 +12,7 @@
 
 #include "DataFormats/EcalRawData/interface/EcalRawDataCollections.h"
 
-#include "testEcalBarrelMonitorUtils.h"
+#include "DQM/EcalBarrelMonitorClient/interface/EBMUtilsClient.h"
 
 #include "TROOT.h"
 #include "TApplication.h"
@@ -110,7 +110,7 @@ void *pth1(void *) {
 
 //      me = mui->get("Collector/FU0/EcalBarrel/EBLaserTask/Laser1/EBLT amplitude SM01 L1");
       me = mui->get("EcalBarrel/Sums/EBLaserTask/Laser1/EBLT amplitude SM01 L1");
-      h = getTProfile2D(me);
+      h = EBMUtilsClient::getHisto<TProfile2D*>(me);
       if ( h ) {
         c1->cd();
         h->SetOption("col");
@@ -120,7 +120,7 @@ void *pth1(void *) {
 
 //      me = mui->get("Collector/FU0/EcalBarrel/EBLaserTask/Laser2/EBLT amplitude SM01 L2");
       me = mui->get("EcalBarrel/Sums/EBLaserTask/Laser2/EBLT amplitude SM01 L2");
-      h = getTProfile2D(me);
+      h = EBMUtilsClient::getHisto<TProfile2D*>(me);
       if ( h ) {
         c2->cd();
         h->SetOption("col");
@@ -130,7 +130,7 @@ void *pth1(void *) {
 
 //      me = mui->get("Collector/FU0/EcalBarrel/EBLaserTask/Laser1/EBLT shape SM01 L1");
       me = mui->get("EcalBarrel/Sums/EBLaserTask/Laser1/EBLT shape SM01 L1");
-      h = getTProfile2D(me);
+      h = EBMUtilsClient::getHisto<TProfile2D*>(me);
       if ( h ) {
         c3->cd();
         h->SetOption("lego");
@@ -140,7 +140,7 @@ void *pth1(void *) {
 
 //      me = mui->get("Collector/FU0/EcalBarrel/EBLaserTask/Laser2/EBLT shape SM01 L2");
       me = mui->get("EcalBarrel/Sums/EBLaserTask/Laser2/EBLT shape SM01 L2");
-      h = getTProfile2D(me);
+      h = EBMUtilsClient::getHisto<TProfile2D*>(me);
       if ( h ) {
         c4->cd();
         h->SetOption("lego");

@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorClient.cpp
  *
- *  $Date: 2006/02/24 08:03:48 $
- *  $Revision: 1.24 $
+ *  $Date: 2006/05/05 20:12:01 $
+ *  $Revision: 1.25 $
  *  \author G. Della Ricca
  *
  */
@@ -12,7 +12,7 @@
 
 #include "DataFormats/EcalRawData/interface/EcalRawDataCollections.h"
 
-#include "testEcalBarrelMonitorUtils.h"
+#include "DQM/EcalBarrelMonitorClient/interface/EBMUtilsClient.h"
 
 #include "TROOT.h"
 #include "TApplication.h"
@@ -106,7 +106,7 @@ void *pth1(void *) {
 
 //      me = mui->get("Collector/FU0/EcalBarrel/EVTTYPE");
       me = mui->get("EcalBarrel/Sums/EVTTYPE");
-      h = getTH1F(me);
+      h = EBMUtilsClient::getHisto<TH1F*>(me);
       if ( h ) {
         c1->cd();
         h->Draw();
@@ -117,7 +117,7 @@ void *pth1(void *) {
 
 //      me = mui->get("Collector/FU0/EcalBarrel/EcalEvent/EBMM event SM01");
       me = mui->get("EcalBarrel/Sums/EcalEvent/EBMM event SM01");
-      h2 = getTH2F(me);
+      h2 = EBMUtilsClient::getHisto<TH2F*>(me);
       if ( h2 ) {
         c2->cd();
         h2->SetMaximum(4096.);

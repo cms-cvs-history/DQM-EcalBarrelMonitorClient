@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorPedestalClient.cpp
  *
- *  $Date: 2006/02/24 08:03:48 $
- *  $Revision: 1.20 $
+ *  $Date: 2006/05/05 20:12:01 $
+ *  $Revision: 1.21 $
  *  \author G. Della Ricca
  *
  */
@@ -12,7 +12,7 @@
 
 #include "DataFormats/EcalRawData/interface/EcalRawDataCollections.h"
 
-#include "testEcalBarrelMonitorUtils.h"
+#include "DQM/EcalBarrelMonitorClient/interface/EBMUtilsClient.h"
 
 #include "TROOT.h"
 #include "TApplication.h"
@@ -108,7 +108,7 @@ void *pth1(void *) {
 
 //      me = mui->get("Collector/FU0/EcalBarrel/EBPedestalTask/Gain01/EBPT pedestal SM01 G01");
       me = mui->get("EcalBarrel/Sums/EBPedestalTask/Gain01/EBPT pedestal SM01 G01");
-      h = getTProfile2D(me);
+      h = EBMUtilsClient::getHisto<TProfile2D*>(me);
       if ( h ) {
         c1->cd();
         h->SetOption("col");
@@ -118,7 +118,7 @@ void *pth1(void *) {
 
 //      me = mui->get("Collector/FU0/EcalBarrel/EBPedestalTask/Gain06/EBPT pedestal SM01 G06");
       me = mui->get("EcalBarrel/Sums/EBPedestalTask/Gain06/EBPT pedestal SM01 G06");
-      h = getTProfile2D(me);
+      h = EBMUtilsClient::getHisto<TProfile2D*>(me);
       if ( h ) {
         c2->cd();
         h->SetOption("col");
@@ -128,7 +128,7 @@ void *pth1(void *) {
 
 //      me = mui->get("Collector/FU0/EcalBarrel/EBPedestalTask/Gain12/EBPT pedestal SM01 G12");
       me = mui->get("EcalBarrel/Sums/EBPedestalTask/Gain12/EBPT pedestal SM01 G12");
-      h = getTProfile2D(me);
+      h = EBMUtilsClient::getHisto<TProfile2D*>(me);
       if ( h ) {
         c3->cd();
         h->SetOption("col");
