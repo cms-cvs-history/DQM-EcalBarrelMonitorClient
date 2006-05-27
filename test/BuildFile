@@ -10,15 +10,6 @@
  <use name=DQM/EcalBarrelMonitorClient>
  <use name=xdaq>
  <use name=oracle>
- <lib name=xgi>
- <lib name=xdata>
  <use name=xerces-c>
- <lib name=cgicc>
- <lib name=log4cplus>
- <lib name=xcept>
- <lib name=udpappender>
- <lib name=peer>
- <lib name=mimetic>
- <lib name=xmlappender>
 </library> 
 
