@@ -28,10 +28,6 @@
               </xc:Application>
               <xc:Module>.libpath1</xc:Module>
 
-              <xc:Application class="XdaqCollector" id="16" instance="0" network="local">
-              </xc:Application>		
-              <xc:Module>.libpath2</xc:Module>
-
            </xc:Context>
 
       </xc:Partition>
