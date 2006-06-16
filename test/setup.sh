@@ -28,4 +28,7 @@ fi
 
 sed -e "s/.portn/1972/g" -e "s/.host/${HOSTNAME}/g" -e "s/.pwd/${TEST_PATH}/g" .profile.xml > profile.xml
 sed -e "s/.portn/1972/g" -e "s/.host/${HOSTNAME}/g" -e "s/.pwd/${TEST_PATH}/g" -e "s/.libpath1/${LIB1}/g"  -e "s/.libpath2/${LIB2}/g" .EBMonitorClientWithWebInterface.xml > EBMonitorClientWithWebInterface.xml 
+/bin/sed -e "s/.portn/$LOCALPORT/g" -e "s/.host/$LOCALHOST/g" .runMonitorClient.sh > runMonitorClient.sh
+
+/bin/chmod 751 runMonitorClient.sh
 
