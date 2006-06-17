@@ -1,5 +1,5 @@
 
-./setup.sh localhost 1972
+./setup.sh localhost 1972 collectorhost 9090
 
 # start the DQM Web Client
 

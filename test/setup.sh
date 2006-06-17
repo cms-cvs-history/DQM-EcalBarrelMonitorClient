@@ -6,11 +6,19 @@ fi
 if [ "$2" != "" ]; then 
   LOCALPORT=$2
 fi
+if [ "$3" != "" ]; then
+  REMHOST=$3
+fi
+if [ "$4" != "" ]; then
+  REMPORT=$4
+fi
 
 # Settable parameters. If empty or commented out they'll be asked for...
 
-#LOCALHOST="pclip9.cern.ch"
+#LOCALHOST="localhost"
 #LOCALPORT=1972
+#REMHOST="pclip9.cern.ch"
+#REMPORT=9090
 
 # End of settable parameters
 
@@ -27,6 +35,12 @@ if [ "$LOCALHOST" == "" ] ; then
 fi
 if [ "$LOCALPORT" == "" ]; then
   LOCALPORT=1972
+fi
+if [ "$REMHOST" == "" ] ; then
+  REMHOST=$HOSTNAME
+fi
+if [ "$REMPORT" == "" ]; then
+  REMPORT=9090
 fi
 
 LIB1="${LOCALRT}/lib/slc3_ia32_gcc323/libEBMonitorClientWebInterface.so"
@@ -48,7 +62,7 @@ if [ -e EBMonitorClientWithWebInterface.xml ]; then
 fi
 
 sed -e "s/.lport/${LOCALPORT}/g" -e "s/.lhost/${LOCALHOST}/g" -e "s/.pwd/${TEST_PATH}/g" .profile.xml > profile.xml
-sed -e "s/.lport/${LOCALPORT}/g" -e "s/.lhost/${LOCALHOST}/g" -e "s/.pwd/${TEST_PATH}/g" -e "s/.libpath1/${LIB1}/g"  -e "s/.libpath2/${LIB2}/g" .EBMonitorClientWithWebInterface.xml > EBMonitorClientWithWebInterface.xml 
+sed -e "s/.lport/${LOCALPORT}/g" -e "s/.lhost/${LOCALHOST}/g" -e "s/.rport/${REMPORT}/g" -e "s/.rhost/${REMHOST}/g" -e "s/.pwd/${TEST_PATH}/g" -e "s/.libpath1/${LIB1}/g"  -e "s/.libpath2/${LIB2}/g" .EBMonitorClientWithWebInterface.xml > EBMonitorClientWithWebInterface.xml 
 /bin/sed -e "s/.lport/$LOCALPORT/g" -e "s/.lhost/$LOCALHOST/g" .runMonitorClient.sh > runMonitorClient.sh
 
 /bin/chmod 751 runMonitorClient.sh

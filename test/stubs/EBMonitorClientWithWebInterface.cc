@@ -1,12 +1,12 @@
 
 #include "EBMonitorClientWithWebInterface.h"
 
-EBMonitorClientWithWebInterface::EBMonitorClientWithWebInterface(xdaq::ApplicationStub *stub) : DQMBaseClient(
-		  stub,       // the application stub - do not change
-		  "test",     // the name by which the collector identifies the client
-		  "localhost",// the name of the computer hosting the collector
-		  9090        // the port at which the collector listens
-		  )
+EBMonitorClientWithWebInterface::EBMonitorClientWithWebInterface(xdaq::ApplicationStub *stub) :
+DQMBaseClient( stub,                                  // the application stub - do not change
+               "EBMonitorClientWithWebInterface",     // the name by which the collector identifies the client
+               "localhost",                           // the name of the computer hosting the collector
+                9090                                   // the port at which the collector listens
+             )
 {
 
   webInterface_p = new EBMonitorClientWebInterface(getContextURL(), getApplicationURL(), &mui_);

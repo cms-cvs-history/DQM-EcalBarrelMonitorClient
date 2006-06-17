@@ -9,12 +9,21 @@
 
     <xc:Endpoint hostname=".lhost" network="tcp1" port="30000" protocol="tcp" service="i2o"></xc:Endpoint>
 
-    <xc:Application class="EBMonitorClientWithWebInterface" id="15" instance="0" network="local">
-      <properties xmlns="urn:xdaq-application:EBMonitorClientWithWebInterface" xsi:type="soapenc:Struct">
-        <serverHost xsi:type="xsd:string">.lhost</serverHost>
-        <serverPort xsi:type="xsd:unsignedLong">9090</serverPort>
+    <xc:Application class="PeerTransportTCP" id="20" network="local" instance="0">
+      <properties xmlns="urn:xdaq-application:PeerTransportTCP" xsi:type="soapenc:Struct">
+        <autoSize xsi:type="xsd:boolean">true</autoSize>
+        <maxPacketSize xsi:type="xsd:unsignedLong">65536</maxPacketSize>
+        <!-- poolName xsi:type="xsd:string">RoundtripSendPool</poolName -->
       </properties>
     </xc:Application>
+
+    <xc:Application class="EBMonitorClientWithWebInterface" id="15" instance="0" network="local">
+      <properties xmlns="urn:xdaq-application:EBMonitorClientWithWebInterface" xsi:type="soapenc:Struct">
+        <serverHost xsi:type="xsd:string">.rhost</serverHost>
+        <serverPort xsi:type="xsd:unsignedLong">.rport</serverPort>
+      </properties>
+    </xc:Application>
+    <xc:Module>${XDAQ_ROOT}/lib/linux/x86/libpttcp.so</xc:Module>
     <xc:Module>.libpath1</xc:Module>
 
   </xc:Context>
