@@ -1,12 +1,33 @@
 #!/bin/bash
 
+if [ "$1" != "" ]; then 
+  LOCALHOST=$1
+fi
+if [ "$2" != "" ]; then 
+  LOCALPORT=$2
+fi
+
+# Settable parameters. If empty or commented out they'll be asked for...
+
+#LOCALHOST="pclip9.cern.ch"
+#LOCALPORT=1972
+
+# End of settable parameters
+
 eval `scramv1 ru -sh`
 
 HOSTNAME=$(echo `/bin/hostname` | sed 's/\//\\\//g')
-echo "The hostname is = $HOSTNAME"
+echo "The local hostname is = $HOSTNAME"
 
 TEST_PATH=$(echo "${PWD}" | sed 's/\//\\\//g')
 echo "The current directory is = $PWD"
+
+if [ "$LOCALHOST" == "" ] ; then
+  LOCALHOST=$HOSTNAME
+fi
+if [ "$LOCALPORT" == "" ]; then
+  LOCALPORT=1972
+fi
 
 LIB1="${LOCALRT}/lib/slc3_ia32_gcc323/libEBMonitorClientWebInterface.so"
 echo "Looking for the MonitorWebClient library... $LIB1"
@@ -26,9 +47,9 @@ if [ -e EBMonitorClientWithWebInterface.xml ]; then
     rm EBMonitorClientWithWebInterface.xml
 fi
 
-sed -e "s/.portn/1972/g" -e "s/.host/${HOSTNAME}/g" -e "s/.pwd/${TEST_PATH}/g" .profile.xml > profile.xml
-sed -e "s/.portn/1972/g" -e "s/.host/${HOSTNAME}/g" -e "s/.pwd/${TEST_PATH}/g" -e "s/.libpath1/${LIB1}/g"  -e "s/.libpath2/${LIB2}/g" .EBMonitorClientWithWebInterface.xml > EBMonitorClientWithWebInterface.xml 
-/bin/sed -e "s/.portn/$LOCALPORT/g" -e "s/.host/$LOCALHOST/g" .runMonitorClient.sh > runMonitorClient.sh
+sed -e "s/.lport/${LOCALPORT}/g" -e "s/.lhost/${LOCALHOST}/g" -e "s/.pwd/${TEST_PATH}/g" .profile.xml > profile.xml
+sed -e "s/.lport/${LOCALPORT}/g" -e "s/.lhost/${LOCALHOST}/g" -e "s/.pwd/${TEST_PATH}/g" -e "s/.libpath1/${LIB1}/g"  -e "s/.libpath2/${LIB2}/g" .EBMonitorClientWithWebInterface.xml > EBMonitorClientWithWebInterface.xml 
+/bin/sed -e "s/.lport/$LOCALPORT/g" -e "s/.lhost/$LOCALHOST/g" .runMonitorClient.sh > runMonitorClient.sh
 
 /bin/chmod 751 runMonitorClient.sh
 

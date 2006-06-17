@@ -5,11 +5,13 @@
     i2o:target class="EBMonitorClientWithWebInterface" instance="0" tid="95"/>
   </i2o:protocol>
 
-  <xc:Context url="http://.host:.portn">    
+  <xc:Context url="http://.lhost:.lport">
+
+    <xc:Endpoint hostname=".lhost" network="tcp1" port="30000" protocol="tcp" service="i2o"></xc:Endpoint>
 
     <xc:Application class="EBMonitorClientWithWebInterface" id="15" instance="0" network="local">
       <properties xmlns="urn:xdaq-application:EBMonitorClientWithWebInterface" xsi:type="soapenc:Struct">
-        <serverHost xsi:type="xsd:string">.host.</serverHost>
+        <serverHost xsi:type="xsd:string">.lhost</serverHost>
         <serverPort xsi:type="xsd:unsignedLong">9090</serverPort>
       </properties>
     </xc:Application>

@@ -1,7 +1,7 @@
 
-./setup.sh
+./setup.sh localhost 1972
 
 # start the DQM Web Client
 
-xdaq.exe -h localhost -p 12345 -e profile.xml -c EBMonitorClientWithWebInterface.xml
+xdaq.exe -h localhost -p 1972 -e profile.xml -c EBMonitorClientWithWebInterface.xml
 
