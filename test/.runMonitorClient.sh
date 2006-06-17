@@ -1,6 +1,6 @@
 #!/bin/sh
 
-./sendSimpleCmdToApp .host .portn EBMonitorClientWithWebInterface 0 Configure
+./sendSimpleCmdToApp .lhost .lport EBMonitorClientWithWebInterface 0 Configure
 
-./sendSimpleCmdToApp .host .portn EBMonitorClientWithWebInterface 0 Enable
+./sendSimpleCmdToApp .lhost .lport EBMonitorClientWithWebInterface 0 Enable
 
