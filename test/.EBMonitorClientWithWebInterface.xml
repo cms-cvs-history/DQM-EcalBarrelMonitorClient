@@ -1,36 +1,19 @@
-<SOAP-ENV:Envelope
-   SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-   xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
-   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-   xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/">
+<?xml version='1.0'?>
+<xc:Partition xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xc="http://xdaq.web.cern.ch/xdaq/xsd/2004/XMLConfiguration-30">
 
-  <SOAP-ENV:Header>
+  <i2o:protocol xmlns:i2o="http://xdaq.web.cern.ch/xdaq/xsd/2004/I2OConfiguration-30">
+    i2o:target class="EBMonitorClientWithWebInterface" instance="0" tid="95"/>
+  </i2o:protocol>
 
-  </SOAP-ENV:Header>
+  <xc:Context url="http://.host:.portn">    
 
-  <SOAP-ENV:Body>
+    <xc:Application class="EBMonitorClientWithWebInterface" id="15" instance="0" network="local">
+      <properties xmlns="urn:xdaq-application:EBMonitorClientWithWebInterface" xsi:type="soapenc:Struct">
+        <serverHost xsi:type="xsd:string">.host.</serverHost>
+        <serverPort xsi:type="xsd:unsignedLong">9090</serverPort>
+      </properties>
+    </xc:Application>
+    <xc:Module>.libpath1</xc:Module>
 
-    <xdaq:Configure xmlns:xdaq="urn:xdaq-soap:3.0">
-
-      <xc:Partition 
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-         xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" 
-         xmlns:xc="http://xdaq.web.cern.ch/xdaq/xsd/2004/XMLConfiguration-30">
-	
-           <xc:Context url="http://.host:.portn">    
-
-              <xc:Application class="EBMonitorClientWithWebInterface" id="15" instance="0" network="local">
-                  <properties xmlns="urn:xdaq-application:EBMonitorClientWithWebInterface" xsi:type="soapenc:Struct">
-                    <serverHost xsi:type="xsd:string">.host.</serverHost>
-                    <serverPort xsi:type="xsd:unsignedLong">9090</serverPort>
-                  </properties>
-              </xc:Application>
-              <xc:Module>.libpath1</xc:Module>
-
-           </xc:Context>
-
-      </xc:Partition>
-    </xdaq:Configure>
-  </SOAP-ENV:Body>
-</SOAP-ENV:Envelope>
+  </xc:Context>
+</xc:Partition>
