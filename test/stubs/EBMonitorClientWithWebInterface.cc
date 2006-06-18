@@ -38,7 +38,7 @@ void EBMonitorClientWithWebInterface::configure()
 
   ps.addUntrackedParameter<bool>("collateSources", false);
 
-  ps.addUntrackedParameter<bool>("cloneME", true);
+  ps.addUntrackedParameter<bool>("cloneME", false);
 
   ps.addUntrackedParameter<bool>("enableExit", false);
 
