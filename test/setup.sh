@@ -60,10 +60,16 @@ fi
 if [ -e EBMonitorClientWithWebInterface.xml ]; then
     rm EBMonitorClientWithWebInterface.xml
 fi
+if [ -e MonitorClient.xml ]; then
+    rm MonitorClient.xml
+fi
 
 sed -e "s/.lport/${LOCALPORT}/g" -e "s/.lhost/${LOCALHOST}/g" -e "s/.pwd/${TEST_PATH}/g" .profile.xml > profile.xml
 sed -e "s/.lport/${LOCALPORT}/g" -e "s/.lhost/${LOCALHOST}/g" -e "s/.rport/${REMPORT}/g" -e "s/.rhost/${REMHOST}/g" -e "s/.pwd/${TEST_PATH}/g" -e "s/.libpath1/${LIB1}/g"  -e "s/.libpath2/${LIB2}/g" .EBMonitorClientWithWebInterface.xml > EBMonitorClientWithWebInterface.xml 
+sed -e "s/.lport/${LOCALPORT}/g" -e "s/.lhost/${LOCALHOST}/g" -e "s/.rport/${REMPORT}/g" -e "s/.rhost/${REMHOST}/g" -e "s/.pwd/${TEST_PATH}/g" -e "s/.libpath1/${LIB1}/g"  -e "s/.libpath2/${LIB2}/g" .MonitorClient.xml > MonitorClient.xml 
+/bin/sed -e "s/.lport/$LOCALPORT/g" -e "s/.lhost/$LOCALHOST/g" .runMonitorClient.sh > runEBMonitorClientWithWebInterface.sh
 /bin/sed -e "s/.lport/$LOCALPORT/g" -e "s/.lhost/$LOCALHOST/g" .runMonitorClient.sh > runMonitorClient.sh
 
+/bin/chmod 751 runEBMonitorClientWithWebInterface.sh
 /bin/chmod 751 runMonitorClient.sh
 

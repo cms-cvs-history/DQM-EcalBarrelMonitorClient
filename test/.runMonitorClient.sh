@@ -1,6 +1,6 @@
 #!/bin/sh
 
-./sendSimpleCmdToApp .lhost .lport EBMonitorClientWithWebInterface 0 Configure
+./sendSimpleCmdToApp .lhost .lport evf::FUEventProcessor 0 Configure
 
-./sendSimpleCmdToApp .lhost .lport EBMonitorClientWithWebInterface 0 Enable
+./sendSimpleCmdToApp .lhost .lport evf::FUEventProcessor 0 Enable
 

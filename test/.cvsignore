@@ -1,3 +1,5 @@
 EBMonitorClientWithWebInterface.xml
+MonitorClient.xml
 profile.xml
-runMonitorClient.sh
+runEBMonitorClientWithWebInterface.sh
+runWebClient.sh
