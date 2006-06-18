@@ -46,6 +46,11 @@ void EBMonitorClientWithWebInterface::configure()
 
   ps.addUntrackedParameter<bool>("verbose", false);
 
+  vector<int> superModules;
+  superModules.push_back(1);
+
+  ps.addUntrackedParameter<vector<int> >("superModules", superModules);
+
   ebmc_ = new EcalBarrelMonitorClient(ps, mui_);
 
 }
