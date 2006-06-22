@@ -33,18 +33,26 @@ void EBMonitorClientWithWebInterface::configure()
 
   edm::ParameterSet ps;
 
-  ps.addUntrackedParameter<bool>("enableSubRun", true);
   ps.addUntrackedParameter<string>("location", "H4");
 
   ps.addUntrackedParameter<bool>("collateSources", false);
 
   ps.addUntrackedParameter<bool>("cloneME", false);
 
+  ps.addUntrackedParameter<bool>("enableSubRun", true);
+
   ps.addUntrackedParameter<bool>("enableExit", false);
 
   ps.addUntrackedParameter<bool>("enableMonitorDaemon", true);
 
+//  ps.addUntrackedParameter<string>("prefixME", "Collector/FU0/");
+  ps.addUntrackedParameter<string>("prefixME", "EvF/FU0/");
+
   ps.addUntrackedParameter<bool>("verbose", false);
+
+  ps.addUntrackedParameter<bool>("enableServer", true);
+
+  ps.addUntrackedParameter<int>("serverPort", 9900);
 
   vector<int> superModules;
   superModules.push_back(1);
