@@ -1,13 +1,13 @@
 
-./setup.sh localhost 1972 collectorhost 9090
+./setup.sh 127.0.0.1 1972 collectorhost 9090
 
 # start the DQM Web Client
 
-xdaq.exe -h localhost -p 1972 -e profile.xml -c EBMonitorClientWithWebInterface.xml
+xdaq.exe -h 127.0.0.1 -p 1972 -e profile.xml -c EBMonitorClientWithWebInterface.xml
 
 #  _OR_
 
 # start the DQM Client within the FUEventProcessor
 
-xdaq.exe -h localhost -p 1972 -e profile.xml -c MonitorClient.xml
+xdaq.exe -h 127.0.0.1 -p 1972 -e profile.xml -c MonitorClient.xml
 
