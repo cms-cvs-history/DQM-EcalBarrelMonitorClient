@@ -1,4 +1,5 @@
 <bin file=testEcalBarrelMonitorClient.cpp>
+ <use name=FWCore/MessageLogger>
  <use name=DQMServices/NodeROOT>
  <use name=DQMServices/UI>
  <use name=root>
@@ -6,6 +7,7 @@
 </bin>
 
 <bin file=testEcalBarrelMonitorIntegrityClient.cpp>
+ <use name=FWCore/MessageLogger>
  <use name=DQMServices/NodeROOT>
  <use name=DQMServices/UI>
  <use name=root>
@@ -13,6 +15,7 @@
 </bin>
 
 <bin file=testEcalBarrelMonitorPedestalClient.cpp>
+ <use name=FWCore/MessageLogger>
  <use name=DQMServices/NodeROOT>
  <use name=DQMServices/UI>
  <use name=root>
@@ -20,6 +23,7 @@
 </bin>
 
 <bin file=testEcalBarrelMonitorTestPulseClient.cpp>
+ <use name=FWCore/MessageLogger>
  <use name=DQMServices/NodeROOT>
  <use name=DQMServices/UI>
  <use name=root>
@@ -27,6 +31,7 @@
 </bin>
 
 <bin file=testEcalBarrelMonitorCosmicClient.cpp>
+ <use name=FWCore/MessageLogger>
  <use name=DQMServices/NodeROOT>
  <use name=DQMServices/UI>
  <use name=root>
@@ -34,6 +39,7 @@
 </bin>
 
 <bin file=testEcalBarrelMonitorLaserClient.cpp>
+ <use name=FWCore/MessageLogger>
  <use name=DQMServices/NodeROOT>
  <use name=DQMServices/UI>
  <use name=root>
