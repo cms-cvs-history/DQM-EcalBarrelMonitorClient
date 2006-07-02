@@ -26,13 +26,19 @@
         module ecalMonitorClient = EcalBarrelMonitorClient{
         untracked string outputFile = 'EcalBarrelMonitorClient.root'
         untracked string location = "H4"
-        untracked string baseHtmlDir = "."
-        untracked bool enableSubRun = true
+        untracked bool collateSources = false
+        untracked bool cloneME = true
+        untracked bool enableQT = false
+        untracked bool enableSubRun = false
         untracked bool enableExit = false
+        untracked bool enableMonitorDaemon = true
+        untracked string prefixME = "Collector/FU0/"
         untracked string hostName = ".rhost"
         untracked int32  hostPort = .rport
-        untracked bool verbose = true
+        untracked bool enableServer = true
+        untracked int32 serverPort = 9900
         untracked vint32 superModules = { 01 }
+        untracked bool verbose = false
       }
 
       path p = { ecalMonitorClient }

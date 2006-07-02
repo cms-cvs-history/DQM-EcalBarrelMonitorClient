@@ -5,7 +5,7 @@ EBMonitorClientWithWebInterface::EBMonitorClientWithWebInterface(xdaq::Applicati
 DQMBaseClient( stub,                                  // the application stub - do not change
                "EBMonitorClientWithWebInterface",     // the name by which the collector identifies the client
                "localhost",                           // the name of the computer hosting the collector
-                9090                                   // the port at which the collector listens
+                9090                                  // the port at which the collector listens
              )
 {
 
@@ -39,7 +39,9 @@ void EBMonitorClientWithWebInterface::configure()
 
   ps.addUntrackedParameter<bool>("cloneME", true);
 
-  ps.addUntrackedParameter<bool>("enableSubRun", true);
+  ps.addUntrackedParameter<bool>("enableQT", false);
+
+  ps.addUntrackedParameter<bool>("enableSubRun", false);
 
   ps.addUntrackedParameter<bool>("enableExit", false);
 
@@ -48,16 +50,16 @@ void EBMonitorClientWithWebInterface::configure()
   ps.addUntrackedParameter<string>("prefixME", "Collector/FU0/");
 //  ps.addUntrackedParameter<string>("prefixME", "EvF/FU0/");
 
-  ps.addUntrackedParameter<bool>("verbose", false);
+//DQMBaseClient: ps.addUntrackedParameter<bool>("enableServer", true);
 
-  ps.addUntrackedParameter<bool>("enableServer", true);
-
-  ps.addUntrackedParameter<int>("serverPort", 9900);
+//DQMBaseClient: ps.addUntrackedParameter<int>("serverPort", 9900);
 
   vector<int> superModules;
   superModules.push_back(1);
 
   ps.addUntrackedParameter<vector<int> >("superModules", superModules);
+
+  ps.addUntrackedParameter<bool>("verbose", false);
 
   ebmc_ = new EcalBarrelMonitorClient(ps, mui_);
 
