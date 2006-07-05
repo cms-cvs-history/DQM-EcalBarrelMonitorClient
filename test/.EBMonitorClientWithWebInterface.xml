@@ -21,6 +21,7 @@
       <properties xmlns="urn:xdaq-application:EBMonitorClientWithWebInterface" xsi:type="soapenc:Struct">
         <serverHost xsi:type="xsd:string">.rhost</serverHost>
         <serverPort xsi:type="xsd:unsignedLong">.rport</serverPort>
+        <actAsServer xsi:type="xsd:boolean">false</actAsServer>
       </properties>
     </xc:Application>
     <xc:Module>${XDAQ_ROOT}/lib/linux/x86/libpttcp.so</xc:Module>
