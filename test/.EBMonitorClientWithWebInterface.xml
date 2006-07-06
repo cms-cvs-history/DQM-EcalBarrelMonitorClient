@@ -22,6 +22,7 @@
         <serverHost xsi:type="xsd:string">.rhost</serverHost>
         <serverPort xsi:type="xsd:unsignedLong">.rport</serverPort>
         <actAsServer xsi:type="xsd:boolean">false</actAsServer>
+        <reconnectDelaySecs xsi:type="xsd:unsignedLong">5</reconnectDelaySecs>
       </properties>
     </xc:Application>
     <xc:Module>${XDAQ_ROOT}/lib/linux/x86/libpttcp.so</xc:Module>

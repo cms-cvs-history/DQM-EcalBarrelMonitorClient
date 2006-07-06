@@ -5,12 +5,18 @@ EBMonitorClientWithWebInterface::EBMonitorClientWithWebInterface(xdaq::Applicati
 DQMBaseClient( stub,                                  // the application stub - do not change
                "EBMonitorClientWithWebInterface",     // the name by which the collector identifies the client
                "localhost",                           // the name of the computer hosting the collector
-                9090                                  // the port at which the collector listens
+                9090,                                 // the port at which the collector listens
+                5,                                    // the delay between reconnect attempts
+                false                                 // do not act as server
              )
 {
 
-  webInterface_p = new EBMonitorClientWebInterface(getContextURL(), getApplicationURL(), &mui_);
-  
+  bool webInterface = false;
+
+  if ( webInterface ) {
+    webInterface_p = new EBMonitorClientWebInterface(getContextURL(), getApplicationURL(), &mui_);
+  }
+
   xgi::bind(this, &EBMonitorClientWithWebInterface::handleWebRequest, "Request");
 
 }
@@ -18,13 +24,13 @@ DQMBaseClient( stub,                                  // the application stub - 
 void EBMonitorClientWithWebInterface::general(xgi::Input *in, xgi::Output *out ) throw (xgi::exception::Exception)
 {
 
-  webInterface_p->Default(in, out);
+  if ( webInterface_p ) webInterface_p->Default(in, out);
 }
 
 void EBMonitorClientWithWebInterface::handleWebRequest(xgi::Input *in, xgi::Output *out)
 {
 
-  webInterface_p->handleRequest(in, out);
+  if ( webInterface_p ) webInterface_p->handleRequest(in, out);
 
 }
 
