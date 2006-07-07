@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorLaserClient.cpp
  *
- *  $Date: 2006/05/05 20:12:01 $
- *  $Revision: 1.24 $
+ *  $Date: 2006/05/24 20:42:24 $
+ *  $Revision: 1.25 $
  *  \author G. Della Ricca
  *
  */
@@ -46,10 +46,10 @@ void *pth1(void *) {
     stay_in_loop = mui->update();
 
     // subscribe to new monitorable matching pattern
-    mui->subscribeNew("*/EcalBarrel/STATUS");
-    mui->subscribeNew("*/EcalBarrel/RUN");
-    mui->subscribeNew("*/EcalBarrel/EVT");
-    mui->subscribeNew("*/EcalBarrel/RUNTYPE");
+    mui->subscribeNew("*/EcalBarrel/EcalInfo/STATUS");
+    mui->subscribeNew("*/EcalBarrel/EcalInfo/RUN");
+    mui->subscribeNew("*/EcalBarrel/EcalInfo/EVT");
+    mui->subscribeNew("*/EcalBarrel/EcalInfo/RUNTYPE");
     mui->subscribeNew("*/EcalBarrel/EBLaserTask/Laser1/EBLT shape SM01 L1");
     mui->subscribeNew("*/EcalBarrel/EBLaserTask/Laser1/EBLT amplitude SM01 L1");
     mui->subscribeNew("*/EcalBarrel/EBLaserTask/Laser2/EBLT shape SM01 L2");
@@ -69,7 +69,7 @@ void *pth1(void *) {
     // draw monitoring objects every monitoring cycle
     if ( updates != last_plotting ) {
 
-      me = mui->get("Collector/FU0/EcalBarrel/STATUS");
+      me = mui->get("Collector/FU0/EcalBarrel/EcalInfo/STATUS");
       if ( me ) {
         s = me->valueString();
         status = "unknown";
@@ -79,21 +79,21 @@ void *pth1(void *) {
         cout << "status = " << status << endl;
       }
 
-      me = mui->get("Collector/FU0/EcalBarrel/RUN");
+      me = mui->get("Collector/FU0/EcalBarrel/EcalInfo/RUN");
       if ( me ) {
         s = me->valueString();
         run = s.substr(2,s.length()-2);
         cout << "run = " << run << endl;
       }
 
-      me = mui->get("Collector/FU0/EcalBarrel/EVT");
+      me = mui->get("Collector/FU0/EcalBarrel/EcalInfo/EVT");
       if ( me ) {
         s = me->valueString();
         evt = s.substr(2,s.length()-2);
         cout << "event = " << evt << endl;
       }
 
-      me = mui->get("Collector/FU0/EcalBarrel/RUNTYPE");
+      me = mui->get("Collector/FU0/EcalBarrel/EcalInfo/RUNTYPE");
       if ( me ) {
         s = me->valueString();
         if ( atoi(s.substr(2,s.size()-2).c_str()) == EcalDCCHeaderBlock::COSMIC ) type = "COSMIC";
@@ -204,10 +204,10 @@ int main(int argc, char** argv) {
   mui->setReconnectDelay(5);
 
   // subscribe to all monitorable matching pattern
-  mui->subscribe("*/EcalBarrel/STATUS");
-  mui->subscribe("*/EcalBarrel/RUN");
-  mui->subscribe("*/EcalBarrel/EVT");
-  mui->subscribe("*/EcalBarrel/RUNTYPE");
+  mui->subscribe("*/EcalBarrel/EcalInfo/STATUS");
+  mui->subscribe("*/EcalBarrel/EcalInfo/RUN");
+  mui->subscribe("*/EcalBarrel/EcalInfo/EVT");
+  mui->subscribe("*/EcalBarrel/EcalInfo/RUNTYPE");
   mui->subscribe("*/EcalBarrel/EBLaserTask/Laser1/EBLT shape SM01 L1");
   mui->subscribe("*/EcalBarrel/EBLaserTask/Laser1/EBLT amplitude SM01 L1");
   mui->subscribe("*/EcalBarrel/EBLaserTask/Laser2/EBLT shape SM01 L2");
