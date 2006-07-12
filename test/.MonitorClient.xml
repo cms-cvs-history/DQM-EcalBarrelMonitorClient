@@ -36,7 +36,6 @@
         untracked string hostName = ".rhost"
         untracked int32  hostPort = .rport
         untracked bool enableServer = true
-        untracked int32 serverPort = 9900
         untracked vint32 superModules = { 01 }
         untracked bool verbose = false
       }
