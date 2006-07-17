@@ -160,8 +160,6 @@ void EBMonitorClientWithWebInterface::configure()
 
 //DQMBaseClient: ps.addUntrackedParameter<bool>("enableServer", true);
 
-//DQMBaseClient: ps.addUntrackedParameter<int>("serverPort", 9900);
-
   vector<int> superModules;
   superModules.push_back(1);
 
