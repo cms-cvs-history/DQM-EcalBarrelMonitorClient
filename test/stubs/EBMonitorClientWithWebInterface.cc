@@ -13,6 +13,8 @@ DQMBaseClient( stub,                                  // the application stub - 
 
   bool webInterface = false;
 
+  webInterface_p = 0;
+
   if ( webInterface ) {
     webInterface_p = new EBMonitorClientWebInterface(getContextURL(), getApplicationURL(), &mui_);
   }
@@ -198,6 +200,7 @@ void EBMonitorClientWithWebInterface::finalize()
 {
 
   if( ebmc_ ) delete ebmc_;
+  ebmc_ = 0;
 
 }
 
