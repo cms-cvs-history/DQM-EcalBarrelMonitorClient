@@ -15,7 +15,7 @@ DQMBaseClient( stub,                                  // the application stub - 
 
   webInterface_p = 0;
 
-  if ( webInterface ) {
+  if( webInterface ) {
     webInterface_p = new EBMonitorClientWebInterface(getContextURL(), getApplicationURL(), &mui_);
   }
 
@@ -128,13 +128,13 @@ void EBMonitorClientWithWebInterface::general(xgi::Input *in, xgi::Output *out )
     *out << "</td><table>" << std::endl;
 
   }
-  if ( webInterface_p ) webInterface_p->Default(in, out);
+  if( webInterface_p ) webInterface_p->Default(in, out);
 }
 
 void EBMonitorClientWithWebInterface::handleWebRequest(xgi::Input *in, xgi::Output *out)
 {
 
-  if ( webInterface_p ) webInterface_p->handleRequest(in, out);
+  if( webInterface_p ) webInterface_p->handleRequest(in, out);
 
 }
 
@@ -169,7 +169,7 @@ void EBMonitorClientWithWebInterface::configure()
 
   ps.addUntrackedParameter<bool>("verbose", false);
 
-  if ( ! ebmc_ ) ebmc_ = new EcalBarrelMonitorClient(ps, mui_);
+  if( ! ebmc_ ) ebmc_ = new EcalBarrelMonitorClient(ps, mui_);
 
 }
 
@@ -199,7 +199,7 @@ void EBMonitorClientWithWebInterface::onUpdate() const
 void EBMonitorClientWithWebInterface::finalize()
 {
 
-  if ( webInterface_p ) delete webInterface_p;
+  if( webInterface_p ) delete webInterface_p;
   webInterface_p = 0;
 
   if( ebmc_ ) delete ebmc_;
