@@ -15,9 +15,7 @@ DQMBaseClient( stub,                                  // the application stub - 
 
   webInterface_p = 0;
 
-  if( webInterface ) {
-    webInterface_p = new EBMonitorClientWebInterface(getContextURL(), getApplicationURL(), &mui_);
-  }
+  if( webInterface ) webInterface_p = new EBMonitorClientWebInterface(getContextURL(), getApplicationURL(), &mui_);
 
   xgi::bind(this, &EBMonitorClientWithWebInterface::handleWebRequest, "Request");
 
