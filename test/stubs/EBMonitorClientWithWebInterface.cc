@@ -126,7 +126,9 @@ void EBMonitorClientWithWebInterface::general(xgi::Input *in, xgi::Output *out )
     *out << "</td><table>" << std::endl;
 
   }
+
   if( webInterface_p ) webInterface_p->Default(in, out);
+
 }
 
 void EBMonitorClientWithWebInterface::handleWebRequest(xgi::Input *in, xgi::Output *out)
@@ -167,7 +169,12 @@ void EBMonitorClientWithWebInterface::configure()
 
   ps.addUntrackedParameter<bool>("verbose", false);
 
-  if( ! ebmc_ ) ebmc_ = new EcalBarrelMonitorClient(ps, mui_);
+  mui_->setVerbose(0);
+
+  if( ! ebmc_ ) {
+    ebmc_ = new EcalBarrelMonitorClient(ps, mui_);
+    if( ebmc_ ) ebmc_->beginJob();
+  }
 
 }
 
@@ -176,14 +183,12 @@ void EBMonitorClientWithWebInterface::newRun()
 
   upd_->registerObserver(this);
 
-  if( ebmc_ ) ebmc_->beginJob();
-
 }
 
 void EBMonitorClientWithWebInterface::endRun()
 {
 
-  if( ebmc_ ) ebmc_->endJob();
+  if( ebmc_ ) ebmc_->endRun();
 
 }
 
