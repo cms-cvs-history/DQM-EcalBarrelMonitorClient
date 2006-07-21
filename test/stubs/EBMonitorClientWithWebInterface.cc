@@ -2,12 +2,12 @@
 #include "EBMonitorClientWithWebInterface.h"
 
 EBMonitorClientWithWebInterface::EBMonitorClientWithWebInterface(xdaq::ApplicationStub *stub) :
-DQMBaseClient( stub,                                  // the application stub - do not change
-               "EBMonitorClientWithWebInterface",     // the name by which the collector identifies the client
-               "localhost",                           // the name of the computer hosting the collector
-                9090,                                 // the port at which the collector listens
-                5,                                    // the delay between reconnect attempts
-                false                                 // do not act as server
+DQMBaseClient( stub,                          // the application stub - do not change
+               "EcalBarrelMonitorClient",     // the name by which the collector identifies the client
+               "localhost",                   // the name of the computer hosting the collector
+                9090,                         // the port at which the collector listens
+                5,                            // the delay between reconnect attempts
+                false                         // do not act as server
              )
 {
 
