@@ -7,7 +7,7 @@ DQMBaseClient( stub,                          // the application stub - do not c
                "localhost",                   // the name of the computer hosting the collector
                 9090,                         // the port at which the collector listens
                 5,                            // the delay between reconnect attempts
-                false                         // do not act as server
+                true                          // do not act as server
              )
 {
 
