@@ -3,11 +3,11 @@
 
 # start the DQM Web Client
 
-xdaq.exe -h 127.0.0.1 -p 1972 -e profile.xml -c EBMonitorClientWithWebInterface.xml
+${XDAQ_ROOT}/bin/xdaq.exe -h 127.0.0.1 -p 1972 -e profile.xml -c EBMonitorClientWithWebInterface.xml
 
 #  _OR_
 
 # start the DQM Client within the FUEventProcessor
 
-xdaq.exe -h 127.0.0.1 -p 1972 -e profile.xml -c MonitorClient.xml
+${XDAQ_ROOT}/bin/xdaq.exe -h 127.0.0.1 -p 1972 -e profile.xml -c MonitorClient.xml
 
