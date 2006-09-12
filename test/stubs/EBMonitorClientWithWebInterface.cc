@@ -157,8 +157,8 @@ void EBMonitorClientWithWebInterface::configure()
 
   ps.addUntrackedParameter<bool>("enableMonitorDaemon", true);
 
-//  ps.addUntrackedParameter<string>("prefixME", "Collector/FU0/");
-  ps.addUntrackedParameter<string>("prefixME", "Collector/FU1/");
+  ps.addUntrackedParameter<string>("prefixME", "Collector/FU0/");
+//  ps.addUntrackedParameter<string>("prefixME", "Collector/FU1/");
 //  ps.addUntrackedParameter<string>("prefixME", "EvF/FU0/");
 
 //DQMBaseClient: ps.addUntrackedParameter<bool>("enableServer", true);
