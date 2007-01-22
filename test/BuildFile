@@ -13,3 +13,8 @@
  <use name=xerces-c>
 </library> 
 
+<use name=OnlineDB/EcalCondDB>
+<use name=oracle>
+<use name=DQM/EcalBarrelMonitorClient>
+<bin file=stubs/readMaskFromDB.cpp></bin>
+<bin file=stubs/writeMaskToDB.cpp></bin>
