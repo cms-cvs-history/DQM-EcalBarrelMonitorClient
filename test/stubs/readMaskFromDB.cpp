@@ -1,11 +1,11 @@
-// $Id: readMaskFromDB.cpp,v 1.1 2007/01/22 23:05:49 dellaric Exp $
+// $Id: readMaskFromDB.cpp,v 1.2 2007/01/23 08:10:40 dellaric Exp $
 
 /*!
   \file readMaskFromDB.cpp
   \brief It reads errors masks from database and writes them to an output file
   \author B. Gobbo 
-  \version $Revision: 1.1 $
-  \date $Date: 2007/01/22 23:05:49 $
+  \version $Revision: 1.2 $
+  \date $Date: 2007/01/23 08:10:40 $
 */
 
 
@@ -20,15 +20,16 @@
 void usage( char* cp ) {
   std::cout <<
 "\n\
-usage: " << cp << " [-h] [-H hostname] [-l location] [-p dbpasswd] [-s sid] \n\
-                 [-t run type] [-u dbuser] file\n\n\
+usage: " << cp << " [-h] [-s sid] [-H hostname] [-u dbuser] [-p dbpasswd] \n\
+                      [-l location] [-r runnumber] [-t run type] file\n\n\
      -h             : print this help message \n\
-     -H hostname    : data base server host name \n\
-     -l location    : location H4, 867-1, ...\n\
-     -p dbpasswd    : data base password \n\
      -s sid         : data base sid \n\
-     -t runtype     : run type \n\
-     -u dbuser      : data base user name \n\n";
+     -H hostname    : data base server host name \n\
+     -u dbuser      : data base user name \n\
+     -p dbpasswd    : data base password \n\
+     -l location    : location H4, 867-1, ...\n\
+     -r runnumber   : run number \n\
+     -t runtype     : run type \n\n";
 }
 
 int main( int argc, char **argv ) {
@@ -53,7 +54,7 @@ int main( int argc, char **argv ) {
   // Arguments and Options
   if( argc > 1 ) {
     int rc;
-    while(( rc = getopt( argc, argv, "H:hl:p:s:t:u:" )) != EOF ) {
+    while(( rc = getopt( argc, argv, "H:hl:p:r:s:t:u:" )) != EOF ) {
       switch( rc ) {
       case 'H':
 	hostName = optarg;
@@ -67,6 +68,9 @@ int main( int argc, char **argv ) {
 	break;
       case 'p':
 	passwd = optarg;
+	break;
+      case 'r':
+	runNb = 0;
 	break;
       case 's':
 	sid = optarg;

@@ -1,11 +1,11 @@
-// $Id: writeMaskToDB.cpp,v 1.3 2007/01/23 08:56:29 benigno Exp $
+// $Id: writeMaskToDB.cpp,v 1.4 2007/01/23 09:06:01 benigno Exp $
 
 /*!
   \file writeMaskFromDB.cpp
   \brief It reads errors masks from a file and updates database
   \author B. Gobbo 
-  \version $Revision: 1.3 $
-  \date $Date: 2007/01/23 08:56:29 $
+  \version $Revision: 1.4 $
+  \date $Date: 2007/01/23 09:06:01 $
 */
 
 
@@ -20,16 +20,17 @@
 void usage( char* cp ) {
   std::cout <<
 "\n\
-usage: " << cp << " [-h] [-H hostname] [-i] [-l location] [-p dbpasswd] [-s sid] \n\
-                 [-t run type] [-u dbuser] [-v] file\n\n\
+usage: " << cp << " [-h] [-s sid] [-H hostname] [-u dbuser] [-p dbpasswd] \n\
+                     [-l location] [-t run type] [-r runnumber] [-i] [-v] file\n\n\
      -h             : print this help message \n\
-     -H hostname    : data base server host name \n\
-     -i             : self made IOV \n\
-     -l location    : location H4, 867-1, ...\n\
-     -p dbpasswd    : data base password \n\
      -s sid         : data base sid \n\
-     -t runtype     : run type \n\
+     -H hostname    : data base server host name \n\
      -u dbuser      : data base user name \n\
+     -p dbpasswd    : data base password \n\
+     -l location    : location H4, 867-1, ...\n\
+     -r runnumber   : run number \n\
+     -t runtype     : run type \n\
+     -i             : self made IOV \n\
      -v             : verbosity on \n\n";
 }
 
@@ -83,7 +84,7 @@ int main( int argc, char **argv ) {
   // Arguments and Options
   if( argc > 1 ) {
     int rc;
-    while(( rc = getopt( argc, argv, "H:hil:p:s:t:u:v" )) != EOF ) {
+    while(( rc = getopt( argc, argv, "H:hil:p:r:s:t:u:v" )) != EOF ) {
       switch( rc ) {
       case 'H':
 	hostName = optarg;
@@ -100,6 +101,9 @@ int main( int argc, char **argv ) {
 	break;
       case 'p':
 	passwd = optarg;
+	break;
+      case 'r':
+	runNb = 0;
 	break;
       case 's':
 	sid = optarg;
@@ -196,6 +200,9 @@ int main( int argc, char **argv ) {
   printIOV(&runiov);
 
   EcalErrorMask::readFile( fileName, verbose );
+
+// add safety check
+
   EcalErrorMask::writeDB( eConn, &runiov );
 
   delete eConn;
