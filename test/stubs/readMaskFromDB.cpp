@@ -1,11 +1,11 @@
-// $Id: readMaskFromDB.cpp,v 1.6 2007/01/22 18:59:19 dellaric Exp $
+// $Id: readMaskFromDB.cpp,v 1.1 2007/01/22 23:05:49 dellaric Exp $
 
 /*!
   \file readMaskFromDB.cpp
   \brief It reads errors masks from database and writes them to an output file
   \author B. Gobbo 
-  \version $Revision: 1.6 $
-  \date $Date: 2007/01/22 18:59:19 $
+  \version $Revision: 1.1 $
+  \date $Date: 2007/01/22 23:05:49 $
 */
 
 
@@ -134,9 +134,13 @@ int main( int argc, char **argv ) {
   RunTag     runtag;
 
   locdef.setLocation( location );
+
   rundef.setRunType( runType );
+
   runtag.setLocationDef( locdef );
   runtag.setRunTypeDef( rundef );
+
+  runtag.setGeneralTag( runType );
 
   RunIOV runiov;
   runiov.setRunTag( runtag );
