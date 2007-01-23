@@ -1,11 +1,11 @@
-// $Id: writeMaskToDB.cpp,v 1.1 2007/01/22 23:05:49 dellaric Exp $
+// $Id: writeMaskToDB.cpp,v 1.2 2007/01/23 08:26:02 dellaric Exp $
 
 /*!
   \file writeMaskFromDB.cpp
   \brief It reads errors masks from a file and updates database
   \author B. Gobbo 
-  \version $Revision: 1.1 $
-  \date $Date: 2007/01/22 23:05:49 $
+  \version $Revision: 1.2 $
+  \date $Date: 2007/01/23 08:26:02 $
 */
 
 
@@ -20,10 +20,11 @@
 void usage( char* cp ) {
   std::cout <<
 "\n\
-usage: " << cp << " [-h] [-H hostname] [-l location] [-p dbpasswd] [-s sid] \n\
+usage: " << cp << " [-h] [-H hostname] [-i] [-l location] [-p dbpasswd] [-s sid] \n\
                  [-t run type] [-u dbuser] file\n\n\
      -h             : print this help message \n\
      -H hostname    : data base server host name \n\
+     -i             : self made IOV \n\
      -l location    : location H4, 867-1, ...\n\
      -p dbpasswd    : data base password \n\
      -s sid         : data base sid \n\
@@ -32,36 +33,43 @@ usage: " << cp << " [-h] [-H hostname] [-l location] [-p dbpasswd] [-s sid] \n\
 }
 
 void printTag( const RunTag* tag) {
-  cout << endl;
-  cout << "=============RunTag:" << endl;
-  cout << "GeneralTag:         " << tag->getGeneralTag() << endl;
-  cout << "Location:           " << tag->getLocationDef().getLocation() << endl;
-  cout << "Run Type:           " << tag->getRunTypeDef().getRunType() << endl;
-  cout << "====================" << endl;
+  std::cout << std::endl;
+  std::cout << "=============RunTag:" << std::endl;
+  std::cout << "GeneralTag:         " << tag->getGeneralTag() << std::endl;
+  std::cout << "Location:           " << tag->getLocationDef().getLocation() << std::endl;
+  std::cout << "Run Type:           " << tag->getRunTypeDef().getRunType() << std::endl;
+  std::cout << "====================" << std::endl;
 }
 
 void printIOV( const RunIOV* iov) {
-  cout << endl;
+  std::cout << std::endl;
   RunTag tag = iov->getRunTag();
   printTag(&tag);
-  cout << "=============RunIOV:" << endl;
-  cout << "Run Number:         " << iov->getRunNumber() << endl;
-  cout << "Run Start:          " << iov->getRunStart().str() << endl;
-  cout << "Run End:            " << iov->getRunEnd().str() << endl;
-  cout << "====================" << endl;
+  std::cout << "=============RunIOV:" << std::endl;
+  std::cout << "Run Number:         " << iov->getRunNumber() << std::endl;
+  std::cout << "Run Start:          " << iov->getRunStart().str() << std::endl;
+  std::cout << "Run End:            " << iov->getRunEnd().str() << std::endl;
+  std::cout << "====================" << std::endl;
 }
 
 int main( int argc, char **argv ) {
 
   char* cp;
-  std::string user   = "";
-  std::string passwd = "";
-  int runNb = 0;
+
+  // --------------------------------------------------------------------------
+  // If you like, you can set variables to some default here
+
+  std::string user     = "";
+  std::string passwd   = "";
+  int runNb            = 0;
   std::string fileName = "";
   std::string hostName = "";
-  std::string sid = "";
+  std::string sid      = "";
   std::string location = "";
-  std::string runType = "";
+  std::string runType  = "";
+  bool smi             = false;
+
+  // ------------------
 
   if(( cp = (char*) strrchr( argv[0], '/' )) != NULL ) {
     ++cp;
@@ -73,7 +81,7 @@ int main( int argc, char **argv ) {
   // Arguments and Options
   if( argc > 1 ) {
     int rc;
-    while(( rc = getopt( argc, argv, "H:hl:p:s:t:u:" )) != EOF ) {
+    while(( rc = getopt( argc, argv, "H:hil:p:s:t:u:" )) != EOF ) {
       switch( rc ) {
       case 'H':
 	hostName = optarg;
@@ -81,6 +89,9 @@ int main( int argc, char **argv ) {
       case 'h':
 	usage(cp);
 	return(0);
+	break;
+      case 'i':
+	smi = true;
 	break;
       case 'l':
 	location = optarg;
@@ -162,20 +173,19 @@ int main( int argc, char **argv ) {
 
   runtag.setGeneralTag( runType );
 
-// begin: self made IOV
+  if( smi ) {
 
-  Tm startTm;
-  startTm.setToCurrentGMTime();
-  startTm.setToMicrosTime( startTm.microsTime() );
-
-  RunIOV new_runiov;
-  new_runiov.setRunNumber( runNb );
-  new_runiov.setRunStart( startTm );
-  new_runiov.setRunTag( runtag );
-
-  eConn->insertRunIOV(&new_runiov);
-
-// end: self made IOV
+    Tm startTm;
+    startTm.setToCurrentGMTime();
+    startTm.setToMicrosTime( startTm.microsTime() );
+    
+    RunIOV new_runiov;
+    new_runiov.setRunNumber( runNb );
+    new_runiov.setRunStart( startTm );
+    new_runiov.setRunTag( runtag );
+    
+    eConn->insertRunIOV(&new_runiov);
+  }
  
   RunIOV runiov = eConn->fetchRunIOV( &runtag, runNb );
   printIOV(&runiov);
