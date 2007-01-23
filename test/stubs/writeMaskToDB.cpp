@@ -1,11 +1,11 @@
-// $Id: writeMaskToDB.cpp,v 1.2 2007/01/23 08:26:02 dellaric Exp $
+// $Id: writeMaskToDB.cpp,v 1.3 2007/01/23 08:56:29 benigno Exp $
 
 /*!
   \file writeMaskFromDB.cpp
   \brief It reads errors masks from a file and updates database
   \author B. Gobbo 
-  \version $Revision: 1.2 $
-  \date $Date: 2007/01/23 08:26:02 $
+  \version $Revision: 1.3 $
+  \date $Date: 2007/01/23 08:56:29 $
 */
 
 
@@ -21,7 +21,7 @@ void usage( char* cp ) {
   std::cout <<
 "\n\
 usage: " << cp << " [-h] [-H hostname] [-i] [-l location] [-p dbpasswd] [-s sid] \n\
-                 [-t run type] [-u dbuser] file\n\n\
+                 [-t run type] [-u dbuser] [-v] file\n\n\
      -h             : print this help message \n\
      -H hostname    : data base server host name \n\
      -i             : self made IOV \n\
@@ -29,7 +29,8 @@ usage: " << cp << " [-h] [-H hostname] [-i] [-l location] [-p dbpasswd] [-s sid]
      -p dbpasswd    : data base password \n\
      -s sid         : data base sid \n\
      -t runtype     : run type \n\
-     -u dbuser      : data base user name \n\n";
+     -u dbuser      : data base user name \n\
+     -v             : verbosity on \n\n";
 }
 
 void printTag( const RunTag* tag) {
@@ -68,6 +69,7 @@ int main( int argc, char **argv ) {
   std::string location = "";
   std::string runType  = "";
   bool smi             = false;
+  bool verbose         = false;
 
   // ------------------
 
@@ -81,7 +83,7 @@ int main( int argc, char **argv ) {
   // Arguments and Options
   if( argc > 1 ) {
     int rc;
-    while(( rc = getopt( argc, argv, "H:hil:p:s:t:u:" )) != EOF ) {
+    while(( rc = getopt( argc, argv, "H:hil:p:s:t:u:v" )) != EOF ) {
       switch( rc ) {
       case 'H':
 	hostName = optarg;
@@ -107,6 +109,9 @@ int main( int argc, char **argv ) {
 	break;
       case 'u':
 	user = optarg;
+	break;
+      case 'v':
+	verbose = true;
 	break;
       default:
 	break;
@@ -190,7 +195,7 @@ int main( int argc, char **argv ) {
   RunIOV runiov = eConn->fetchRunIOV( &runtag, runNb );
   printIOV(&runiov);
 
-  EcalErrorMask::readFile( fileName, true );
+  EcalErrorMask::readFile( fileName, verbose );
   EcalErrorMask::writeDB( eConn, &runiov );
 
   delete eConn;
