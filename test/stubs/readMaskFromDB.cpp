@@ -1,11 +1,11 @@
-// $Id: readMaskFromDB.cpp,v 1.2 2007/01/23 08:10:40 dellaric Exp $
+// $Id: readMaskFromDB.cpp,v 1.3 2007/01/23 10:46:17 dellaric Exp $
 
 /*!
   \file readMaskFromDB.cpp
   \brief It reads errors masks from database and writes them to an output file
   \author B. Gobbo 
-  \version $Revision: 1.2 $
-  \date $Date: 2007/01/23 08:10:40 $
+  \version $Revision: 1.3 $
+  \date $Date: 2007/01/23 10:46:17 $
 */
 
 
@@ -70,7 +70,7 @@ int main( int argc, char **argv ) {
 	passwd = optarg;
 	break;
       case 'r':
-	runNb = 0;
+	runNb = atoi(optarg);
 	break;
       case 's':
 	sid = optarg;

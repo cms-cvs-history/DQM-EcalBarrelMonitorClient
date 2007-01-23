@@ -1,11 +1,11 @@
-// $Id: writeMaskToDB.cpp,v 1.4 2007/01/23 09:06:01 benigno Exp $
+// $Id: writeMaskToDB.cpp,v 1.5 2007/01/23 10:46:17 dellaric Exp $
 
 /*!
   \file writeMaskFromDB.cpp
   \brief It reads errors masks from a file and updates database
   \author B. Gobbo 
-  \version $Revision: 1.4 $
-  \date $Date: 2007/01/23 09:06:01 $
+  \version $Revision: 1.5 $
+  \date $Date: 2007/01/23 10:46:17 $
 */
 
 
@@ -103,7 +103,7 @@ int main( int argc, char **argv ) {
 	passwd = optarg;
 	break;
       case 'r':
-	runNb = 0;
+	runNb = atoi(optarg);
 	break;
       case 's':
 	sid = optarg;
@@ -201,9 +201,12 @@ int main( int argc, char **argv ) {
 
   EcalErrorMask::readFile( fileName, verbose );
 
-// add safety check
-
-  EcalErrorMask::writeDB( eConn, &runiov );
+  std::string yesno;
+  std::cout << "Are you sure? [y/N] ";
+  std::cin >> yesno;
+  if( yesno == "y" || yesno == "Y" || yesno == "yes" || yesno == "YES" ) { 
+    EcalErrorMask::writeDB( eConn, &runiov );
+  }
 
   delete eConn;
 
