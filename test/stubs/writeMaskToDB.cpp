@@ -1,17 +1,18 @@
-// $Id: writeMaskToDB.cpp,v 1.5 2007/01/23 10:46:17 dellaric Exp $
+// $Id: writeMaskToDB.cpp,v 1.6 2007/01/23 12:18:45 benigno Exp $
 
 /*!
   \file writeMaskFromDB.cpp
   \brief It reads errors masks from a file and updates database
   \author B. Gobbo 
-  \version $Revision: 1.5 $
-  \date $Date: 2007/01/23 10:46:17 $
+  \version $Revision: 1.6 $
+  \date $Date: 2007/01/23 12:18:45 $
 */
 
 
 #include <iostream>
 #include <string>
 #include <cstdlib>
+#include <getopt.h>
 
 #include "OnlineDB/EcalCondDB/interface/EcalCondDBInterface.h"
 #include "OnlineDB/EcalCondDB/interface/RunIOV.h"
@@ -20,18 +21,17 @@
 void usage( char* cp ) {
   std::cout <<
 "\n\
-usage: " << cp << " [-h] [-s sid] [-H hostname] [-u dbuser] [-p dbpasswd] \n\
-                     [-l location] [-t run type] [-r runnumber] [-i] [-v] file\n\n\
-     -h             : print this help message \n\
-     -s sid         : data base sid \n\
-     -H hostname    : data base server host name \n\
-     -u dbuser      : data base user name \n\
-     -p dbpasswd    : data base password \n\
-     -l location    : location H4, 867-1, ...\n\
-     -r runnumber   : run number \n\
-     -t runtype     : run type \n\
-     -i             : self made IOV \n\
-     -v             : verbosity on \n\n";
+usage: " << cp << " [OPTIONS] file\n\n\
+     -h, --help                   : print this help message \n\
+     -s, --sid=SID                : data base sid \n\
+     -H, --host-name=HOST NAME    : data base server host name \n\
+     -u, --user-name=DB USER      : data base user name \n\
+     -p, --password=DB PASSWORD   : data base password \n\
+     -l, --location=LOCATION      : location H4, 867-1, ...\n\
+     -r, --run-number=RUN NUMBER  : run number \n\
+     -t, --run-type=RUN TYPE      : run type \n\
+     -i, --self-iov               : self made IOV \n\
+     -v, --verbose                : verbosity on \n\n";
 }
 
 void printTag( const RunTag* tag) {
@@ -83,36 +83,54 @@ int main( int argc, char **argv ) {
   
   // Arguments and Options
   if( argc > 1 ) {
-    int rc;
-    while(( rc = getopt( argc, argv, "H:hil:p:r:s:t:u:v" )) != EOF ) {
-      switch( rc ) {
-      case 'H':
-	hostName = optarg;
-	break;
+    int c;
+    while(1) {
+      int option_index;
+      static struct option long_options[] = {
+	{ "help",       0, 0, 'h' },     
+	{ "sid",        1, 0, 's' },     
+	{ "host-name",  1, 0, 'H' },
+	{ "user-name",  1, 0, 'u' },
+	{ "password",   1, 0, 'p' },
+	{ "location",   1, 0, 'l' },
+	{ "run-number", 1, 0, 'r' },
+	{ "run-type",   1, 0, 't' },
+	{ "self-iov",   0, 0, 'i' },
+	{ "verbose",    0, 0, 'v' },
+	{ 0, 0, 0, 0 }
+      };
+
+      c = getopt_long( argc, argv, "hs:H:u:p:l:r:t:iv", long_options, &option_index );
+      if( c == -1 ) break;
+
+      switch( c ) {
       case 'h':
 	usage(cp);
 	return(0);
 	break;
-      case 'i':
-	smi = true;
+      case 's':
+	sid = optarg;
 	break;
-      case 'l':
-	location = optarg;
+      case 'H':
+	hostName = optarg;
+	break;
+      case 'u':
+	user = optarg;
 	break;
       case 'p':
 	passwd = optarg;
 	break;
+      case 'l':
+	location = optarg;
+	break;
       case 'r':
 	runNb = atoi(optarg);
-	break;
-      case 's':
-	sid = optarg;
 	break;
       case 't':
 	runType = optarg;
 	break;
-      case 'u':
-	user = optarg;
+      case 'i':
+	smi = true;
 	break;
       case 'v':
 	verbose = true;

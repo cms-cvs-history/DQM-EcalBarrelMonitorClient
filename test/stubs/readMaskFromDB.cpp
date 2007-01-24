@@ -1,17 +1,18 @@
-// $Id: readMaskFromDB.cpp,v 1.3 2007/01/23 10:46:17 dellaric Exp $
+// $Id: readMaskFromDB.cpp,v 1.4 2007/01/23 12:18:45 benigno Exp $
 
 /*!
   \file readMaskFromDB.cpp
   \brief It reads errors masks from database and writes them to an output file
   \author B. Gobbo 
-  \version $Revision: 1.3 $
-  \date $Date: 2007/01/23 10:46:17 $
+  \version $Revision: 1.4 $
+  \date $Date: 2007/01/23 12:18:45 $
 */
 
 
 #include <iostream>
 #include <string>
 #include <cstdlib>
+#include <getopt.h>
 
 #include "OnlineDB/EcalCondDB/interface/EcalCondDBInterface.h"
 #include "OnlineDB/EcalCondDB/interface/RunIOV.h"
@@ -20,29 +21,32 @@
 void usage( char* cp ) {
   std::cout <<
 "\n\
-usage: " << cp << " [-h] [-s sid] [-H hostname] [-u dbuser] [-p dbpasswd] \n\
-                      [-l location] [-r runnumber] [-t run type] file\n\n\
-     -h             : print this help message \n\
-     -s sid         : data base sid \n\
-     -H hostname    : data base server host name \n\
-     -u dbuser      : data base user name \n\
-     -p dbpasswd    : data base password \n\
-     -l location    : location H4, 867-1, ...\n\
-     -r runnumber   : run number \n\
-     -t runtype     : run type \n\n";
+usage: " << cp << " [OPTIONS] file\n\n\
+     -h, --help                   : print this help message \n\
+     -s, --sid=SID                : data base sid \n\
+     -H, --host-name=HOST NAME    : data base server host name \n\
+     -u, --user-name=DB USER      : data base user name \n\
+     -p, --password=DB PASSWORD   : data base password \n\
+     -l, --location=LOCATION      : location H4, 867-1, ...\n\
+     -r, --run-number=RUN NUMBER  : run number \n\
+     -t, --run-type=RUN TYPE      : run type \n\n";
 }
 
 int main( int argc, char **argv ) {
 
   char* cp;
-  std::string user   = "";
-  std::string passwd = "";
-  int runNb = 0;
+
+  // --------------------------------------------------------------------------
+  // If you like, you can set variables to some default here
+
+  std::string user     = "";
+  std::string passwd   = "";
+  int runNb            = 0;
   std::string fileName = "";
   std::string hostName = "";
-  std::string sid = "";
+  std::string sid      = "";
   std::string location = "";
-  std::string runType = "";
+  std::string runType  = "";
 
   if(( cp = (char*) strrchr( argv[0], '/' )) != NULL ) {
     ++cp;
@@ -53,33 +57,49 @@ int main( int argc, char **argv ) {
   
   // Arguments and Options
   if( argc > 1 ) {
-    int rc;
-    while(( rc = getopt( argc, argv, "H:hl:p:r:s:t:u:" )) != EOF ) {
-      switch( rc ) {
-      case 'H':
-	hostName = optarg;
-	break;
+    int c;
+    while(1) {
+      int option_index;
+      static struct option long_options[] = {
+	{ "help", 0, 0, 'h' },     
+	{ "sid", 1, 0, 's' },     
+	{ "host-name", 1, 0, 'H' },
+	{ "user-name", 1, 0, 'u' },
+	{ "password", 1, 0, 'p' },
+	{ "location", 1, 0, 'l' },
+	{ "run-number", 1, 0, 'r' },
+	{ "run-type", 1, 0, 't' },
+	{ 0, 0, 0, 0 }
+      };
+
+      c = getopt_long( argc, argv, "hs:H:u:p:l:r:t:", long_options, &option_index );
+      if( c == -1 ) break;
+
+      switch( c ) {
       case 'h':
 	usage(cp);
 	return(0);
 	break;
-      case 'l':
-	location = optarg;
+      case 's':
+	sid = optarg;
+	break;
+      case 'H':
+	hostName = optarg;
+	break;
+      case 'u':
+	user = optarg;
 	break;
       case 'p':
 	passwd = optarg;
 	break;
+      case 'l':
+	location = optarg;
+	break;
       case 'r':
 	runNb = atoi(optarg);
 	break;
-      case 's':
-	sid = optarg;
-	break;
       case 't':
 	runType = optarg;
-	break;
-      case 'u':
-	user = optarg;
 	break;
       default:
 	break;
@@ -123,6 +143,15 @@ int main( int argc, char **argv ) {
     std::cin >> runType;
   }
 
+  std::cout << "hostname  : " << hostName << std::endl
+	    << "sid       : " << sid << std::endl
+	    << "user      : " << user << std::endl
+	    << "password  : " << passwd << std::endl
+	    << "runNumber : " << runNb << std::endl
+	    << "location  : " << location << std::endl
+	    << "runType   : " << runType << std::endl
+	    << "file      : " << fileName << std::endl;
+  
   // OK, from here there's all what's needed...
 
   EcalCondDBInterface* eConn;
