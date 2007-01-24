@@ -1,11 +1,11 @@
-// $Id: writeMaskToDB.cpp,v 1.6 2007/01/23 12:18:45 benigno Exp $
+// $Id: writeMaskToDB.cpp,v 1.7 2007/01/24 11:05:00 benigno Exp $
 
 /*!
   \file writeMaskFromDB.cpp
   \brief It reads errors masks from a file and updates database
   \author B. Gobbo 
-  \version $Revision: 1.6 $
-  \date $Date: 2007/01/23 12:18:45 $
+  \version $Revision: 1.7 $
+  \date $Date: 2007/01/24 11:05:00 $
 */
 
 
@@ -35,7 +35,6 @@ usage: " << cp << " [OPTIONS] file\n\n\
 }
 
 void printTag( const RunTag* tag) {
-  std::cout << std::endl;
   std::cout << "=============RunTag:" << std::endl;
   std::cout << "GeneralTag:         " << tag->getGeneralTag() << std::endl;
   std::cout << "Location:           " << tag->getLocationDef().getLocation() << std::endl;
@@ -52,6 +51,7 @@ void printIOV( const RunIOV* iov) {
   std::cout << "Run Start:          " << iov->getRunStart().str() << std::endl;
   std::cout << "Run End:            " << iov->getRunEnd().str() << std::endl;
   std::cout << "====================" << std::endl;
+  std::cout << std::endl;
 }
 
 int main( int argc, char **argv ) {
@@ -148,6 +148,8 @@ int main( int argc, char **argv ) {
     return -1;
   }
 
+  std::cout << std::endl;
+
   if( hostName == "" ) {
     std::cout << "hostname: ";
     std::cin >> hostName;
@@ -177,11 +179,21 @@ int main( int argc, char **argv ) {
     std::cin >> runType;
   }
 
+  std::cout << std::endl;
+  std::cout << "hostname  : " << hostName << std::endl
+            << "sid       : " << sid << std::endl
+            << "user      : " << user << std::endl
+            << "password  : " << passwd << std::endl
+            << "runNumber : " << runNb << std::endl
+            << "location  : " << location << std::endl
+            << "runType   : " << runType << std::endl
+            << "file      : " << fileName << std::endl;
+
   // OK, from here there's all what's needed...
 
   EcalCondDBInterface* eConn;
   try {
-     eConn = new EcalCondDBInterface( hostName, sid, user, passwd );
+    eConn = new EcalCondDBInterface( hostName, sid, user, passwd );
   } catch( runtime_error &e ) {
     std::cerr << e.what() << std::endl;
     return -1;

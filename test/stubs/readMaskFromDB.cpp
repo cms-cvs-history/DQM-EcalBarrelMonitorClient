@@ -1,11 +1,11 @@
-// $Id: readMaskFromDB.cpp,v 1.4 2007/01/23 12:18:45 benigno Exp $
+// $Id: readMaskFromDB.cpp,v 1.5 2007/01/24 11:05:00 benigno Exp $
 
 /*!
   \file readMaskFromDB.cpp
   \brief It reads errors masks from database and writes them to an output file
   \author B. Gobbo 
-  \version $Revision: 1.4 $
-  \date $Date: 2007/01/23 12:18:45 $
+  \version $Revision: 1.5 $
+  \date $Date: 2007/01/24 11:05:00 $
 */
 
 
@@ -114,6 +114,8 @@ int main( int argc, char **argv ) {
     return -1;
   }
 
+  std::cout << std::endl;
+
   if( hostName == "" ) {
     std::cout << "hostname: ";
     std::cin >> hostName;
@@ -143,6 +145,7 @@ int main( int argc, char **argv ) {
     std::cin >> runType;
   }
 
+  std::cout << std::endl;
   std::cout << "hostname  : " << hostName << std::endl
 	    << "sid       : " << sid << std::endl
 	    << "user      : " << user << std::endl
@@ -156,7 +159,7 @@ int main( int argc, char **argv ) {
 
   EcalCondDBInterface* eConn;
   try {
-     eConn = new EcalCondDBInterface( hostName, sid, user, passwd );
+    eConn = new EcalCondDBInterface( hostName, sid, user, passwd );
   } catch( runtime_error &e ) {
     std::cerr << e.what() << std::endl;
     return -1;
