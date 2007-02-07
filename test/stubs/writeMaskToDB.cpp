@@ -1,11 +1,11 @@
-// $Id: writeMaskToDB.cpp,v 1.8 2007/01/24 16:28:53 dellaric Exp $
+// $Id: writeMaskToDB.cpp,v 1.9 2007/02/07 17:09:33 benigno Exp $
 
 /*!
   \file writeMaskFromDB.cpp
   \brief It reads errors masks from a file and updates database
   \author B. Gobbo 
-  \version $Revision: 1.8 $
-  \date $Date: 2007/01/24 16:28:53 $
+  \version $Revision: 1.9 $
+  \date $Date: 2007/02/07 17:09:33 $
 */
 
 
@@ -32,7 +32,7 @@ usage: " << cp << " [OPTIONS] file\n\n\
      -t, --run-type=RUN TYPE      : run type \n\
      -i, --self-iov               : self made IOV \n\
      -v, --verbose                : verbosity on \n\
-     -T, --test_systax            : just verify file text syntax \n\n";
+     -T, --test_syntax            : just verify file text syntax \n\n";
 }
 
 void printTag( const RunTag* tag) {
