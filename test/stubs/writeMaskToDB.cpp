@@ -1,11 +1,11 @@
-// $Id: writeMaskToDB.cpp,v 1.9 2007/02/07 17:09:33 benigno Exp $
+// $Id: writeMaskToDB.cpp,v 1.10 2007/02/07 18:18:29 dellaric Exp $
 
 /*!
   \file writeMaskFromDB.cpp
   \brief It reads errors masks from a file and updates database
   \author B. Gobbo 
-  \version $Revision: 1.9 $
-  \date $Date: 2007/02/07 17:09:33 $
+  \version $Revision: 1.10 $
+  \date $Date: 2007/02/07 18:18:29 $
 */
 
 
@@ -217,7 +217,7 @@ int main( int argc, char **argv ) {
 
   if( testSyntax ) {
     if( errors ) {
-      std::cerr << "---> File contains syntax error(s), pelase fix them..." << std::endl;
+      std::cerr << "---> File contains syntax error(s), please fix them..." << std::endl;
     }
     else {
       std::cout << "---> File syntax sounds correct... Good!" << std::endl;
