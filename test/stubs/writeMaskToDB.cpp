@@ -1,11 +1,11 @@
-// $Id: writeMaskToDB.cpp,v 1.7 2007/01/24 11:05:00 benigno Exp $
+// $Id: writeMaskToDB.cpp,v 1.8 2007/01/24 16:28:53 dellaric Exp $
 
 /*!
   \file writeMaskFromDB.cpp
   \brief It reads errors masks from a file and updates database
   \author B. Gobbo 
-  \version $Revision: 1.7 $
-  \date $Date: 2007/01/24 11:05:00 $
+  \version $Revision: 1.8 $
+  \date $Date: 2007/01/24 16:28:53 $
 */
 
 
@@ -31,26 +31,27 @@ usage: " << cp << " [OPTIONS] file\n\n\
      -r, --run-number=RUN NUMBER  : run number \n\
      -t, --run-type=RUN TYPE      : run type \n\
      -i, --self-iov               : self made IOV \n\
-     -v, --verbose                : verbosity on \n\n";
+     -v, --verbose                : verbosity on \n\
+     -T, --test_systax            : just verify file text syntax \n\n";
 }
 
 void printTag( const RunTag* tag) {
-  std::cout << "=============RunTag:" << std::endl;
+  std::cout << "------------ RunTag:" << std::endl;
   std::cout << "GeneralTag:         " << tag->getGeneralTag() << std::endl;
   std::cout << "Location:           " << tag->getLocationDef().getLocation() << std::endl;
   std::cout << "Run Type:           " << tag->getRunTypeDef().getRunType() << std::endl;
-  std::cout << "====================" << std::endl;
+  std::cout << "--------------------" << std::endl;
 }
 
 void printIOV( const RunIOV* iov) {
   std::cout << std::endl;
   RunTag tag = iov->getRunTag();
   printTag(&tag);
-  std::cout << "=============RunIOV:" << std::endl;
+  std::cout << "------------ RunIOV:" << std::endl;
   std::cout << "Run Number:         " << iov->getRunNumber() << std::endl;
   std::cout << "Run Start:          " << iov->getRunStart().str() << std::endl;
   std::cout << "Run End:            " << iov->getRunEnd().str() << std::endl;
-  std::cout << "====================" << std::endl;
+  std::cout << "--------------------" << std::endl;
   std::cout << std::endl;
 }
 
@@ -71,6 +72,8 @@ int main( int argc, char **argv ) {
   std::string runType  = "";
   bool smi             = false;
   bool verbose         = false;
+  bool testSyntax      = false;
+  bool errors          = false;
 
   // ------------------
 
@@ -87,20 +90,21 @@ int main( int argc, char **argv ) {
     while(1) {
       int option_index;
       static struct option long_options[] = {
-	{ "help",       0, 0, 'h' },     
-	{ "sid",        1, 0, 's' },     
-	{ "host-name",  1, 0, 'H' },
-	{ "user-name",  1, 0, 'u' },
-	{ "password",   1, 0, 'p' },
-	{ "location",   1, 0, 'l' },
-	{ "run-number", 1, 0, 'r' },
-	{ "run-type",   1, 0, 't' },
-	{ "self-iov",   0, 0, 'i' },
-	{ "verbose",    0, 0, 'v' },
+	{ "help",        0, 0, 'h' },     
+	{ "sid",         1, 0, 's' },     
+	{ "host-name",   1, 0, 'H' },
+	{ "user-name",   1, 0, 'u' },
+	{ "password",    1, 0, 'p' },
+	{ "location",    1, 0, 'l' },
+	{ "run-number",  1, 0, 'r' },
+	{ "run-type",    1, 0, 't' },
+	{ "self-iov",    0, 0, 'i' },
+	{ "verbose",     0, 0, 'v' },
+	{ "test-syntax", 0, 0, 'T' },
 	{ 0, 0, 0, 0 }
       };
 
-      c = getopt_long( argc, argv, "hs:H:u:p:l:r:t:iv", long_options, &option_index );
+      c = getopt_long( argc, argv, "hs:H:u:p:l:r:t:ivT", long_options, &option_index );
       if( c == -1 ) break;
 
       switch( c ) {
@@ -135,6 +139,8 @@ int main( int argc, char **argv ) {
       case 'v':
 	verbose = true;
 	break;
+      case 'T':
+        testSyntax = true;
       default:
 	break;
       }
@@ -150,95 +156,121 @@ int main( int argc, char **argv ) {
 
   std::cout << std::endl;
 
-  if( hostName == "" ) {
-    std::cout << "hostname: ";
-    std::cin >> hostName;
+  if( testSyntax ) {
+    std::cout << "---> Do nothing, just verify text syntax inside "; 
   }
-  if( sid == "" ) {
-    std::cout << "sid     : ";
-    std::cin >> sid;
-  }
-  if( user == "" ) {
-    std::cout << "username: ";
-    std::cin >> user;
-  }
-  if( passwd == "" ) {
-    std::cout << "password: ";
-    std::cin >> passwd;
-  }
-  if( runNb == 0 ) {
-    std::cout << "run Nb  : ";
-    std::cin >> runNb;
-  }
-  if( location == "" ) {
-    std::cout << "location: ";
-    std::cin >> location;
-  }
-  if( runType == "" ) {
-    std::cout << "run type: ";
-    std::cin >> runType;
+  else {
+    if( hostName == "" ) {
+      std::cout << "hostname: ";
+      std::cin >> hostName;
+    }
+    if( sid == "" ) {
+      std::cout << "sid     : ";
+      std::cin >> sid;
+    }
+    if( user == "" ) {
+      std::cout << "username: ";
+      std::cin >> user;
+    }
+    if( passwd == "" ) {
+      std::cout << "password: ";
+      std::cin >> passwd;
+    }
+    if( runNb == 0 ) {
+      std::cout << "run Nb  : ";
+      std::cin >> runNb;
+    }
+    if( location == "" ) {
+      std::cout << "location: ";
+      std::cin >> location;
+    }
+    if( runType == "" ) {
+      std::cout << "run type: ";
+      std::cin >> runType;
+    }
+    
+    std::cout << std::endl;
+    std::cout << "hostname  : " << hostName << std::endl
+	      << "sid       : " << sid << std::endl
+	      << "user      : " << user << std::endl
+	      << "password  : " << passwd << std::endl
+	      << "runNumber : " << runNb << std::endl
+	      << "location  : " << location << std::endl
+	      << "runType   : " << runType << std::endl;
   }
 
-  std::cout << std::endl;
-  std::cout << "hostname  : " << hostName << std::endl
-            << "sid       : " << sid << std::endl
-            << "user      : " << user << std::endl
-            << "password  : " << passwd << std::endl
-            << "runNumber : " << runNb << std::endl
-            << "location  : " << location << std::endl
-            << "runType   : " << runType << std::endl
-            << "file      : " << fileName << std::endl;
+  std::cout << "file      : " << fileName << std::endl;
 
   // OK, from here there's all what's needed...
 
-  EcalCondDBInterface* eConn;
   try {
-    eConn = new EcalCondDBInterface( hostName, sid, user, passwd );
-  } catch( runtime_error &e ) {
+    EcalErrorMask::readFile( fileName, verbose );
+  } catch( std::runtime_error &e ) {
     std::cerr << e.what() << std::endl;
-    return -1;
+    if( !testSyntax ) {
+      return -1;
+    }
+    else {
+      errors = true;
+    }
   }
+
+  if( testSyntax ) {
+    if( errors ) {
+      std::cerr << "---> File contains syntax error(s), pelase fix them..." << std::endl;
+    }
+    else {
+      std::cout << "---> File syntax sounds correct... Good!" << std::endl;
+    }
+  }
+  else {
+    EcalCondDBInterface* eConn;
+    try {
+      eConn = new EcalCondDBInterface( hostName, sid, user, passwd );
+    } catch( std::runtime_error &e ) {
+      std::cerr << e.what() << std::endl;
+      return -1;
+    }
+    
+    LocationDef locdef;
+    RunTypeDef rundef;
+    RunTag     runtag;
+    
+    locdef.setLocation( location );
+    
+    rundef.setRunType( runType );
+    
+    runtag.setLocationDef( locdef );
+    runtag.setRunTypeDef( rundef );
+    
+    runtag.setGeneralTag( runType );
+    
+    if( smi ) {
+      
+      Tm startTm;
+      startTm.setToCurrentGMTime();
+      startTm.setToMicrosTime( startTm.microsTime() );
+      
+      RunIOV new_runiov;
+      new_runiov.setRunNumber( runNb );
+      new_runiov.setRunStart( startTm );
+      new_runiov.setRunTag( runtag );
+      
+      eConn->insertRunIOV(&new_runiov);
+    }
+    
+    RunIOV runiov = eConn->fetchRunIOV( &runtag, runNb );
+    printIOV(&runiov);
+    
+    std::string yesno;
+    std::cout << "Are you sure? [y/N] ";
+    std::cin >> yesno;
+    if( yesno == "y" || yesno == "Y" || yesno == "yes" || yesno == "YES" ) { 
+      EcalErrorMask::writeDB( eConn, &runiov );
+    }
   
-  LocationDef locdef;
-  RunTypeDef rundef;
-  RunTag     runtag;
-
-  locdef.setLocation( location );
-
-  rundef.setRunType( runType );
-
-  runtag.setLocationDef( locdef );
-  runtag.setRunTypeDef( rundef );
-
-  runtag.setGeneralTag( runType );
-
-  if( smi ) {
-
-    Tm startTm;
-    startTm.setToCurrentGMTime();
-    startTm.setToMicrosTime( startTm.microsTime() );
-    
-    RunIOV new_runiov;
-    new_runiov.setRunNumber( runNb );
-    new_runiov.setRunStart( startTm );
-    new_runiov.setRunTag( runtag );
-    
-    eConn->insertRunIOV(&new_runiov);
+    delete eConn;
   }
- 
-  RunIOV runiov = eConn->fetchRunIOV( &runtag, runNb );
-  printIOV(&runiov);
-
-  EcalErrorMask::readFile( fileName, verbose );
-
-  std::string yesno;
-  std::cout << "Are you sure? [y/N] ";
-  std::cin >> yesno;
-  if( yesno == "y" || yesno == "Y" || yesno == "yes" || yesno == "YES" ) { 
-    EcalErrorMask::writeDB( eConn, &runiov );
-  }
-
-  delete eConn;
 
   return 0;
 }
