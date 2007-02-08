@@ -1,11 +1,11 @@
-// $Id: writeMaskToDB.cpp,v 1.10 2007/02/07 18:18:29 dellaric Exp $
+// $Id: writeMaskToDB.cpp,v 1.11 2007/02/07 21:59:32 dellaric Exp $
 
 /*!
   \file writeMaskFromDB.cpp
   \brief It reads errors masks from a file and updates database
   \author B. Gobbo 
-  \version $Revision: 1.10 $
-  \date $Date: 2007/02/07 18:18:29 $
+  \version $Revision: 1.11 $
+  \date $Date: 2007/02/07 21:59:32 $
 */
 
 
@@ -32,7 +32,7 @@ usage: " << cp << " [OPTIONS] file\n\n\
      -t, --run-type=RUN TYPE      : run type \n\
      -i, --self-iov               : self made IOV \n\
      -v, --verbose                : verbosity on \n\
-     -T, --test_syntax            : just verify file text syntax \n\n";
+     -V, --verify-syntax          : just verify file text syntax \n\n";
 }
 
 void printTag( const RunTag* tag) {
@@ -72,7 +72,7 @@ int main( int argc, char **argv ) {
   std::string runType  = "";
   bool smi             = false;
   bool verbose         = false;
-  bool testSyntax      = false;
+  bool verifySyntax    = false;
   bool errors          = false;
 
   // ------------------
@@ -90,21 +90,21 @@ int main( int argc, char **argv ) {
     while(1) {
       int option_index;
       static struct option long_options[] = {
-	{ "help",        0, 0, 'h' },     
-	{ "sid",         1, 0, 's' },     
-	{ "host-name",   1, 0, 'H' },
-	{ "user-name",   1, 0, 'u' },
-	{ "password",    1, 0, 'p' },
-	{ "location",    1, 0, 'l' },
-	{ "run-number",  1, 0, 'r' },
-	{ "run-type",    1, 0, 't' },
-	{ "self-iov",    0, 0, 'i' },
-	{ "verbose",     0, 0, 'v' },
-	{ "test-syntax", 0, 0, 'T' },
+	{ "help",          0, 0, 'h' },     
+	{ "sid",           1, 0, 's' },     
+	{ "host-name",     1, 0, 'H' },
+	{ "user-name",     1, 0, 'u' },
+	{ "password",      1, 0, 'p' },
+	{ "location",      1, 0, 'l' },
+	{ "run-number",    1, 0, 'r' },
+	{ "run-type",      1, 0, 't' },
+	{ "self-iov",      0, 0, 'i' },
+	{ "verbose",       0, 0, 'v' },
+	{ "verify-syntax", 0, 0, 'V' },
 	{ 0, 0, 0, 0 }
       };
 
-      c = getopt_long( argc, argv, "hs:H:u:p:l:r:t:ivT", long_options, &option_index );
+      c = getopt_long( argc, argv, "hs:H:u:p:l:r:t:ivV", long_options, &option_index );
       if( c == -1 ) break;
 
       switch( c ) {
@@ -139,8 +139,8 @@ int main( int argc, char **argv ) {
       case 'v':
 	verbose = true;
 	break;
-      case 'T':
-        testSyntax = true;
+      case 'V':
+        verifySyntax = true;
       default:
 	break;
       }
@@ -156,10 +156,7 @@ int main( int argc, char **argv ) {
 
   std::cout << std::endl;
 
-  if( testSyntax ) {
-    std::cout << "---> Do nothing, just verify text syntax inside "; 
-  }
-  else {
+  if( !verifySyntax ) {
     if( hostName == "" ) {
       std::cout << "hostname: ";
       std::cin >> hostName;
@@ -204,10 +201,15 @@ int main( int argc, char **argv ) {
   // OK, from here there's all what's needed...
 
   try {
-    EcalErrorMask::readFile( fileName, verbose );
+    if( verifySyntax ) {
+      EcalErrorMask::readFile( fileName, verbose, true );
+    }
+    else {
+      EcalErrorMask::readFile( fileName, verbose );
+    }
   } catch( std::runtime_error &e ) {
     std::cerr << e.what() << std::endl;
-    if( !testSyntax ) {
+    if( !verifySyntax ) {
       return -1;
     }
     else {
@@ -215,15 +217,7 @@ int main( int argc, char **argv ) {
     }
   }
 
-  if( testSyntax ) {
-    if( errors ) {
-      std::cerr << "---> File contains syntax error(s), please fix them..." << std::endl;
-    }
-    else {
-      std::cout << "---> File syntax sounds correct... Good!" << std::endl;
-    }
-  }
-  else {
+  if( !verifySyntax ) {
     EcalCondDBInterface* eConn;
     try {
       eConn = new EcalCondDBInterface( hostName, sid, user, passwd );
