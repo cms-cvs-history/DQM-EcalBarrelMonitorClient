@@ -1,11 +1,11 @@
-// $Id: writeMaskToDB.cpp,v 1.11 2007/02/07 21:59:32 dellaric Exp $
+// $Id: writeMaskToDB.cpp,v 1.12 2007/02/08 08:36:08 benigno Exp $
 
 /*!
   \file writeMaskFromDB.cpp
   \brief It reads errors masks from a file and updates database
   \author B. Gobbo 
-  \version $Revision: 1.11 $
-  \date $Date: 2007/02/07 21:59:32 $
+  \version $Revision: 1.12 $
+  \date $Date: 2007/02/08 08:36:08 $
 */
 
 
@@ -30,7 +30,7 @@ usage: " << cp << " [OPTIONS] file\n\n\
      -l, --location=LOCATION      : location H4, 867-1, ...\n\
      -r, --run-number=RUN NUMBER  : run number \n\
      -t, --run-type=RUN TYPE      : run type \n\
-     -i, --self-iov               : self made IOV \n\
+     -i, --self-iov               : self-made IOV \n\
      -v, --verbose                : verbosity on \n\
      -V, --verify-syntax          : just verify file text syntax \n\n";
 }
@@ -249,15 +249,21 @@ int main( int argc, char **argv ) {
       new_runiov.setRunNumber( runNb );
       new_runiov.setRunStart( startTm );
       new_runiov.setRunTag( runtag );
-      
-      eConn->insertRunIOV(&new_runiov);
+
+      printIOV(&new_runiov);
+      std::string yesno;
+      std::cout << "Inserting self-made IOV. Are you sure? [y/N] ";
+      std::cin >> yesno;
+      if( yesno == "y" || yesno == "Y" || yesno == "yes" || yesno == "YES" ) {
+        eConn->insertRunIOV(&new_runiov);
+      }
     }
     
     RunIOV runiov = eConn->fetchRunIOV( &runtag, runNb );
     printIOV(&runiov);
     
     std::string yesno;
-    std::cout << "Are you sure? [y/N] ";
+    std::cout << "Inserting masking table. Are you sure? [y/N] ";
     std::cin >> yesno;
     if( yesno == "y" || yesno == "Y" || yesno == "yes" || yesno == "YES" ) { 
       EcalErrorMask::writeDB( eConn, &runiov );
