@@ -1,0 +1,29 @@
+module ecalBarrelMonitorClient = EcalBarrelMonitorClient{
+  untracked string outputFile = ""
+  untracked string dbName = ""
+  untracked string dbHostName = ""
+  untracked int32 dbHostPort = 1521
+  untracked string dbUserName = ""
+  untracked string dbPassword = ""
+  untracked string maskFile = "maskfile.dat"
+  untracked string location = ""
+  untracked string baseHtmlDir = ""
+  untracked bool collateSources = false
+  untracked bool cloneME = true
+  untracked bool enableQT = true
+  untracked bool enableSubRun = false
+  untracked bool enableTCC = false
+  untracked bool enableCluster = false
+  untracked bool enableExit = true
+  untracked bool enableMonitorDaemon = true
+  untracked string prefixME = "Collector/FU0/"
+#  untracked string prefixME = "EvF/FU0/"
+  untracked bool enableServer = true
+  untracked int32 serverPort = 9090
+  untracked vint32 superModules = { 01, 02, 03, 04, 05, 06, 07, 08, 09, 10,
+                                    11, 12, 13, 14, 15, 16 ,17, 18, 19, 20,
+                                    21, 22, 23, 24, 25, 26, 27, 28, 29, 30,
+                                    31, 32, 33, 34, 35, 36 }
+  untracked bool verbose = false
+}
+
