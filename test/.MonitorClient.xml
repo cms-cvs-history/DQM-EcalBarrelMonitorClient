@@ -29,7 +29,8 @@
         untracked bool collateSources = false
         untracked bool cloneME = true
         untracked bool enableQT = false
-        untracked bool enableSubRun = false
+        untracked bool enableSubRunDb = false
+        untracked bool enableSubRunHtml = false
         untracked bool enableExit = false
         untracked bool enableMonitorDaemon = true
         untracked string prefixME = "Collector/FU0/"

@@ -151,7 +151,9 @@ void EBMonitorClientWithWebInterface::configure()
 
   ps.addUntrackedParameter<bool>("enableQT", false);
 
-  ps.addUntrackedParameter<bool>("enableSubRun", false);
+  ps.addUntrackedParameter<bool>("enableSubRunDb", false);
+
+  ps.addUntrackedParameter<bool>("enableSubRunHtml", false);
 
   ps.addUntrackedParameter<bool>("enableExit", false);
 
