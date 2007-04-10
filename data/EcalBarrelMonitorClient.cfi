@@ -13,6 +13,7 @@ module ecalBarrelMonitorClient = EcalBarrelMonitorClient{
   untracked bool enableQT = true
   untracked bool enableSubRunDb = false
   untracked bool enableSubRunHtml = false
+  untracked int32 htmlRefreshTime = 5
   untracked bool enableTCC = false
   untracked bool enableCluster = false
   untracked bool enableExit = false
