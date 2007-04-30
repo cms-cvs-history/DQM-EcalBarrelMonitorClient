@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorCosmicClient.cpp
  *
- *  $Date: 2006/05/24 20:42:24 $
- *  $Revision: 1.22 $
+ *  $Date: 2006/07/07 18:41:49 $
+ *  $Revision: 1.23 $
  *  \author G. Della Ricca
  *
  */
@@ -12,7 +12,7 @@
 
 #include "DataFormats/EcalRawData/interface/EcalRawDataCollections.h"
 
-#include "DQM/EcalBarrelMonitorClient/interface/EBMUtilsClient.h"
+#include "DQM/EcalCommon/interface/UtilsClient.h"
 
 #include "TROOT.h"
 #include "TApplication.h"
@@ -106,7 +106,7 @@ void *pth1(void *) {
 
 //      me = mui->get("Collector/FU0/EcalBarrel/EBCosmicTask/Cut/EBCT energy cut SM01");
       me = mui->get("EcalBarrel/Sums/EBCosmicTask/Cut/EBCT energy cut SM01");
-      h = EBMUtilsClient::getHisto<TProfile2D*>(me);
+      h = UtilsClient::getHisto<TProfile2D*>(me);
       if ( h ) {
         c1->cd();
         h->SetMaximum(1000.);
@@ -117,7 +117,7 @@ void *pth1(void *) {
 
 //      me = mui->get("Collector/FU0/EcalBarrel/EBCosmicTask/Sel/EBCT energy sel SM01");
       me = mui->get("EcalBarrel/Sums/EBCosmicTask/Sel/EBCT energy sel SM01");
-      h = EBMUtilsClient::getHisto<TProfile2D*>(me);
+      h = UtilsClient::getHisto<TProfile2D*>(me);
       if ( h ) {
         c2->cd();
         h->SetMaximum(1000.);

@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorIntegrityClient.cpp
  *
- *  $Date: 2006/05/24 20:42:24 $
- *  $Revision: 1.26 $
+ *  $Date: 2006/07/07 18:41:49 $
+ *  $Revision: 1.27 $
  *  \author G. Della Ricca
  *
  */
@@ -12,7 +12,7 @@
 
 #include "DataFormats/EcalRawData/interface/EcalRawDataCollections.h"
 
-#include "DQM/EcalBarrelMonitorClient/interface/EBMUtilsClient.h"
+#include "DQM/EcalCommon/interface/UtilsClient.h"
 
 #include "TROOT.h"
 #include "TApplication.h"
@@ -115,7 +115,7 @@ void *pth1(void *) {
 
       //      me = mui->get("Collector/FU0/EcalBarrel/EBIntegrityTask/EBIT DCC size error");
       me = mui->get("EcalBarrel/Sums/EBIntegrityTask/EBIT DCC size error");
-      h1 = EBMUtilsClient::getHisto<TH1F*>(me);
+      h1 = UtilsClient::getHisto<TH1F*>(me);
       if ( h1 ) {
         c1->cd();
         h1->SetOption("text");
@@ -125,7 +125,7 @@ void *pth1(void *) {
     
       //      me = mui->get("Collector/FU0/EcalBarrel/EBIntegrityTask/Gain/EBIT gain SM01");
       me = mui->get("EcalBarrel/Sums/EBIntegrityTask/Gain/EBIT gain SM01");
-      h2 = EBMUtilsClient::getHisto<TH2F*>(me);
+      h2 = UtilsClient::getHisto<TH2F*>(me);
       if ( h2 ) {
         c2->cd(1);
         h2->SetOption("text");
@@ -135,7 +135,7 @@ void *pth1(void *) {
 
       //      me = mui->get("Collector/FU0/EcalBarrel/EBIntegrityTask/ChId/EBIT ChId SM01");
       me = mui->get("EcalBarrel/Sums/EBIntegrityTask/ChId/EBIT ChId SM01");
-      h2 = EBMUtilsClient::getHisto<TH2F*>(me);
+      h2 = UtilsClient::getHisto<TH2F*>(me);
       if ( h2 ) {
         c2->cd(2);
         h2->SetOption("text");
@@ -145,7 +145,7 @@ void *pth1(void *) {
 
       //      me = mui->get("Collector/FU0/EcalBarrel/EBIntegrityTask/TTId/EBIT TTId SM01");
       me = mui->get("EcalBarrel/Sums/EBIntegrityTask/TTId/EBIT TTId SM01");
-      h2 = EBMUtilsClient::getHisto<TH2F*>(me);
+      h2 = UtilsClient::getHisto<TH2F*>(me);
       if ( h2 ) {
         c2->cd(3);
         h2->SetOption("text");
@@ -155,7 +155,7 @@ void *pth1(void *) {
 
       //      me = mui->get("Collector/FU0/EcalBarrel/EBIntegrityTask/TTBlockSize/EBIT TTBlockSize SM01");
       me = mui->get("EcalBarrel/Sums/EBIntegrityTask/TTBlockSize/EBIT TTBlockSize SM01");
-      h2 = EBMUtilsClient::getHisto<TH2F*>(me);
+      h2 = UtilsClient::getHisto<TH2F*>(me);
       if ( h2 ) {
         c2->cd(4);
         h2->SetOption("text");
@@ -169,7 +169,7 @@ void *pth1(void *) {
 
       // me = mui->get("EcalBarrel/Sums/EBIntegrityTask/TTBlockSize/EBIT TTBlockSize SM01");
       me = mui->get("EcalBarrel/Sums/EBIntegrityTask/MemChId/EBIT MemChId SM01");
-       h2 = EBMUtilsClient::getHisto<TH2F*>(me);
+       h2 = UtilsClient::getHisto<TH2F*>(me);
        if ( h2 ) {
          c3->cd(1);
          h2->SetOption("col");
@@ -182,7 +182,7 @@ void *pth1(void *) {
       c3->Update();
 
       me = mui->get("EcalBarrel/Sums/EBIntegrityTask/MemGain/EBIT MemGain SM01");
-      h2 = EBMUtilsClient::getHisto<TH2F*>(me);
+      h2 = UtilsClient::getHisto<TH2F*>(me);
       if ( h2 ) {
         c3->cd(2);
         h2->SetOption("col");
