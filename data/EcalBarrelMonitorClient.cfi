@@ -6,6 +6,7 @@ module ecalBarrelMonitorClient = EcalBarrelMonitorClient{
   untracked string dbUserName = ""
   untracked string dbPassword = ""
   untracked string maskFile = "maskfile.dat"
+  untracked bool collateRuns = false
   untracked string location = ""
   untracked string baseHtmlDir = ""
   untracked bool collateSources = false
