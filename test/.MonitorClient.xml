@@ -65,7 +65,7 @@
       </xc:Application>
 
       <xc:Module>${XDAQ_ROOT}/lib/linux/x86/libpttcp.so</xc:Module>
-      <xc:Module>/cms/software/Releases/CMSSW/CMSSW_0_7_0/lib/slc3_ia32_gcc323/libEventFilterProcessor.so</xc:Module>
+      <xc:Module>.libpath2</xc:Module>
 
   </xc:Context>
 

@@ -43,16 +43,27 @@ if [ "$REMPORT" == "" ]; then
   REMPORT=9090
 fi
 
-LIB1="${LOCALRT}/lib/slc3_ia32_gcc323/libEBMonitorClientWebInterface.so"
+LIB1="${CMSSW_BASE}/lib/${SCRAM_ARCH}/libEBMonitorClientWebInterface.so"
 echo "Looking for the MonitorWebClient library... $LIB1"
 if [ ! -f $LIB1 ]; then
     echo "Not Found! Will pick it up from the release area..."
-    LIB1="/afs/cern.ch/cms/Releases/CMSSW/prerelease/${CMSSW_VERSION}/lib/slc3_ia32_gcc323/libEBMonitorClientWebInterface.so"
+    LIB1="${CMSSW_RELEASE_BASE}/lib/${SCRAM_ARCH}/libEBMonitorClientWebInterface.so"
 else 
     echo "Found!"
 fi
 echo $LIB1
 LIB1=$(echo "$LIB1" | sed 's/\//\\\//g')
+
+LIB2="${CMSSW_BASE}/lib/${SCRAM_ARCH}/libEventFilterProcessor.so"
+echo "Looking for the EventFilterProcessor... $LIB2"
+if [ ! -f $LIB2 ]; then
+    echo "Not Found! Will pick it up from the release area..."
+    LIB2="${CMSSW_RELEASE_BASE}/lib/${SCRAM_ARCH}/libEventFilterProcessor.so"
+else 
+    echo "Found!"
+fi 
+echo $LIB2
+LIB2=$(echo "$LIB2" | sed 's/\//\\\//g')
 
 if [ -e profile.xml ]; then
     rm profile.xml
