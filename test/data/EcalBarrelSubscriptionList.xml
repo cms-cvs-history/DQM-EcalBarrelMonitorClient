@@ -1,0 +1,4 @@
+<MESUBSCRIPTION>
+        <ME get="yes">*/EventInfo/*</ME>
+        <ME get="yes">*/EcalBarrel/*</ME>
+</MESUBSCRIPTION>
