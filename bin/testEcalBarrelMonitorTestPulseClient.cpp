@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorTestPulseClient.cpp
  *
- *  $Date: 2006/07/07 18:41:49 $
- *  $Revision: 1.24 $
+ *  $Date: 2007/04/30 09:23:59 $
+ *  $Revision: 1.25 $
  *  \author G. Della Ricca
  *
  */
@@ -52,12 +52,12 @@ void *pth1(void *) {
     mui->subscribeNew("*/EcalBarrel/EcalInfo/RUN");
     mui->subscribeNew("*/EcalBarrel/EcalInfo/EVT");
     mui->subscribeNew("*/EcalBarrel/EcalInfo/RUNTYPE");
-    mui->subscribeNew("*/EcalBarrel/EBTestPulseTask/Gain01/EBTPT shape SM01 G01");
-    mui->subscribeNew("*/EcalBarrel/EBTestPulseTask/Gain01/EBTPT amplitude SM01 G01");
-    mui->subscribeNew("*/EcalBarrel/EBTestPulseTask/Gain06/EBTPT shape SM01 G06");
-    mui->subscribeNew("*/EcalBarrel/EBTestPulseTask/Gain06/EBTPT amplitude SM01 G06");
-    mui->subscribeNew("*/EcalBarrel/EBTestPulseTask/Gain12/EBTPT shape SM01 G12");
-    mui->subscribeNew("*/EcalBarrel/EBTestPulseTask/Gain12/EBTPT amplitude SM01 G12");
+    mui->subscribeNew("*/EcalBarrel/EBTestPulseTask/Gain01/EBTPT shape EB+01 G01");
+    mui->subscribeNew("*/EcalBarrel/EBTestPulseTask/Gain01/EBTPT amplitude EB+01 G01");
+    mui->subscribeNew("*/EcalBarrel/EBTestPulseTask/Gain06/EBTPT shape EB+01 G06");
+    mui->subscribeNew("*/EcalBarrel/EBTestPulseTask/Gain06/EBTPT amplitude EB+01 G06");
+    mui->subscribeNew("*/EcalBarrel/EBTestPulseTask/Gain12/EBTPT shape EB+01 G12");
+    mui->subscribeNew("*/EcalBarrel/EBTestPulseTask/Gain12/EBTPT amplitude EB+01 G12");
 
     // # of full monitoring cycles processed
     int updates = mui->getNumUpdates();
@@ -112,8 +112,8 @@ void *pth1(void *) {
 
       TProfile2D* h;
 
-//      me = mui->get("Collector/FU0/EcalBarrel/EBTestPulseTask/Gain01/EBTPT amplitude SM01 G01");
-      me = mui->get("EcalBarrel/Sums/EBTestPulseTask/Gain01/EBTPT amplitude SM01 G01");
+//      me = mui->get("Collector/FU0/EcalBarrel/EBTestPulseTask/Gain01/EBTPT amplitude EB+01 G01");
+      me = mui->get("EcalBarrel/Sums/EBTestPulseTask/Gain01/EBTPT amplitude EB+01 G01");
       h = UtilsClient::getHisto<TProfile2D*>(me);
       if ( h ) {
         c1->cd();
@@ -122,8 +122,8 @@ void *pth1(void *) {
         c1->Update();
       }
 
-//      me = mui->get("Collector/FU0/EcalBarrel/EBTestPulseTask/Gain06/EBTPT amplitude SM01 G06");
-      me = mui->get("EcalBarrel/Sums/EBTestPulseTask/Gain06/EBTPT amplitude SM01 G06");
+//      me = mui->get("Collector/FU0/EcalBarrel/EBTestPulseTask/Gain06/EBTPT amplitude EB+01 G06");
+      me = mui->get("EcalBarrel/Sums/EBTestPulseTask/Gain06/EBTPT amplitude EB+01 G06");
       h = UtilsClient::getHisto<TProfile2D*>(me);
       if ( h ) {
         c2->cd();
@@ -132,8 +132,8 @@ void *pth1(void *) {
         c2->Update();
       }
 
-//      me = mui->get("Collector/FU0/EcalBarrel/EBTestPulseTask/Gain12/EBTPT amplitude SM01 G12");
-      me = mui->get("EcalBarrel/Sums/EBTestPulseTask/Gain12/EBTPT amplitude SM01 G12");
+//      me = mui->get("Collector/FU0/EcalBarrel/EBTestPulseTask/Gain12/EBTPT amplitude EB+01 G12");
+      me = mui->get("EcalBarrel/Sums/EBTestPulseTask/Gain12/EBTPT amplitude EB+01 G12");
       h = UtilsClient::getHisto<TProfile2D*>(me);
       if ( h ) {
         c3->cd();
@@ -142,8 +142,8 @@ void *pth1(void *) {
         c3->Update();
       }
 
-//      me = mui->get("Collector/FU0/EcalBarrel/EBTestPulseTask/Gain01/EBTPT shape SM01 G01");
-      me = mui->get("EcalBarrel/Sums/EBTestPulseTask/Gain01/EBTPT shape SM01 G01");
+//      me = mui->get("Collector/FU0/EcalBarrel/EBTestPulseTask/Gain01/EBTPT shape EB+01 G01");
+      me = mui->get("EcalBarrel/Sums/EBTestPulseTask/Gain01/EBTPT shape EB+01 G01");
       h = UtilsClient::getHisto<TProfile2D*>(me);
       if ( h ) {
         c4->cd();
@@ -152,8 +152,8 @@ void *pth1(void *) {
         c4->Update();
       }
 
-//      me = mui->get("Collector/FU0/EcalBarrel/EBTestPulseTask/Gain06/EBTPT shape SM01 G06");
-      me = mui->get("EcalBarrel/Sums/EBTestPulseTask/Gain06/EBTPT shape SM01 G06");
+//      me = mui->get("Collector/FU0/EcalBarrel/EBTestPulseTask/Gain06/EBTPT shape EB+01 G06");
+      me = mui->get("EcalBarrel/Sums/EBTestPulseTask/Gain06/EBTPT shape EB+01 G06");
       h = UtilsClient::getHisto<TProfile2D*>(me);
       if ( h ) {
         c5->cd();
@@ -162,8 +162,8 @@ void *pth1(void *) {
         c5->Update();
       }
 
-//      me = mui->get("Collector/FU0/EcalBarrel/EBTestPulseTask/Gain12/EBTPT shape SM01 G12");
-      me = mui->get("EcalBarrel/Sums/EBTestPulseTask/Gain12/EBTPT shape SM01 G12");
+//      me = mui->get("Collector/FU0/EcalBarrel/EBTestPulseTask/Gain12/EBTPT shape EB+01 G12");
+      me = mui->get("EcalBarrel/Sums/EBTestPulseTask/Gain12/EBTPT shape EB+01 G12");
       h = UtilsClient::getHisto<TProfile2D*>(me);
       if ( h ) {
         c6->cd();
@@ -238,32 +238,32 @@ int main(int argc, char** argv) {
   mui->subscribe("*/EcalBarrel/EcalInfo/RUN");
   mui->subscribe("*/EcalBarrel/EcalInfo/EVT");
   mui->subscribe("*/EcalBarrel/EcalInfo/RUNTYPE");
-  mui->subscribe("*/EcalBarrel/EBTestPulseTask/Gain01/EBTPT shape SM01 G01");
-  mui->subscribe("*/EcalBarrel/EBTestPulseTask/Gain01/EBTPT amplitude SM01 G01");
-  mui->subscribe("*/EcalBarrel/EBTestPulseTask/Gain06/EBTPT shape SM01 G06");
-  mui->subscribe("*/EcalBarrel/EBTestPulseTask/Gain06/EBTPT amplitude SM01 G06");
-  mui->subscribe("*/EcalBarrel/EBTestPulseTask/Gain12/EBTPT shape SM01 G12");
-  mui->subscribe("*/EcalBarrel/EBTestPulseTask/Gain12/EBTPT amplitude SM01 G12");
+  mui->subscribe("*/EcalBarrel/EBTestPulseTask/Gain01/EBTPT shape EB+01 G01");
+  mui->subscribe("*/EcalBarrel/EBTestPulseTask/Gain01/EBTPT amplitude EB+01 G01");
+  mui->subscribe("*/EcalBarrel/EBTestPulseTask/Gain06/EBTPT shape EB+01 G06");
+  mui->subscribe("*/EcalBarrel/EBTestPulseTask/Gain06/EBTPT amplitude EB+01 G06");
+  mui->subscribe("*/EcalBarrel/EBTestPulseTask/Gain12/EBTPT shape EB+01 G12");
+  mui->subscribe("*/EcalBarrel/EBTestPulseTask/Gain12/EBTPT amplitude EB+01 G12");
 
   CollateMonitorElement* cme;
 
-  cme = mui->collateProf2D("EBTPT shape SM01 G01", "EBTPT shape SM01 G01", "EcalBarrel/Sums/EBTestPulseTask/Gain01");
-  mui->add(cme, "*/EcalBarrel/EBTestPulseTask/Gain01/EBTPT shape SM01 G01");
+  cme = mui->collateProf2D("EBTPT shape EB+01 G01", "EBTPT shape EB+01 G01", "EcalBarrel/Sums/EBTestPulseTask/Gain01");
+  mui->add(cme, "*/EcalBarrel/EBTestPulseTask/Gain01/EBTPT shape EB+01 G01");
 
-  cme = mui->collateProf2D("EBTPT amplitude SM01 G01", "EBTPT amplitude SM01 G01", "EcalBarrel/Sums/EBTestPulseTask/Gain01");
-  mui->add(cme, "*/EcalBarrel/EBTestPulseTask/Gain01/EBTPT amplitude SM01 G01");
+  cme = mui->collateProf2D("EBTPT amplitude EB+01 G01", "EBTPT amplitude EB+01 G01", "EcalBarrel/Sums/EBTestPulseTask/Gain01");
+  mui->add(cme, "*/EcalBarrel/EBTestPulseTask/Gain01/EBTPT amplitude EB+01 G01");
 
-  cme = mui->collateProf2D("EBTPT shape SM01 G06", "EBTPT shape SM01 G06", "EcalBarrel/Sums/EBTestPulseTask/Gain06");
-  mui->add(cme, "*/EcalBarrel/EBTestPulseTask/Gain06/EBTPT shape SM01 G06");
+  cme = mui->collateProf2D("EBTPT shape EB+01 G06", "EBTPT shape EB+01 G06", "EcalBarrel/Sums/EBTestPulseTask/Gain06");
+  mui->add(cme, "*/EcalBarrel/EBTestPulseTask/Gain06/EBTPT shape EB+01 G06");
 
-  cme = mui->collateProf2D("EBTPT amplitude SM01 G06", "EBTPT amplitude SM01 G06", "EcalBarrel/Sums/EBTestPulseTask/Gain06");
-  mui->add(cme, "*/EcalBarrel/EBTestPulseTask/Gain06/EBTPT amplitude SM01 G06");
+  cme = mui->collateProf2D("EBTPT amplitude EB+01 G06", "EBTPT amplitude EB+01 G06", "EcalBarrel/Sums/EBTestPulseTask/Gain06");
+  mui->add(cme, "*/EcalBarrel/EBTestPulseTask/Gain06/EBTPT amplitude EB+01 G06");
 
-  cme = mui->collateProf2D("EBTPT shape SM01 G12", "EBTPT shape SM01 G12", "EcalBarrel/Sums/EBTestPulseTask/Gain12");
-  mui->add(cme, "*/EcalBarrel/EBTestPulseTask/Gain12/EBTPT shape SM01 G12");
+  cme = mui->collateProf2D("EBTPT shape EB+01 G12", "EBTPT shape EB+01 G12", "EcalBarrel/Sums/EBTestPulseTask/Gain12");
+  mui->add(cme, "*/EcalBarrel/EBTestPulseTask/Gain12/EBTPT shape EB+01 G12");
 
-  cme = mui->collateProf2D("EBTPT amplitude SM01 G12", "EBTPT amplitude SM01 G12", "EcalBarrel/Sums/EBTestPulseTask/Gain12");
-  mui->add(cme, "*/EcalBarrel/EBTestPulseTask/Gain12/EBTPT amplitude SM01 G12");
+  cme = mui->collateProf2D("EBTPT amplitude EB+01 G12", "EBTPT amplitude EB+01 G12", "EcalBarrel/Sums/EBTestPulseTask/Gain12");
+  mui->add(cme, "*/EcalBarrel/EBTestPulseTask/Gain12/EBTPT amplitude EB+01 G12");
 
   TThread *th1 = new TThread("th1",pth1);
 

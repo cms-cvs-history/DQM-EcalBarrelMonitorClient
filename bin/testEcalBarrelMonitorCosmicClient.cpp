@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorCosmicClient.cpp
  *
- *  $Date: 2006/07/07 18:41:49 $
- *  $Revision: 1.23 $
+ *  $Date: 2007/04/30 09:23:59 $
+ *  $Revision: 1.24 $
  *  \author G. Della Ricca
  *
  */
@@ -48,8 +48,8 @@ void *pth1(void *) {
     mui->subscribeNew("*/EcalBarrel/EcalInfo/RUN");
     mui->subscribeNew("*/EcalBarrel/EcalInfo/EVT");
     mui->subscribeNew("*/EcalBarrel/EcalInfo/RUNTYPE");
-    mui->subscribeNew("*/EcalBarrel/EBCosmicTask/Cut/EBCT energy cut SM01");
-    mui->subscribeNew("*/EcalBarrel/EBCosmicTask/Sel/EBCT energy sel SM01");
+    mui->subscribeNew("*/EcalBarrel/EBCosmicTask/Cut/EBCT energy cut EB+01");
+    mui->subscribeNew("*/EcalBarrel/EBCosmicTask/Sel/EBCT energy sel EB+01");
 
     // # of full monitoring cycles processed
     int updates = mui->getNumUpdates();
@@ -104,8 +104,8 @@ void *pth1(void *) {
 
       TProfile2D* h;
 
-//      me = mui->get("Collector/FU0/EcalBarrel/EBCosmicTask/Cut/EBCT energy cut SM01");
-      me = mui->get("EcalBarrel/Sums/EBCosmicTask/Cut/EBCT energy cut SM01");
+//      me = mui->get("Collector/FU0/EcalBarrel/EBCosmicTask/Cut/EBCT energy cut EB+01");
+      me = mui->get("EcalBarrel/Sums/EBCosmicTask/Cut/EBCT energy cut EB+01");
       h = UtilsClient::getHisto<TProfile2D*>(me);
       if ( h ) {
         c1->cd();
@@ -115,8 +115,8 @@ void *pth1(void *) {
         c1->Update();
       }
 
-//      me = mui->get("Collector/FU0/EcalBarrel/EBCosmicTask/Sel/EBCT energy sel SM01");
-      me = mui->get("EcalBarrel/Sums/EBCosmicTask/Sel/EBCT energy sel SM01");
+//      me = mui->get("Collector/FU0/EcalBarrel/EBCosmicTask/Sel/EBCT energy sel EB+01");
+      me = mui->get("EcalBarrel/Sums/EBCosmicTask/Sel/EBCT energy sel EB+01");
       h = UtilsClient::getHisto<TProfile2D*>(me);
       if ( h ) {
         c2->cd();
@@ -180,16 +180,16 @@ int main(int argc, char** argv) {
   mui->subscribe("*/EcalBarrel/EcalInfo/RUN");
   mui->subscribe("*/EcalBarrel/EcalInfo/EVT");
   mui->subscribe("*/EcalBarrel/EcalInfo/RUNTYPE");
-  mui->subscribe("*/EcalBarrel/EBCosmicTask/Cut/EBCT energy cut SM01");
-  mui->subscribe("*/EcalBarrel/EBCosmicTask/Sel/EBCT energy sel SM01");
+  mui->subscribe("*/EcalBarrel/EBCosmicTask/Cut/EBCT energy cut EB+01");
+  mui->subscribe("*/EcalBarrel/EBCosmicTask/Sel/EBCT energy sel EB+01");
 
   CollateMonitorElement* cme;
 
-  cme = mui->collateProf2D("EBCT energy cut SM01", "EBCT energy cut SM01", "EcalBarrel/Sums/EBCosmicTask/Cut");
-  mui->add(cme, "*/EcalBarrel/EBCosmicTask/Cut/EBCT energy cut SM01");
+  cme = mui->collateProf2D("EBCT energy cut EB+01", "EBCT energy cut EB+01", "EcalBarrel/Sums/EBCosmicTask/Cut");
+  mui->add(cme, "*/EcalBarrel/EBCosmicTask/Cut/EBCT energy cut EB+01");
 
-  cme = mui->collateProf2D("EBCT energy sel SM01", "EBCT energy sel SM01", "EcalBarrel/Sums/EBCosmicTask/Sel");
-  mui->add(cme, "*/EcalBarrel/EBCosmicTask/Sel/EBCT energy sel SM01");
+  cme = mui->collateProf2D("EBCT energy sel EB+01", "EBCT energy sel EB+01", "EcalBarrel/Sums/EBCosmicTask/Sel");
+  mui->add(cme, "*/EcalBarrel/EBCosmicTask/Sel/EBCT energy sel EB+01");
 
   TThread *th1 = new TThread("th1",pth1);
 
