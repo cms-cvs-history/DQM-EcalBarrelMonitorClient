@@ -11,7 +11,7 @@ eval `scramv1 run -csh`
 cd CMSSW_1_4_0/src/DQM/EcalBarrelMonitorClient/test/
 eval `scramv1 run -csh`
 
-./initialize-standalone -host=localhost.localdomain -collector=localhost.localdomain
+./initialize-source-client -host=localhost.localdomain -collector=localhost.localdomain
 
 (after log/localhost.localdomain.40000.log & log/localhost.localdomain.40001.log are 'Ready')
 ./configure
@@ -30,4 +30,10 @@ tail -f log/localhost.localdomain.40000.log
 cd CMSSW_1_4_0/src/DQM/EcalBarrelMonitorClient/test/
 
 tail -f log/localhost.localdomain.40001.log
+
+--- terminal5:
+
+htmlview http://localhost.localdomain:40000
+
+htmlview http://localhost.localdomain:40001
 
