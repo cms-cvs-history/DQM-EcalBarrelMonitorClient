@@ -1,0 +1,33 @@
+
+--- terminal1:
+
+cd CMSSW_1_4_0/
+eval `scramv1 run -csh`
+
+./bin/slc4_ia32_gcc345/DQMCollector
+
+--- terminal2:
+
+cd CMSSW_1_4_0/src/DQM/EcalBarrelMonitorClient/test/
+eval `scramv1 run -csh`
+
+./initialize-standalone -host=localhost.localdomain -collector=localhost.localdomain
+
+(after log/localhost.localdomain.40000.log & log/localhost.localdomain.40001.log are 'Ready')
+./configure
+
+(after log/localhost.localdomain.40000.log & log/localhost.localdomain.40001.log are 'Ready')
+./enable
+
+--- terminal3:
+
+cd CMSSW_1_4_0/src/DQM/EcalBarrelMonitorClient/test/
+
+tail -f log/localhost.localdomain.40000.log
+
+--- terminal4:
+
+cd CMSSW_1_4_0/src/DQM/EcalBarrelMonitorClient/test/
+
+tail -f log/localhost.localdomain.40001.log
+
