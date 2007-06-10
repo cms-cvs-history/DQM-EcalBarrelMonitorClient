@@ -19,6 +19,12 @@ eval `scramv1 run -csh`
 (after log/localhost.localdomain.40000.log & log/localhost.localdomain.40001.log are 'Ready')
 ./enable
 
+
+(if needed)
+./stop
+./halt
+./destroy
+
 --- terminal3:
 
 cd CMSSW_1_4_0/src/DQM/EcalBarrelMonitorClient/test/
