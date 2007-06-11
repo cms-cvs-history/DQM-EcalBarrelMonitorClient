@@ -708,7 +708,7 @@ sub makeCfgClient
     $result = $result . "  // paths\n";
 
     $result = $result . "  \n";
-    $result = $result . "  path p1 = { ecalBarrelMonitorClient }\n";
+    $result = $result . "  path p = { ecalBarrelMonitorClient }\n";
 
     $result = $result . "  \n";
     $result = $result . "  // modules\n";
