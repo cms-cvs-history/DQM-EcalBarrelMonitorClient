@@ -440,8 +440,8 @@ sub makeCfgFu
 
     $result = $result . "  \n";
     $result = $result . "  // options\n";
-    $result = $result . "  \n";
 
+    $result = $result . "  \n";
     $result = $result . "  untracked PSet options = {\n";
     $result = $result . "    untracked vstring Rethrow = {\n";
     $result = $result . "      \"ProductNotFound\",\n";
@@ -456,16 +456,16 @@ sub makeCfgFu
 
     $result = $result . "  \n";
     $result = $result . "  // source\n";
-    $result = $result . "  \n";
 
+    $result = $result . "  \n";
     $result = $result . "  source = DaqSource {\n";
     $result = $result . "    string reader = \"FUShmReader\"\n";
     $result = $result . "  }\n";
 
     $result = $result . "  \n";
     $result = $result . "  // modules\n";
-    $result = $result . "  \n";
 
+    $result = $result . "  \n";
     $result = $result . "  module ecalEBunpacker = EcalDCCUnpackingModule { }\n";
 
     $result = $result . "  \n";
@@ -485,9 +485,6 @@ sub makeCfgFu
 
 #    $result = $result . "  replace ecalBarrelMonitorModule.verbose = true\n";
 
-#    $result = $result . "  replace ecalBarrelMonitorModule.runNumber = 6100\n";
-    $result = $result . "  replace ecalBarrelMonitorModule.runNumber = 8205\n";
-
     $result = $result . "  \n";
     $result = $result . "include \"DQM/EcalBarrelMonitorTasks/data/EcalBarrelMonitorTasks.cfi\"\n";
 
@@ -499,8 +496,8 @@ sub makeCfgFu
 
     $result = $result . "  \n";
     $result = $result . "  // sequences\n";
-    $result = $result . "  \n";
 
+    $result = $result . "  \n";
     $result = $result . "  sequence ecalBarrelDataSequence = { preScaler,\n";
     $result = $result . "                                      eventSource,\n";
     $result = $result . "                                      ecalEBunpacker,\n";
@@ -509,6 +506,9 @@ sub makeCfgFu
 
     $result = $result . "  \n";
     $result = $result . "  sequence ecalBarrelMonitorSequence = { ecalBarrelMonitorModule }\n";
+
+    $result = $result . "  \n";
+    $result = $result . "  // modules\n";
 
     $result = $result . "  \n";
     $result = $result . "  module out = ShmStreamConsumer\n";
@@ -522,20 +522,17 @@ sub makeCfgFu
 
     $result = $result . "  \n";
     $result = $result . "  // paths\n";
-    $result = $result . "  \n";
-
-    $result = $result . "  path p1 = { ecalBarrelDataSequence, ecalBarrelMonitorSequence }\n";
 
     $result = $result . "  \n";
-    $result = $result . "  // endpaths\n";
-    $result = $result . "  \n";
+    $result = $result . "  path p = { ecalBarrelDataSequence, ecalBarrelMonitorSequence }\n";
 
+    $result = $result . "  \n";
     $result = $result . "  endpath q = { ecalBarrelCosmicTasksSequence, out }\n";
 
     $result = $result . "  \n";
     $result = $result . "  // services\n";
-    $result = $result . "  \n";
 
+    $result = $result . "  \n";
     $result = $result . "  es_source = EcalTrivialConditionRetriever {\n";
     $result = $result . "    untracked double adcToGeVEBConstant = 0.00875\n";
     $result = $result . "    untracked vdouble amplWeights = { -0.333, -0.333, -0.333,\n";
@@ -549,6 +546,7 @@ sub makeCfgFu
     $result = $result . "                                      -0.500, -0.500, -0.400,  0.000 }\n";
     $result = $result . "  }\n";
 
+#    $result = $result . "  \n";
 #    $result = $result . "  service = MessageLogger {\n";
 #    $result = $result . "    untracked vstring destinations = { \"cout\" }\n";
 #    $result = $result . "    untracked PSet cout = {\n";
@@ -575,16 +573,25 @@ sub makeCfgSm
 {
     my $result = "";
 
-    $result = $result . "process SM  = {\n\n";
+    $result = $result . "process SM  = {\n";
+
+    $result = $result . "  \n";
     $result = $result . "  // source\n";
+
+    $result = $result . "  \n";
     $result = $result . "  source = FragmentInput { }\n\n";
-    $result = $result . "  // endpath\n";
-    $result = $result . "  endpath e1 = { out  }\n";
-    $result = $result . "  endpath e2 = { out2 }\n";
-    $result = $result . "  endpath e3 = { out3 }\n\n\n";
-    $result = $result . "  // modules\n\n";
-    $result = $result . "  module out = EventStreamFileWriter\n";
-    $result = $result . "  {\n";
+
+    $result = $result . "  \n";
+    $result = $result . "  // paths\n";
+
+    $result = $result . "  \n";
+    $result = $result . "  endpath q = { out  }\n";
+
+    $result = $result . "  \n";
+    $result = $result . "  // modules\n";
+
+    $result = $result . "  \n";
+    $result = $result . "  module out = EventStreamFileWriter {\n";
     $result = $result . "    int32 max_event_size    = 7000000\n";
     $result = $result . "    int32 max_queue_depth   =       5\n";
     $result = $result . "    bool use_compression    =   false\n";
@@ -598,43 +605,12 @@ sub makeCfgSm
     $result = $result . "    int32  maxSize            =            536870912\n";
     $result = $result . "    double highWaterMark      =                  0.9\n";
     $result = $result . "    double lumiSectionTimeOut =                 10.0\n\n";
-    $result = $result . "    untracked PSet SelectEvents = { vstring SelectEvents={\"p1\"}}\n";
-    $result = $result . "  }\n\n";
-    $result = $result . "  module out2 = EventStreamFileWriter\n";
-    $result = $result . "  {\n";
-    $result = $result . "    int32 max_event_size    = 7000000\n";
-    $result = $result . "    int32 max_queue_depth   =       5\n";
-    $result = $result . "    bool use_compression    =   false\n";
-    $result = $result . "    int32 compression_level =       1\n\n";
-    $result = $result . "    string fileName           =     \"storageManager\"\n";
-    $result = $result . "    string indexFileName      = \"storageManager.ind\"\n";
-    $result = $result . "    string filePath           =            \"/tmp/sm\"\n";
-    $result = $result . "    string mailboxPath        =       \"/tmp/sm/mbox\"\n";
-    $result = $result . "    string setupLabel         =               \"mtcc\"\n";
-    $result = $result . "    string streamLabel        =                  \"B\"\n";
-    $result = $result . "    int32  maxSize            =           1073741824\n";
-    $result = $result . "    double highWaterMark      =                  0.9\n";
-    $result = $result . "    double lumiSectionTimeOut =                 10.0\n\n";
-    $result = $result . "    untracked PSet SelectEvents = { vstring SelectEvents={\"p2\"}}\n";
-    $result = $result . "  }\n\n";
-    $result = $result . "  module out3 = EventStreamFileWriter\n";
-    $result = $result . "  {\n";
-    $result = $result . "    int32 max_event_size    = 7000000\n";
-    $result = $result . "    int32 max_queue_depth   =       5\n";
-    $result = $result . "    bool use_compression    =   false\n";
-    $result = $result . "    int32 compression_level =       1\n\n";
-    $result = $result . "    string fileName           =     \"storageManager\"\n";
-    $result = $result . "    string indexFileName      = \"storageManager.ind\"\n";
-    $result = $result . "    string filePath           =            \"/tmp/sm\"\n";
-    $result = $result . "    string mailboxPath        =       \"/tmp/sm/mbox\"\n";
-    $result = $result . "    string setupLabel         =               \"mtcc\"\n";
-    $result = $result . "    string streamLabel        =                  \"C\"\n";
-    $result = $result . "    int32  maxSize            =           1073741824\n";
-    $result = $result . "    double highWaterMark      =                  0.9\n";
-    $result = $result . "    double lumiSectionTimeOut =                 10.0\n\n";
-    $result = $result . "    untracked PSet SelectEvents = { vstring SelectEvents={\"p3\"}}\n";
-    $result = $result . "  }\n\n";
+    $result = $result . "    untracked PSet SelectEvents = { vstring SelectEvents={\"p\"}}\n";
+    $result = $result . "  }\n";
+
     $result = $result . "}\n";
+
+    return $result;
 }
 
 ################################################################################
@@ -663,8 +639,8 @@ sub makeCfgPlayback
 
     $result = $result . "  \n";
     $result = $result . "  // source\n";
-    $result = $result . "  \n";
 
+    $result = $result . "  \n";
     $result = $result . "  source = PoolSource {\n";
     $result = $result . "    untracked vstring fileNames = {";
     foreach (@input_files) {
@@ -682,8 +658,8 @@ sub makeCfgPlayback
 
     $result = $result . "  \n";
     $result = $result . "  // services\n";
-    $result = $result . "  \n";
 
+#    $result = $result . "  \n";
 #    $result = $result . "  service = MessageLogger {\n";
 #    $result = $result . "    untracked vstring destinations = { \"cout\" }\n";
 #    $result = $result . "    untracked PSet cout = {\n";
@@ -693,11 +669,12 @@ sub makeCfgPlayback
 
     $result = $result . "  \n";
     $result = $result . "  // modules\n";
-    $result = $result . "  \n";
 
+    $result = $result . "  \n";
     $result = $result . "  module playback = PlaybackRawDataProvider {\n";
     $result = $result . "    untracked uint32 queueSize = 32\n";
     $result = $result . "  }\n";
+
     $result = $result . "}\n";
     
     return $result;
@@ -716,8 +693,8 @@ sub makeCfgClient
 
     $result = $result . "  \n";
     $result = $result . "  // source\n";
-    $result = $result . "  \n";
 
+    $result = $result . "  \n";
     $result = $result . "  source = DQMHttpSource {\n";
     $result = $result . "    untracked string sourceURL = \"http:\/\/".$hostname.":".$SMport."/urn:xdaq-application:lid=".$SMlocalid."\"\n";
     $result = $result . "    untracked string DQMconsumerName = \"ECAL DQM Client\"\n";
@@ -729,30 +706,36 @@ sub makeCfgClient
 
     $result = $result . "  \n";
     $result = $result . "  // paths\n";
+
     $result = $result . "  \n";
     $result = $result . "  path p1 = { ecalBarrelMonitorClient }\n";
 
     $result = $result . "  \n";
     $result = $result . "  // modules\n";
-    $result = $result . "  \n";
 
+    $result = $result . "  \n";
     $result = $result . "include \"DQM/EcalBarrelMonitorClient/data/EcalBarrelMonitorClient.cfi\"\n";
     $result = $result . "  \n";
     $result = $result . "  replace ecalBarrelMonitorClient.location = \"H4\"\n";
     $result = $result . "  replace ecalBarrelMonitorClient.baseHtmlDir = \".\"\n";
     $result = $result . "  replace ecalBarrelMonitorClient.enableTCC = true\n";
     $result = $result . "  replace ecalBarrelMonitorClient.prefixME = \"Collector/FU0/\"\n";
+    $result = $result . "  replace ecalBarrelMonitorClient.clientName = \"EcalBarrelMonitorClient\"\n";
+#    $result = $result . "  replace ecalBarrelMonitorClient.hostName = \"localhost\"\n";
+#    $result = $result . "  replace ecalBarrelMonitorClient.hostPort = 9090\n";
     $result = $result . "  replace ecalBarrelMonitorClient.enableServer = false\n";
     $result = $result . "  replace ecalBarrelMonitorClient.superModules = { 19 }\n";
     
 #    $result = $result . "  replace ecalBarrelMonitorClient.verbose = true\n";
-    
+
+    $result = $result . "  replace ecalBarrelMonitorClient.enableMonitorDaemon = false\n";
+#    $result = $result . "  replace ecalBarrelMonitorClient.enableMonitorDaemon = true\n";
     $result = $result . "  replace ecalBarrelMonitorClient.enableStateMachine = true\n";
 
     $result = $result . "  \n";
     $result = $result . "  // services\n";
-    $result = $result . "  \n"; 
 
+    $result = $result . "  \n"; 
     $result = $result . "  service = ModuleWebRegistry { }\n";
     
     $result = $result . "  \n";
@@ -763,7 +746,6 @@ sub makeCfgClient
     $result = $result . "    }\n"; 
     $result = $result . "  }\n";
 
-    $result = $result . "  \n";
     $result = $result . "}\n";
 
     return $result;
