@@ -27,24 +27,32 @@ my $EPport = 40000;
 my $DPport = 40001;
 
 my $EPappname="evf::FUEventProcessor";
+my $DPappname="evf::FUEventProcessor";
 
 my $EPlocalid=27;
+my $DPlocalid=27;
 
 my $EPlibpath = getLibraryPath("EventFilter/Processor");
+my $DPlibpath = getLibraryPath("EventFilter/Processor");
 
 my $EPlibname = "libEventFilterProcessor.so";
+my $DPlibname = "libEventFilterProcessor.so";
 
 my $pwd = `pwd`; chomp $pwd;
-
 
 #
 # interpret command line
 #
-foreach $param (@ARGV) {
-    if    ($param gt "-host")     { @tok = split(/=/, $param); $hostname = @tok[1]; }
-    elsif ($param gt "-collector"){ @tok = split(/=/, $param); $collectorhost = @tok[1]; }
-    else { die ("Unknown parameter $param!\n"); }
-}
+use vars qw( %opts );
+use Getopt::Long;
+
+Getopt::Long::config('bundling_override');
+%opts = ();
+
+GetOptions( \%opts, "host|h=s", "collector|c=s" );
+
+$hostname = $opts{'host'} if ( $opts{'host'} ) ;
+$collectorhost = $opts{'collector'} if ( $opts{'collector'} );
 
 print "hostname = $hostname\n";
 print "collector = $collectorhost\n";
@@ -57,7 +65,6 @@ print "make directories ...\n";
 `mkdir soap`           if (! -e "soap");
 `mkdir xml`            if (! -e "xml");
 `mkdir cfg`            if (! -e "cfg");
-
 
 #
 # make cfg files
@@ -72,7 +79,7 @@ open(CFG,">./cfg/client.cfg") or die ("Can't open file: $!\n");
 print CFG makeCfgClient();
 close(CFG);
 
-# make source xml input
+# make client xml input
 
 open(CFG,">./cfg/MESubscriptionList.xml") or die ("Can't open file: $!\n");
 print CFG makeSubscriptionList();
@@ -80,8 +87,6 @@ close(CFG);
 open(CFG,">./cfg/QualityTests.xml") or die ("Can't open file: $!\n");
 print CFG makeQualityTests();
 close(CFG);
-
-
 
 #
 # make XDAQ 'profile.xml'
@@ -107,8 +112,6 @@ print XML makeXmlAppHeader(0,"HyperDAQ",3);
 print XML makeXmlAppTrailer(0,$ENV{"XDAQ_ROOT"}."/lib","libhyperdaq.so");
 print XML makeXmlProfileTrailer();
 
-
-
 #
 # make  xdaq configuration file 'evf.xml'
 #
@@ -132,25 +135,22 @@ print XML makeXmlHeader();
 print XML makeXmlPartitionHeader();
 print XML makeXmlComm(@apps);
 
-
 # EP context
-    print XML makeXmlContextHeader("EP",$hostname,$EPport);
-    print XML makeXmlAppHeader(1,$EPappname,$EPlocalid);
-    print XML makeXmlAppProperties($EPappname,@EPproperties);
-    print XML makeXmlAppTrailer(1,$EPlibpath,$EPlibname);
-    print XML makeXmlContextTrailer();
+print XML makeXmlContextHeader("EP",$hostname,$EPport);
+print XML makeXmlAppHeader(1,$EPappname,$EPlocalid);
+print XML makeXmlAppProperties($EPappname,@EPproperties);
+print XML makeXmlAppTrailer(1,$EPlibpath,$EPlibname);
+print XML makeXmlContextTrailer();
 
 # Client context
-    print XML makeXmlContextHeader("DP",$hostname,$DPport);
-    print XML makeXmlAppHeader(1,$EPappname,$EPlocalid);
-    print XML makeXmlAppProperties($EPappname,@DPproperties);
-    print XML makeXmlAppTrailer(1,$EPlibpath,$EPlibname);
-    print XML makeXmlContextTrailer();
-
+print XML makeXmlContextHeader("DP",$hostname,$DPport);
+print XML makeXmlAppHeader(1,$DPappname,$DPlocalid);
+print XML makeXmlAppProperties($DPappname,@DPproperties);
+print XML makeXmlAppTrailer(1,$DPlibpath,$DPlibname);
+print XML makeXmlContextTrailer();
 
 print XML makeXmlPartitionTrailer();
 close (XML);
-
 
 #
 # make soap command xml files
@@ -164,10 +164,9 @@ foreach  (@commands) {
     print CMD makeSoapCommand($hostname,$EPport,$EPlocalid,$_);
     close(CMD);
     open(CMD,">./soap/$_"."DP.xml") or die ("Can't open file: $!\n");
-    print CMD makeSoapCommand($hostname,$DPport,$EPlocalid,$_);
+    print CMD makeSoapCommand($hostname,$DPport,$DPlocalid,$_);
     close(CMD);
 }
-
 
 #
 # make control scripts
@@ -178,7 +177,7 @@ print "make control scripts ...\n";
 open (CTL,">configure") or die ("Can't open file: $!\n");
 print CTL "#!/usr/bin/perl\n\n";
 print CTL makeCtlCommand("Configure",$EPappname,"EP",$hostname,$EPport,0);
-print CTL makeCtlCommand("Configure",$EPappname,"DP",$hostname,$DPport,0);
+print CTL makeCtlCommand("Configure",$DPappname,"DP",$hostname,$DPport,0);
 
 close (CTL);
 `chmod +x configure`;
@@ -187,7 +186,7 @@ close (CTL);
 open (CTL,">enable") or die ("Can't open file: $!\n");
 print CTL "#!/usr/bin/perl\n\n";
 print CTL makeCtlCommand("Enable",$EPappname,"EP",$hostname,$EPport,0);
-print CTL makeCtlCommand("Enable",$EPappname,"DP",$hostname,$DPport,0);
+print CTL makeCtlCommand("Enable",$DPappname,"DP",$hostname,$DPport,0);
 
 close (CTL);
 `chmod +x enable`;
@@ -196,7 +195,7 @@ close (CTL);
 open (CTL,">stop") or die ("Can't open file: $!\n");
 print CTL "#!/usr/bin/perl\n\n";
 print CTL makeCtlCommand("Stop",$EPappname,"EP",$hostname,$EPport,5);
-print CTL makeCtlCommand("Stop",$EPappname,"DP",$hostname,$DPport,5);
+print CTL makeCtlCommand("Stop",$DPappname,"DP",$hostname,$DPport,5);
 
 close (CTL);
 `chmod +x stop`;
@@ -205,7 +204,7 @@ close (CTL);
 open (CTL,">halt") or die ("Can't open file: $!\n");
 print CTL "#!/usr/bin/perl\n\n";
 print CTL makeCtlCommand("Halt",$EPappname,"EP",$hostname,$EPport,1);
-print CTL makeCtlCommand("Halt",$EPappname,"DP",$hostname,$DPport,1);
+print CTL makeCtlCommand("Halt",$DPappname,"DP",$hostname,$DPport,1);
 
 close (CTL);
 `chmod +x halt`;
@@ -216,8 +215,6 @@ print CTL makeCtlDestroy();
 close (CTL);
 `chmod +x destroy`;
 
-
-
 #
 # start processes
 #
@@ -227,14 +224,11 @@ print "\nstart xdaq.exe on $hostname:$EPport\n";
 print "\nstart xdaq.exe on $hostname:$DPport\n";
 `nice -n 15 xdaq.exe -h $hostname -p $DPport -e xml/profile.xml -c xml/evf.xml >& log/$hostname.$DPport.log &`;
 
-
-
 ################################################################################
 ################################################################################
 ## sub routines
 ################################################################################
 ################################################################################
-
 
 ################################################################################
 sub getLibraryPath
@@ -283,14 +277,12 @@ sub makeSoapCommand
     return $result;
 }
 
-
 ################################################################################
 sub makeCfgEp
 {
     my $result="";
     
     $result = $result . "process FU = {\n\n";
-
 
     $result = $result . "  // options\n";
     $result = $result . "  untracked PSet options = {\n";
@@ -535,7 +527,6 @@ sub makeXmlHeader
     return $result;
 }
 
-
 ################################################################################
 sub makeXmlPartitionHeader
 {
@@ -549,7 +540,6 @@ sub makeXmlPartitionHeader
     return $result;
 }
 
-
 ################################################################################
 sub makeXmlProfileHeader
 {
@@ -559,7 +549,6 @@ sub makeXmlProfileHeader
 	"  xmlns:soapenc=\"http://schemas.xmlsoap.org/soap/encoding/\"\n" .
 	"  xmlns:xp=\"http://xdaq.web.cern.ch/xdaq/xsd/2005/XMLProfile-10\">\n\n";
 }
-
 
 ################################################################################
 sub makeXmlComm
@@ -581,7 +570,6 @@ sub makeXmlComm
     return $result;
 }
 
-
 ################################################################################
 sub makeXmlContextHeader
 {
@@ -594,8 +582,6 @@ sub makeXmlContextHeader
     
     return $result;
 }
-
-
 
 ################################################################################
 sub makeXmlEndpoint
@@ -610,7 +596,6 @@ sub makeXmlEndpoint
     return $result;
 }
 
-
 ################################################################################
 sub makeXmlAppHeader
 {
@@ -622,7 +607,6 @@ sub makeXmlAppHeader
 	"\" id=\"" . $localid . "\" instance=\"0\" network=\"local\">\n";
     return $result;
 }
-
 
 ################################################################################
 sub makeXmlAppProperties
@@ -652,7 +636,6 @@ sub makeXmlUnicast
     return "      <xc:Unicast class=\"" . $appname . "\" network=\"tcp0\"></xc:Unicast>\n";
 }
 
-
 ################################################################################
 sub makeXmlAppTrailer
 {
@@ -676,20 +659,17 @@ sub makeXmlContextTrailer
     return "  </xc:Context>\n\n\n";
 }
 
-
 ################################################################################
 sub makeXmlProfileTrailer
 {
     return "</xp:Profile>\n";
 }
 
-
 ################################################################################
 sub makeXmlPartitionTrailer
 {
     return "</xc:Partition>\n";
 }
-
 
 ################################################################################
 sub makeCtlDestroy
@@ -712,7 +692,6 @@ sub makeCtlDestroy
     return $result;
 }
 
-
 ################################################################################
 sub makeCtlCommand
 {
@@ -732,7 +711,6 @@ sub makeCtlCommand
 
     return $result;
 }
-
 
 ################################################################################
 sub makeCurlCommand
