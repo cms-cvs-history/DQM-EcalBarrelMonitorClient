@@ -652,8 +652,8 @@ sub makeCfgPlayback
 
     $result = $result . "  \n";
     $result = $result . "  // path(s)\n";
-    $result = $result . "  \n";
 
+    $result = $result . "  \n";
     $result = $result . "  path p = { playback }\n";
 
     $result = $result . "  \n";
