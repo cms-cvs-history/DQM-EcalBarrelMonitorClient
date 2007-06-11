@@ -555,6 +555,9 @@ sub makeCfgFu
 #    $result = $result . "  }\n";
 
     $result = $result . "  \n";
+    $result = $result . "  service = DaqMonitorROOTBackEnd { }\n";
+
+    $result = $result . "  \n";
     $result = $result . "  service = FUShmDQMOutputService {\n";
     $result = $result . "    untracked int32 initialMessageBufferSize=1000000\n";
     $result = $result . "    double          lumiSectionsPerUpdate   =    1.0\n";

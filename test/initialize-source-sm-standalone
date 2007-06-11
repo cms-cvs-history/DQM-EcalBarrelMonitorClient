@@ -476,7 +476,13 @@ sub makeCfgFu
     $result = $result . "  }\n";
 
     $result = $result . "  \n";
+    $result = $result . "  module print = AsciiOutputModule { }\n";
+
+    $result = $result . "  \n";
     $result = $result . "  // paths\n";
+
+    $result = $result . "  \n";
+    $result = $result . "  path p = { print }\n";
 
     $result = $result . "  \n";
     $result = $result . "  endpath q = { out }\n";
