@@ -19,10 +19,11 @@ eval `scramv1 run -csh`
 (after log/localhost.localdomain.40000.log & log/localhost.localdomain.40001.log are 'Ready')
 ./enable
 
-
 (if needed)
 ./stop
 ./halt
+
+(cleanup)
 ./destroy
 
 --- terminal3:
