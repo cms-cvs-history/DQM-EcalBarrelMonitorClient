@@ -286,8 +286,8 @@ sub makeCfgEp
 
     $result = $result . "  \n";
     $result = $result . "  // options\n";
-    $result = $result . "  \n";
 
+    $result = $result . "  \n";
     $result = $result . "  untracked PSet options = {\n";
     $result = $result . "    untracked vstring Rethrow = {\n";
     $result = $result . "      \"ProductNotFound\",\n";
@@ -303,14 +303,15 @@ sub makeCfgEp
 
     $result = $result . "  \n";
     $result = $result . "  // source\n";
-    $result = $result . "  \n";
 
+    $result = $result . "  \n";
     $result = $result . "  source = DAQEcalTBInputService {\n";
 #    $result = $result . "    untracked vstring fileNames = { 'file:/tmp/H4-000006100-SM5-COSMIC-STD' }\n";
     $result = $result . "    untracked vstring fileNames = { 'file:/tmp/H4-000008205-SM5-TEST_PULSE-MGPA' }\n";
     $result = $result . "    untracked bool isBinary = false\n";
     $result = $result . "  }\n";
 
+#    $result = $result . "  \n";
 #    $result = $result . "   source = PoolSource{\n";
 #    $result = $result . "     untracked vstring fileNames = { 'file:/tmp/h4b.00014790.A.0.0.root' }\n";
 #    $result = $result . "     untracked uint32 debugVebosity = 10\n";
@@ -319,8 +320,8 @@ sub makeCfgEp
 
     $result = $result . "  \n";
     $result = $result . "  // modules\n";
-    $result = $result . "  \n";
 
+    $result = $result . "  \n";
     $result = $result . "  module ecalEBunpacker = EcalDCCUnpackingModule { }\n";
 
     $result = $result . "  \n";
@@ -354,8 +355,8 @@ sub makeCfgEp
 
     $result = $result . "  \n";
     $result = $result . "  // sequences\n";
-    $result = $result . "  \n";
 
+    $result = $result . "  \n";
     $result = $result . "  sequence ecalBarrelDataSequence = { preScaler,\n";
     $result = $result . "                                      eventSource,\n";
     $result = $result . "                                      ecalEBunpacker,\n";
@@ -367,17 +368,17 @@ sub makeCfgEp
 
     $result = $result . "  \n";
     $result = $result . "  // paths\n";
-    $result = $result . "  \n";
 
-    $result = $result . "  path p1 = { ecalBarrelDataSequence, ecalBarrelMonitorSequence }\n";
+    $result = $result . "  \n";
+    $result = $result . "  path p = { ecalBarrelDataSequence, ecalBarrelMonitorSequence }\n";
 
     $result = $result . "  \n";
     $result = $result . "  endpath q = { ecalBarrelCosmicTasksSequence }\n";
 
     $result = $result . "  \n";
     $result = $result . "  // services\n";
-    $result = $result . "  \n";
 
+    $result = $result . "  \n";
     $result = $result . "  es_source = EcalTrivialConditionRetriever {\n";
     $result = $result . "    untracked double adcToGeVEBConstant = 0.00875\n";
     $result = $result . "    untracked vdouble amplWeights = { -0.333, -0.333, -0.333,\n";
@@ -416,7 +417,6 @@ sub makeCfgEp
 #    $result = $result . "    }\n";
 #    $result = $result . "  }\n";
 
-    $result = $result . "  \n";
     $result = $result . "}\n";
     
     return $result;
@@ -436,8 +436,8 @@ sub makeCfgClient
 
     $result = $result . "  \n";
     $result = $result . "  // source\n";
-    $result = $result . "  \n";
 
+    $result = $result . "  \n";
     $result = $result . "  source = DQMEventSource {\n";
     $result = $result . "    untracked uint32 firstRun = 0\n";
     $result = $result . "    untracked string name = \"DQM Event Source\"\n";
@@ -455,13 +455,14 @@ sub makeCfgClient
 
     $result = $result . "  \n";
     $result = $result . "  // paths\n";
+
     $result = $result . "  \n";
-    $result = $result . "  path p1 = { ecalBarrelMonitorClient }\n";
+    $result = $result . "  path p = { ecalBarrelMonitorClient }\n";
 
     $result = $result . "  \n";
     $result = $result . "  // modules\n";
-    $result = $result . "  \n";
 
+    $result = $result . "  \n";
     $result = $result . "include \"DQM/EcalBarrelMonitorClient/data/EcalBarrelMonitorClient.cfi\"\n";
     $result = $result . "  \n";
     $result = $result . "  replace ecalBarrelMonitorClient.location = \"H4\"\n";
@@ -481,8 +482,8 @@ sub makeCfgClient
 
     $result = $result . "  \n";
     $result = $result . "  // services\n";
-    $result = $result . "  \n";
 
+    $result = $result . "  \n";
     $result = $result . "  service = ModuleWebRegistry { }\n";
 
     $result = $result . "  \n";
@@ -493,7 +494,6 @@ sub makeCfgClient
     $result = $result . "    }\n";
     $result = $result . "  }\n";
 
-    $result = $result . "  \n";
     $result = $result . "}\n";
     
     return $result;
