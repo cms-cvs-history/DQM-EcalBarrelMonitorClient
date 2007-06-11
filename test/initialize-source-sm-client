@@ -511,9 +511,6 @@ sub makeCfgFu
     $result = $result . "  sequence ecalBarrelMonitorSequence = { ecalBarrelMonitorModule }\n";
 
     $result = $result . "  \n";
-    $result = $result . "  module dqm = SMDQMSourceExample{}\n";
-
-    $result = $result . "  \n";
     $result = $result . "  module out = ShmStreamConsumer\n";
     $result = $result . "  {\n";
     $result = $result . "    int32           max_event_size       = 7000000\n";
@@ -528,8 +525,6 @@ sub makeCfgFu
     $result = $result . "  \n";
 
     $result = $result . "  path p1 = { ecalBarrelDataSequence, ecalBarrelMonitorSequence }\n";
-
-    $result = $result . "  path p2 = { dqm }\n";
 
     $result = $result . "  \n";
     $result = $result . "  // endpaths\n";
