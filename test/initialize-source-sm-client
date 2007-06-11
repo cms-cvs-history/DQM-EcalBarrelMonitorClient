@@ -340,7 +340,7 @@ open (CTL,">halt") or die ("Can't open file: $!\n");
 print CTL "#!/usr/bin/perl\n\n";
 print CTL makeCtlCommand("Halt",$BUappname,"BU",$hostname,$BUport,0);
 print CTL makeCtlCommand("Halt",$RBappname,"RB",$hostname,$RBport,0);
-print CTL makeCtlCommand("Halt",$EPappname,"PB",$hostname,$PBport,1);
+print CTL makeCtlCommand("Halt",$PBappname,"PB",$hostname,$PBport,1);
 print CTL makeCtlCommand("Halt",$EPappname,"EP",$hostname,$EPport,1);
 print CTL makeCtlCommand("Halt",$DPappname,"DP",$hostname,$DPport,1);
 print CTL makeCtlCommand("Halt",$SMappname,"SM",$hostname,$SMport,0);
