@@ -417,10 +417,7 @@ sub makeCfgEp
 #    $result = $result . "  service = MessageLogger {\n";
 #    $result = $result . "    untracked vstring destinations = { \"cout\" }\n";
 #    $result = $result . "    untracked PSet cout = {\n";
-#    $result = $result . "      untracked string threshold = \"ERROR\"\n"; 
-#    $result = $result . "      untracked PSet default = { untracked int32 limit = 0 }\n";
-#    $result = $result . "      untracked bool noTimeStamps = true\n";
-#    $result = $result . "      untracked bool noLineBreaks = true\n";
+#    $result = $result . "      untracked string threshold = \"FATAL\"\n"; 
 #    $result = $result . "    }\n";
 #    $result = $result . "  }\n";
 
@@ -494,10 +491,7 @@ sub makeCfgClient
     $result = $result . "  service = MessageLogger {\n";
     $result = $result . "    untracked vstring destinations = { \"cout\" }\n";
     $result = $result . "    untracked PSet cout = {\n";
-    $result = $result . "      untracked string threshold = \"WARNING\"\n";
-    $result = $result . "      untracked PSet default          = { untracked int32 limit = 0 }\n";
-    $result = $result . "      untracked bool noTimeStamps = true\n";
-    $result = $result . "      untracked bool noLineBreaks = true\n";
+    $result = $result . "      untracked string threshold = \"FATAL\"\n";
     $result = $result . "    }\n";
     $result = $result . "  }\n";
 
