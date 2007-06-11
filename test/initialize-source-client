@@ -282,9 +282,12 @@ sub makeCfgEp
 {
     my $result="";
     
-    $result = $result . "process FU = {\n\n";
+    $result = $result . "process FU = {\n";
 
+    $result = $result . "  \n";
     $result = $result . "  // options\n";
+    $result = $result . "  \n";
+
     $result = $result . "  untracked PSet options = {\n";
     $result = $result . "    untracked vstring Rethrow = {\n";
     $result = $result . "      \"ProductNotFound\",\n";
@@ -476,7 +479,6 @@ sub makeCfgClient
     $result = $result . "  // services\n";
     $result = $result . "  \n";
 
-    $result = $result . "  \n";
     $result = $result . "  service = ModuleWebRegistry { }\n";
 
     $result = $result . "  \n";
