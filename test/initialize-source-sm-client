@@ -511,8 +511,7 @@ sub makeCfgFu
     $result = $result . "  // modules\n";
 
     $result = $result . "  \n";
-    $result = $result . "  module out = ShmStreamConsumer\n";
-    $result = $result . "  {\n";
+    $result = $result . "  module out = ShmStreamConsumer {\n";
     $result = $result . "    int32           max_event_size       = 7000000\n";
     $result = $result . "    int32           max_queue_depth      =       5\n";
     $result = $result . "    bool            use_compression      =    true\n";
