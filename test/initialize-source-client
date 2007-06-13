@@ -327,8 +327,8 @@ sub makeCfgEp
     $result = $result . "  \n";
     $result = $result . "  module ecalUncalibHit = ecalFixedAlphaBetaFitUncalibRecHit from \"RecoLocalCalo/EcalRecProducers/data/ecalFixedAlphaBetaFitUncalibRecHit.cfi\"\n";
     $result = $result . "  \n";
-    $result = $result . "  replace ecalUncalibHit.EBdigiCollection = ecalEBunpacker:\n";
-    $result = $result . "  replace ecalUncalibHit.EEdigiCollection = ecalEBunpacker:\n";
+    $result = $result . "  replace ecalUncalibHit.EBdigiCollection = ecalEBunpacker:ebDigis\n";
+    $result = $result . "  replace ecalUncalibHit.EEdigiCollection = ecalEBunpacker:eeDigis\n";
 
     $result = $result . "  \n";
     $result = $result . "include \"RecoLocalCalo/EcalRecProducers/data/ecalRecHit.cfi\"\n";
