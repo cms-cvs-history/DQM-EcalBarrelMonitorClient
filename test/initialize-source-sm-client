@@ -466,13 +466,14 @@ sub makeCfgFu
     $result = $result . "  // modules\n";
 
     $result = $result . "  \n";
-    $result = $result . "  module ecalEBunpacker = EcalDCCUnpackingModule { }\n";
+    $result = $result . "include \"EventFilter/EcalTBRawToDigi/data/EcalUnpackerData.cfi\"\n";
+#    $result = $result . "include \"EventFilter/EcalRawToDigiDev/data/EcalUnpackerData.cfi\"\n";
 
     $result = $result . "  \n";
     $result = $result . "  module ecalUncalibHit = ecalFixedAlphaBetaFitUncalibRecHit from \"RecoLocalCalo/EcalRecProducers/data/ecalFixedAlphaBetaFitUncalibRecHit.cfi\"\n";
     $result = $result . "  \n";
-    $result = $result . "  replace ecalUncalibHit.EBdigiCollection = ecalEBunpacker:\n";
-    $result = $result . "  replace ecalUncalibHit.EEdigiCollection = ecalEBunpacker:\n";
+    $result = $result . "  replace ecalUncalibHit.EBdigiCollection = ecalEBunpacker:ebDigis\n";
+    $result = $result . "  replace ecalUncalibHit.EEdigiCollection = ecalEBunpacker:eeDigis\n";
 
     $result = $result . "  \n";
     $result = $result . "include \"RecoLocalCalo/EcalRecProducers/data/ecalRecHit.cfi\"\n";
@@ -721,10 +722,8 @@ sub makeCfgClient
     $result = $result . "  replace ecalBarrelMonitorClient.location = \"H4\"\n";
     $result = $result . "  replace ecalBarrelMonitorClient.baseHtmlDir = \".\"\n";
     $result = $result . "  replace ecalBarrelMonitorClient.enableTCC = true\n";
-    $result = $result . "  replace ecalBarrelMonitorClient.prefixME = \"Collector/FU0/\"\n";
+    $result = $result . "  replace ecalBarrelMonitorClient.prefixME = \"Collector/\"\n";
     $result = $result . "  replace ecalBarrelMonitorClient.clientName = \"EcalBarrelMonitorClient\"\n";
-#    $result = $result . "  replace ecalBarrelMonitorClient.hostName = \"localhost\"\n";
-#    $result = $result . "  replace ecalBarrelMonitorClient.hostPort = 9090\n";
     $result = $result . "  replace ecalBarrelMonitorClient.enableServer = false\n";
     $result = $result . "  replace ecalBarrelMonitorClient.superModules = { 19 }\n";
     
