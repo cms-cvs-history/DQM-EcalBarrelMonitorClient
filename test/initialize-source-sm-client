@@ -730,7 +730,6 @@ sub makeCfgClient
 #    $result = $result . "  replace ecalBarrelMonitorClient.verbose = true\n";
 
     $result = $result . "  replace ecalBarrelMonitorClient.enableMonitorDaemon = false\n";
-    $result = $result . "  replace ecalBarrelMonitorClient.enableStateMachine = true\n";
 
     $result = $result . "  \n";
     $result = $result . "  // services\n";
