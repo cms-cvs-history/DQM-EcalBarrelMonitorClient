@@ -319,8 +319,8 @@ print CTL makeCtlCommand("Enable",   $SMappname,"SM",$hostname,$SMport,1);
 print CTL makeCtlCommand("Enable",   $BUappname,"BU",$hostname,$BUport,0);
 print CTL makeCtlCommand("Enable",   $RBappname,"RB",$hostname,$RBport,0);
 print CTL makeCtlCommand("Enable",   $EPappname,"EP",$hostname,$EPport,0);
-print CTL makeCtlCommand("Configure",$DPappname,"DP",$hostname,$DPport,20);
-print CTL makeCtlCommand("Enable",   $DPappname,"DP",$hostname,$DPport,0);
+#print CTL makeCtlCommand("Configure",$DPappname,"DP",$hostname,$DPport,40);
+#print CTL makeCtlCommand("Enable",   $DPappname,"DP",$hostname,$DPport,0);
 close (CTL);
 `chmod +x enable`;
 
