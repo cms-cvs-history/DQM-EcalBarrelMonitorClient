@@ -493,14 +493,10 @@ sub makeCfgFu
     $result = $result . "  module preScaler = Prescaler { int32 prescaleFactor = 1 }\n";
 
     $result = $result . "  \n";
-    $result = $result . "  module eventSource = EventCoordinatesSource { }\n";
-
-    $result = $result . "  \n";
     $result = $result . "  // sequences\n";
 
     $result = $result . "  \n";
     $result = $result . "  sequence ecalBarrelDataSequence = { preScaler,\n";
-    $result = $result . "                                      eventSource,\n";
     $result = $result . "                                      ecalEBunpacker,\n";
     $result = $result . "                                      ecalUncalibHit,\n";
     $result = $result . "                                      ecalRecHit }\n";
