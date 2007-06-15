@@ -309,7 +309,6 @@ print CTL makeCtlCommand("Enable",   $PBappname,"PB",$hostname,$PBport,5);
 print CTL makeCtlCommand("Configure",$BUappname,"BU",$hostname,$BUport,0);
 print CTL makeCtlCommand("Configure",$RBappname,"RB",$hostname,$RBport,0);
 print CTL makeCtlCommand("Configure",$EPappname,"EP",$hostname,$EPport,0);
-print CTL makeCtlCommand("Configure",$DPappname,"DP",$hostname,$DPport,0);
 close (CTL);
 `chmod +x configure`;
 
@@ -320,6 +319,7 @@ print CTL makeCtlCommand("Enable",$SMappname,"SM",$hostname,$SMport,1);
 print CTL makeCtlCommand("Enable",$BUappname,"BU",$hostname,$BUport,0);
 print CTL makeCtlCommand("Enable",$RBappname,"RB",$hostname,$RBport,0);
 print CTL makeCtlCommand("Enable",$EPappname,"EP",$hostname,$EPport,0);
+print CTL makeCtlCommand("Configure",$DPappname,"DP",$hostname,$DPport,5);
 print CTL makeCtlCommand("Enable",$DPappname,"DP",$hostname,$DPport,0);
 close (CTL);
 `chmod +x enable`;
