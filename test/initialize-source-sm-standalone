@@ -319,8 +319,8 @@ print CTL makeCtlCommand("Enable",   $SMappname,"SM",$hostname,$SMport,1);
 print CTL makeCtlCommand("Enable",   $BUappname,"BU",$hostname,$BUport,0);
 print CTL makeCtlCommand("Enable",   $RBappname,"RB",$hostname,$RBport,0);
 print CTL makeCtlCommand("Enable",   $EPappname,"EP",$hostname,$EPport,0);
-#print CTL makeCtlCommand("Configure",$DPappname,"DP",$hostname,$DPport,40);
-#print CTL makeCtlCommand("Enable",   $DPappname,"DP",$hostname,$DPport,0);
+print CTL makeCtlCommand("Configure",$DPappname,"DP",$hostname,$DPport,40);
+print CTL makeCtlCommand("Enable",   $DPappname,"DP",$hostname,$DPport,0);
 close (CTL);
 `chmod +x enable`;
 
@@ -745,6 +745,15 @@ sub makeCfgClient
     $result = $result . "    untracked vdouble jittWeights = {  0.040,  0.040,  0.040,\n";
     $result = $result . "                                       0.000,  1.320, -0.050,\n";
     $result = $result . "                                      -0.500, -0.500, -0.400,  0.000 }\n";
+    $result = $result . "  }\n";
+
+    $result = $result . "  \n";
+    $result = $result . "  service = FUShmDQMOutputService {\n";
+    $result = $result . "    untracked int32 initialMessageBufferSize=1000000\n";
+    $result = $result . "    double          lumiSectionsPerUpdate   =    1.0\n";
+    $result = $result . "    bool            useCompression          =   true\n";
+    $result = $result . "    int32           compressionLevel        =      1\n";
+    $result = $result . "    untracked int32 lumiSectionInterval     =     30\n";
     $result = $result . "  }\n";
 
     $result = $result . "  \n"; 
