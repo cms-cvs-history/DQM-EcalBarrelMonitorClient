@@ -481,7 +481,7 @@ sub makeCfgFu
     $result = $result . "  // paths\n";
 
     $result = $result . "  \n";
-    $result = $result . "  path p = { print }\n";
+    $result = $result . "  endpath p = { print }\n";
 
     $result = $result . "  \n";
     $result = $result . "  endpath q = { out }\n";
