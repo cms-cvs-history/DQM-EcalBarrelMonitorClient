@@ -304,10 +304,10 @@ print "make control scripts ...\n";
 open (CTL,">configure") or die ("Can't open file: $!\n");
 print CTL "#!/usr/bin/perl\n\n";
 print CTL makeCtlCommand("Configure",$SMappname,"SM",$hostname,$SMport,1);
+print CTL makeCtlCommand("Configure",$RBappname,"RB",$hostname,$RBport,5);
 print CTL makeCtlCommand("Configure",$PBappname,"PB",$hostname,$PBport,5);
 print CTL makeCtlCommand("Enable",   $PBappname,"PB",$hostname,$PBport,5);
 print CTL makeCtlCommand("Configure",$BUappname,"BU",$hostname,$BUport,0);
-print CTL makeCtlCommand("Configure",$RBappname,"RB",$hostname,$RBport,0);
 print CTL makeCtlCommand("Configure",$EPappname,"EP",$hostname,$EPport,0);
 close (CTL);
 `chmod +x configure`;
@@ -319,7 +319,7 @@ print CTL makeCtlCommand("Enable",$SMappname,"SM",$hostname,$SMport,1);
 print CTL makeCtlCommand("Enable",$BUappname,"BU",$hostname,$BUport,0);
 print CTL makeCtlCommand("Enable",$RBappname,"RB",$hostname,$RBport,0);
 print CTL makeCtlCommand("Enable",$EPappname,"EP",$hostname,$EPport,0);
-print CTL makeCtlCommand("Configure",$DPappname,"DP",$hostname,$DPport,5);
+print CTL makeCtlCommand("Configure",$DPappname,"DP",$hostname,$DPport,10);
 print CTL makeCtlCommand("Enable",$DPappname,"DP",$hostname,$DPport,0);
 close (CTL);
 `chmod +x enable`;
@@ -658,6 +658,15 @@ sub makeCfgPlayback
     $result = $result . "  \n";
     $result = $result . "  // services\n";
 
+    $result = $result . "  \n";
+    $result = $result . "  service = FUShmDQMOutputService {\n";
+    $result = $result . "    untracked int32 initialMessageBufferSize=1000000\n";
+    $result = $result . "    double          lumiSectionsPerUpdate   =    1.0\n";
+    $result = $result . "    bool            useCompression          =   true\n";
+    $result = $result . "    int32           compressionLevel        =      1\n";
+    $result = $result . "    untracked int32 lumiSectionInterval     =     30\n";
+    $result = $result . "  }\n";
+
 #    $result = $result . "  \n";
 #    $result = $result . "  service = MessageLogger {\n";
 #    $result = $result . "    untracked vstring destinations = { \"cout\" }\n";
@@ -729,6 +738,18 @@ sub makeCfgClient
 
     $result = $result . "  \n";
     $result = $result . "  // services\n";
+
+    $result = $result . "  \n";
+    $result = $result . "  service = DaqMonitorROOTBackEnd { }\n";
+
+    $result = $result . "  \n";
+    $result = $result . "  service = FUShmDQMOutputService {\n";
+    $result = $result . "    untracked int32 initialMessageBufferSize=1000000\n";
+    $result = $result . "    double          lumiSectionsPerUpdate   =    1.0\n";
+    $result = $result . "    bool            useCompression          =   true\n";
+    $result = $result . "    int32           compressionLevel        =      1\n";
+    $result = $result . "    untracked int32 lumiSectionInterval     =     30\n";
+    $result = $result . "  }\n";
 
     $result = $result . "  \n"; 
     $result = $result . "  service = ModuleWebRegistry { }\n";
