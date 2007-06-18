@@ -118,13 +118,13 @@ print XML makeXmlProfileTrailer();
 print "make xdaq configuration ...\n";
 
 my @EPproperties = ("parameterSet",   "string","file:$pwd/cfg/ep.cfg",
-#		    "hasSharedMemory","boolean","false",
+		    "hasSharedMemory","boolean","false",
 		    "collectorAddr",  "string", "$collectorhost",
 		    "collectorPort",  "integer","9091",
 		    "monSourceName",  "string", "EP01",
 		    "collReconnSec",  "integer","-1");
 my @DPproperties = ("parameterSet",   "string","file:$pwd/cfg/client.cfg",
-#		    "hasSharedMemory","boolean","false",
+		    "hasSharedMemory","boolean","false",
 		    "collectorAddr",  "string", "$collectorhost",
 		    "collectorPort",  "integer","9091",
 		    "monSourceName",  "string", "EP02",

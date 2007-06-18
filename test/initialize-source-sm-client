@@ -166,7 +166,7 @@ my @apps = ($BUappname,$BUlocalid,0,
 	    $MNappname,52,2);
 
 my @PBproperties = ("parameterSet","string","file:$pwd/cfg/playback.cfg",
-#		    "hasSharedMemory","boolean","false",
+		    "hasSharedMemory","boolean","false",
 		    "collectorAddr",  "string", "$collectorhost",
 		    "collectorPort",  "integer","9091",
 		    "monSourceName",  "string", "PB01",
@@ -181,14 +181,14 @@ my @RBproperties = ("buClassName", "string",     $BUappname,
 		    "dqmCellSize", "unsignedInt","0x300000");
 
 my @EPproperties = ("parameterSet", "string","file:$pwd/cfg/fu.cfg",
-#		    "hasSharedMemory","boolean","false",
+		    "hasSharedMemory","boolean","true",
 		    "collectorAddr",  "string", "$collectorhost",
 		    "collectorPort",  "integer","9091",
 		    "monSourceName",  "string", "EP01",
 		    "collReconnSec","integer","-1");
 
 my @DPproperties = ("parameterSet",   "string","file:$pwd/cfg/client.cfg",
-#		    "hasSharedMemory","boolean","false",
+		    "hasSharedMemory","boolean","true",
 		    "collectorAddr",  "string", "$collectorhost",
 		    "collectorPort",  "integer","9091",
 		    "monSourceName",  "string", "EP02",
@@ -657,15 +657,6 @@ sub makeCfgPlayback
 
     $result = $result . "  \n";
     $result = $result . "  // services\n";
-
-    $result = $result . "  \n";
-    $result = $result . "  service = FUShmDQMOutputService {\n";
-    $result = $result . "    untracked int32 initialMessageBufferSize=1000000\n";
-    $result = $result . "    double          lumiSectionsPerUpdate   =    1.0\n";
-    $result = $result . "    bool            useCompression          =   true\n";
-    $result = $result . "    int32           compressionLevel        =      1\n";
-    $result = $result . "    untracked int32 lumiSectionInterval     =     30\n";
-    $result = $result . "  }\n";
 
 #    $result = $result . "  \n";
 #    $result = $result . "  service = MessageLogger {\n";
