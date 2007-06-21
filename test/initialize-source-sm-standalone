@@ -170,7 +170,7 @@ my @PBproperties = ("parameterSet","string","file:$pwd/cfg/playback.cfg",
 		    "collectorAddr",  "string", "$collectorhost",
 		    "collectorPort",  "integer","9091",
 		    "monSourceName",  "string", "PB01",
-		    "collReconnSec","integer","-1");
+		    "collReconnSec",  "integer","-1");
 
 my @RBproperties = ("buClassName", "string",     $BUappname,
 		    "nbRawCells",  "unsignedInt","16",
@@ -185,14 +185,15 @@ my @EPproperties = ("parameterSet", "string","file:$pwd/cfg/fu.cfg",
 		    "collectorAddr",  "string", "$collectorhost",
 		    "collectorPort",  "integer","9091",
 		    "monSourceName",  "string", "EP01",
-		    "collReconnSec","integer","-1");
+		    "collReconnSec",  "integer","-1");
 
 my @DPproperties = ("parameterSet",   "string","file:$pwd/cfg/client.cfg",
 		    "hasSharedMemory","boolean","true",
+		    "setsRunNumber",  "boolean","false",
 		    "collectorAddr",  "string", "$collectorhost",
 		    "collectorPort",  "integer","9091",
 		    "monSourceName",  "string", "EP02",
-		    "collReconnSec","integer","-1");
+		    "collReconnSec",  "integer","-1");
 
 my @SMproperties = ("STparameterSet",   "string",     "file:$pwd/cfg/sm.cfg",
 		    "runNumber",        "unsignedInt","0",
@@ -315,11 +316,11 @@ close (CTL);
 # enable
 open (CTL,">enable") or die ("Can't open file: $!\n");
 print CTL "#!/usr/bin/perl\n\n";
-print CTL makeCtlCommand("Enable",   $SMappname,"SM",$hostname,$SMport,1);
-print CTL makeCtlCommand("Enable",   $BUappname,"BU",$hostname,$BUport,0);
-print CTL makeCtlCommand("Enable",   $RBappname,"RB",$hostname,$RBport,0);
-print CTL makeCtlCommand("Enable",   $EPappname,"EP",$hostname,$EPport,0);
-print CTL makeCtlCommand("Configure",$DPappname,"DP",$hostname,$DPport,60);
+print CTL makeCtlCommand("Configure",$DPappname,"DP",$hostname,$DPport,5);
+print CTL makeCtlCommand("Enable",   $SMappname,"SM",$hostname,$SMport,5);
+print CTL makeCtlCommand("Enable",   $BUappname,"BU",$hostname,$BUport,5);
+print CTL makeCtlCommand("Enable",   $RBappname,"RB",$hostname,$RBport,5);
+print CTL makeCtlCommand("Enable",   $EPappname,"EP",$hostname,$EPport,60);
 print CTL makeCtlCommand("Enable",   $DPappname,"DP",$hostname,$DPport,0);
 close (CTL);
 `chmod +x enable`;
