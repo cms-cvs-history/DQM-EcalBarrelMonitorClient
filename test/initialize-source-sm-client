@@ -170,7 +170,7 @@ my @PBproperties = ("parameterSet","string","file:$pwd/cfg/playback.cfg",
 		    "collectorAddr",  "string", "$collectorhost",
 		    "collectorPort",  "integer","9091",
 		    "monSourceName",  "string", "PB01",
-		    "collReconnSec","integer","-1");
+		    "collReconnSec",  "integer","-1");
 
 my @RBproperties = ("buClassName", "string",     $BUappname,
 		    "nbRawCells",  "unsignedInt","16",
@@ -185,14 +185,14 @@ my @EPproperties = ("parameterSet", "string","file:$pwd/cfg/fu.cfg",
 		    "collectorAddr",  "string", "$collectorhost",
 		    "collectorPort",  "integer","9091",
 		    "monSourceName",  "string", "EP01",
-		    "collReconnSec","integer","-1");
+		    "collReconnSec",  "integer","-1");
 
 my @DPproperties = ("parameterSet",   "string","file:$pwd/cfg/client.cfg",
 		    "hasSharedMemory","boolean","true",
 		    "collectorAddr",  "string", "$collectorhost",
 		    "collectorPort",  "integer","9091",
 		    "monSourceName",  "string", "EP02",
-		    "collReconnSec","integer","-1");
+		    "collReconnSec",  "integer","-1");
 
 my @SMproperties = ("STparameterSet",   "string",     "file:$pwd/cfg/sm.cfg",
 		    "runNumber",        "unsignedInt","0",
