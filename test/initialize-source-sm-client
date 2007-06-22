@@ -484,6 +484,7 @@ sub makeCfgFu
     $result = $result . "  \n";
     $result = $result . "include \"DQM/EcalBarrelMonitorModule/data/EcalBarrelMonitorModule.cfi\"\n";
 
+    $result = $result . "  replace ecalBarrelMonitorModule.enableMonitorDaemon = false\n";
 #    $result = $result . "  replace ecalBarrelMonitorModule.verbose = true\n";
 
     $result = $result . "  \n";
