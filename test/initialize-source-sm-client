@@ -543,13 +543,13 @@ sub makeCfgFu
     $result = $result . "                                      -0.500, -0.500, -0.400,  0.000 }\n";
     $result = $result . "  }\n";
 
-#    $result = $result . "  \n";
-#    $result = $result . "  service = MessageLogger {\n";
-#    $result = $result . "    untracked vstring destinations = { \"cout\" }\n";
-#    $result = $result . "    untracked PSet cout = {\n";
-#    $result = $result . "      untracked string threshold = \"FATAL\"\n";
-#    $result = $result . "    }\n";
-#    $result = $result . "  }\n";
+    $result = $result . "  \n";
+    $result = $result . "  service = MessageLogger {\n";
+    $result = $result . "    untracked vstring destinations = { \"cout\" }\n";
+    $result = $result . "    untracked PSet cout = {\n";
+    $result = $result . "      untracked string threshold = \"FATAL\"\n";
+    $result = $result . "    }\n";
+    $result = $result . "  }\n";
 
     $result = $result . "  \n";
     $result = $result . "  service = DaqMonitorROOTBackEnd { }\n";
@@ -659,13 +659,13 @@ sub makeCfgPlayback
     $result = $result . "  \n";
     $result = $result . "  // services\n";
 
-#    $result = $result . "  \n";
-#    $result = $result . "  service = MessageLogger {\n";
-#    $result = $result . "    untracked vstring destinations = { \"cout\" }\n";
-#    $result = $result . "    untracked PSet cout = {\n";
-#    $result = $result . "      untracked string threshold = \"FATAL\"\n";
-#    $result = $result . "    }\n";
-#    $result = $result . "  }\n";
+    $result = $result . "  \n";
+    $result = $result . "  service = MessageLogger {\n";
+    $result = $result . "    untracked vstring destinations = { \"cout\" }\n";
+    $result = $result . "    untracked PSet cout = {\n";
+    $result = $result . "      untracked string threshold = \"FATAL\"\n";
+    $result = $result . "    }\n";
+    $result = $result . "  }\n";
 
     $result = $result . "  \n";
     $result = $result . "  // modules\n";

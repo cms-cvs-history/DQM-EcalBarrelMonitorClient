@@ -317,9 +317,9 @@ close (CTL);
 # enable
 open (CTL,">enable") or die ("Can't open file: $!\n");
 print CTL "#!/usr/bin/perl\n\n";
-print CTL makeCtlCommand("Enable",   $SMappname,"SM",$hostname,$SMport,5);
-print CTL makeCtlCommand("Enable",   $BUappname,"BU",$hostname,$BUport,5);
-print CTL makeCtlCommand("Enable",   $RBappname,"RB",$hostname,$RBport,5);
+print CTL makeCtlCommand("Enable",   $SMappname,"SM",$hostname,$SMport,1);
+print CTL makeCtlCommand("Enable",   $BUappname,"BU",$hostname,$BUport,0);
+print CTL makeCtlCommand("Enable",   $RBappname,"RB",$hostname,$RBport,0);
 print CTL makeCtlCommand("Enable",   $EPappname,"EP",$hostname,$EPport,60);
 print CTL makeCtlCommand("Enable",   $DPappname,"DP",$hostname,$DPport,0);
 close (CTL);
@@ -476,27 +476,30 @@ sub makeCfgFu
     $result = $result . "  }\n";
 
     $result = $result . "  \n";
+    $result = $result . "  module preScaler = Prescaler { int32 prescaleFactor = 1 }\n";
+
+    $result = $result . "  \n";
     $result = $result . "  module print = AsciiOutputModule { }\n";
 
     $result = $result . "  \n";
     $result = $result . "  // paths\n";
 
     $result = $result . "  \n";
-    $result = $result . "  path p = { print }\n";
+    $result = $result . "  path p = { preScaler }\n";
 
     $result = $result . "  \n";
-    $result = $result . "  endpath q = { out }\n";
+    $result = $result . "  endpath q = { print, out }\n";
 
     $result = $result . "  \n";
     $result = $result . "  // services\n";
 
-#    $result = $result . "  \n";
-#    $result = $result . "  service = MessageLogger {\n";
-#    $result = $result . "    untracked vstring destinations = { \"cout\" }\n";
-#    $result = $result . "    untracked PSet cout = {\n";
-#    $result = $result . "      untracked string threshold = \"FATAL\"\n";
-#    $result = $result . "    }\n";
-#    $result = $result . "  }\n";
+    $result = $result . "  \n";
+    $result = $result . "  service = MessageLogger {\n";
+    $result = $result . "    untracked vstring destinations = { \"cout\" }\n";
+    $result = $result . "    untracked PSet cout = {\n";
+    $result = $result . "      untracked string threshold = \"FATAL\"\n";
+    $result = $result . "    }\n";
+    $result = $result . "  }\n";
 
     $result = $result . "}\n";
     
@@ -594,13 +597,13 @@ sub makeCfgPlayback
     $result = $result . "  \n";
     $result = $result . "  // services\n";
 
-#    $result = $result . "  \n";
-#    $result = $result . "  service = MessageLogger {\n";
-#    $result = $result . "    untracked vstring destinations = { \"cout\" }\n";
-#    $result = $result . "    untracked PSet cout = {\n";
-#    $result = $result . "      untracked string threshold = \"FATAL\"\n";
-#    $result = $result . "    }\n";
-#    $result = $result . "  }\n";
+    $result = $result . "  \n";
+    $result = $result . "  service = MessageLogger {\n";
+    $result = $result . "    untracked vstring destinations = { \"cout\" }\n";
+    $result = $result . "    untracked PSet cout = {\n";
+    $result = $result . "      untracked string threshold = \"FATAL\"\n";
+    $result = $result . "    }\n";
+    $result = $result . "  }\n";
 
     $result = $result . "  \n";
     $result = $result . "  // modules\n";
@@ -745,13 +748,13 @@ sub makeCfgClient
     $result = $result . "  \n"; 
     $result = $result . "  service = DaqMonitorROOTBackEnd{ }\n";
     
-#    $result = $result . "  \n";
-#    $result = $result . "  service = MessageLogger {\n";
-#    $result = $result . "    untracked vstring destinations = { \"cout\" }\n";
-#    $result = $result . "    untracked PSet cout = {\n";
-#    $result = $result . "      untracked string threshold = \"FATAL\"\n";
-#    $result = $result . "    }\n"; 
-#    $result = $result . "  }\n";
+    $result = $result . "  \n";
+    $result = $result . "  service = MessageLogger {\n";
+    $result = $result . "    untracked vstring destinations = { \"cout\" }\n";
+    $result = $result . "    untracked PSet cout = {\n";
+    $result = $result . "      untracked string threshold = \"FATAL\"\n";
+    $result = $result . "    }\n"; 
+    $result = $result . "  }\n";
 
     $result = $result . "}\n";
 

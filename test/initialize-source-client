@@ -410,13 +410,13 @@ sub makeCfgEp
     $result = $result . "  replace MonitorDaemon.SendPort = 9090\n";
     $result = $result . "  replace MonitorDaemon.NameAsSource = \"FU0\"\n";
 
-#    $result = $result . "  \n";
-#    $result = $result . "  service = MessageLogger {\n";
-#    $result = $result . "    untracked vstring destinations = { \"cout\" }\n";
-#    $result = $result . "    untracked PSet cout = {\n";
-#    $result = $result . "      untracked string threshold = \"FATAL\"\n"; 
-#    $result = $result . "    }\n";
-#    $result = $result . "  }\n";
+    $result = $result . "  \n";
+    $result = $result . "  service = MessageLogger {\n";
+    $result = $result . "    untracked vstring destinations = { \"cout\" }\n";
+    $result = $result . "    untracked PSet cout = {\n";
+    $result = $result . "      untracked string threshold = \"FATAL\"\n"; 
+    $result = $result . "    }\n";
+    $result = $result . "  }\n";
 
     $result = $result . "}\n";
     
