@@ -315,12 +315,12 @@ close (CTL);
 # enable
 open (CTL,">enable") or die ("Can't open file: $!\n");
 print CTL "#!/usr/bin/perl\n\n";
-print CTL makeCtlCommand("Enable",$SMappname,"SM",$hostname,$SMport,1);
-print CTL makeCtlCommand("Enable",$BUappname,"BU",$hostname,$BUport,0);
-print CTL makeCtlCommand("Enable",$RBappname,"RB",$hostname,$RBport,0);
-print CTL makeCtlCommand("Enable",$EPappname,"EP",$hostname,$EPport,0);
+print CTL makeCtlCommand("Enable",   $SMappname,"SM",$hostname,$SMport,1);
+print CTL makeCtlCommand("Enable",   $BUappname,"BU",$hostname,$BUport,0);
+print CTL makeCtlCommand("Enable",   $RBappname,"RB",$hostname,$RBport,0);
+print CTL makeCtlCommand("Enable",   $EPappname,"EP",$hostname,$EPport,0);
 print CTL makeCtlCommand("Configure",$DPappname,"DP",$hostname,$DPport,10);
-print CTL makeCtlCommand("Enable",$DPappname,"DP",$hostname,$DPport,0);
+print CTL makeCtlCommand("Enable",   $DPappname,"DP",$hostname,$DPport,0);
 close (CTL);
 `chmod +x enable`;
 
