@@ -310,13 +310,13 @@ print CTL makeCtlCommand("Configure",$PBappname,"PB",$hostname,$PBport,5);
 print CTL makeCtlCommand("Enable",   $PBappname,"PB",$hostname,$PBport,5);
 print CTL makeCtlCommand("Configure",$BUappname,"BU",$hostname,$BUport,0);
 print CTL makeCtlCommand("Configure",$EPappname,"EP",$hostname,$EPport,0);
+print CTL makeCtlCommand("Configure",$DPappname,"DP",$hostname,$DPport,5);
 close (CTL);
 `chmod +x configure`;
 
 # enable
 open (CTL,">enable") or die ("Can't open file: $!\n");
 print CTL "#!/usr/bin/perl\n\n";
-print CTL makeCtlCommand("Configure",$DPappname,"DP",$hostname,$DPport,5);
 print CTL makeCtlCommand("Enable",   $SMappname,"SM",$hostname,$SMport,5);
 print CTL makeCtlCommand("Enable",   $BUappname,"BU",$hostname,$BUport,5);
 print CTL makeCtlCommand("Enable",   $RBappname,"RB",$hostname,$RBport,5);
