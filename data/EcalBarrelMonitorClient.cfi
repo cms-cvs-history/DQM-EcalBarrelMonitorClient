@@ -16,8 +16,12 @@ module ecalBarrelMonitorClient = EcalBarrelMonitorClient{
   untracked int32 dbRefreshTime = 15
   untracked bool enableSubRunHtml = false
   untracked int32 htmlRefreshTime = 5
-  untracked bool enableTCC = false
-  untracked bool enableCluster = false
+  untracked vstring enabledClients = { "Integrity",
+                                       "PedestalOnline",
+                                       "Pedestal", "TestPulse",
+                                       "Laser", "Timing",
+                                       "Cosmic",
+                                       "BeamCalo", "BeamHodo" }
   untracked bool enableExit = false
   untracked bool enableMonitorDaemon = true
   untracked bool enableStateMachine = false
