@@ -323,7 +323,11 @@ sub makeCfgEp
 
     $result = $result . "  \n";
     $result = $result . "include \"EventFilter/EcalTBRawToDigi/data/EcalUnpackerData.cfi\"\n";
-#    $result = $result . "include \"EventFilter/EcalRawToDigiDev/data/EcalUnpackerData.cfi\"\n";
+    $result = $result . "  \n";
+    $result = $result . "#include \"EventFilter/EcalRawToDigiDev/data/EcalUnpackerData.cfi\"\n";
+    $result = $result . "#  replace ecalEBunpacker.FEDs = {13}\n";
+    $result = $result . "#  replace ecalEBunpacker.orderedFedList = {13}\n";
+    $result = $result . "#  replace ecalEBunpacker.orderedDCCIdList = {28}\n";
 
     $result = $result . "  \n";
     $result = $result . "  module ecalUncalibHit = ecalFixedAlphaBetaFitUncalibRecHit from \"RecoLocalCalo/EcalRecProducers/data/ecalFixedAlphaBetaFitUncalibRecHit.cfi\"\n";
