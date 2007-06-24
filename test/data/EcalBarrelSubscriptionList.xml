@@ -1,4 +1,4 @@
 <MESUBSCRIPTION>
-        <ME get="yes">*/EventInfo/iRun</ME>
-        <ME get="yes">*/EventInfo/iEvent</ME>
+  <ME get="yes">*/EventInfo/iRun</ME>
+  <ME get="yes">*/EventInfo/iEvent</ME>
 </MESUBSCRIPTION>
