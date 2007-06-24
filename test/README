@@ -3,6 +3,8 @@ initialize-source-client: Playback + EB-Source + (external Collector) + EB-Clien
 
 initialize-source-sm-standalone: Playback + StorageManager + EB-Source&Client
 
+initialize-source-sm-standalone-daemon: Playback + StorageManager + EB-Source&Client + (external Collector)
+
 initialize-source-sm-client: Playback + EB-Source + StorageManager + EB-Client
 
 --- terminal1:
