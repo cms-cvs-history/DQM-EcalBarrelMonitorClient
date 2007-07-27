@@ -2,7 +2,6 @@
   <use name=DQMServices/Core>
   <use name=DQMServices/UI>
   <use name=DataFormats/EcalRawData>
-  <use name=DQM/EcalBarrelMonitorClient>
   <use name=rootcore>
   <use name=rootthread>
 </bin>
@@ -11,7 +10,6 @@
   <use name=DQMServices/Core>
   <use name=DQMServices/UI>
   <use name=DataFormats/EcalRawData>
-  <use name=DQM/EcalBarrelMonitorClient>
   <use name=rootcore>
   <use name=rootthread>
 </bin>
@@ -20,7 +18,6 @@
   <use name=DQMServices/Core>
   <use name=DQMServices/UI>
   <use name=DataFormats/EcalRawData>
-  <use name=DQM/EcalBarrelMonitorClient>
   <use name=rootcore>
   <use name=rootthread>
 </bin>
@@ -29,7 +26,6 @@
   <use name=DQMServices/Core>
   <use name=DQMServices/UI>
   <use name=DataFormats/EcalRawData>
-  <use name=DQM/EcalBarrelMonitorClient>
   <use name=rootcore>
   <use name=rootthread>
 </bin>
@@ -38,7 +34,6 @@
   <use name=DQMServices/Core>
   <use name=DQMServices/UI>
   <use name=DataFormats/EcalRawData>
-  <use name=DQM/EcalBarrelMonitorClient>
   <use name=rootcore>
   <use name=rootthread>
 </bin>
@@ -47,7 +42,6 @@
   <use name=DQMServices/Core>
   <use name=DQMServices/UI>
   <use name=DataFormats/EcalRawData>
-  <use name=DQM/EcalBarrelMonitorClient>
   <use name=rootcore>
   <use name=rootthread>
 </bin>

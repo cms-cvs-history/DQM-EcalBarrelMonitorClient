@@ -1,8 +1,8 @@
 /*
- * \file EcalBarrelMonitorPedestalClient.cpp
+ * \file testEcalBarrelMonitorPedestalClient.cpp
  *
- *  $Date: 2007/06/14 07:13:12 $
- *  $Revision: 1.26 $
+ *  $Date: 2007/06/14 07:16:15 $
+ *  $Revision: 1.27 $
  *  \author G. Della Ricca
  *
  */

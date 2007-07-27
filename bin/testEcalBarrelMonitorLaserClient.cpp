@@ -1,8 +1,8 @@
 /*
- * \file EcalBarrelMonitorLaserClient.cpp
+ * \file testEcalBarrelMonitorLaserClient.cpp
  *
- *  $Date: 2007/06/14 07:13:12 $
- *  $Revision: 1.29 $
+ *  $Date: 2007/06/14 07:16:15 $
+ *  $Revision: 1.30 $
  *  \author G. Della Ricca
  *
  */
