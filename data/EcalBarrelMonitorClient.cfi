@@ -1,5 +1,6 @@
 module ecalBarrelMonitorClient = EcalBarrelMonitorClient{
   untracked string outputFile = ""
+  untracked string inputFile = ""
   untracked string dbName = ""
   untracked string dbHostName = ""
   untracked int32  dbHostPort = 1521
