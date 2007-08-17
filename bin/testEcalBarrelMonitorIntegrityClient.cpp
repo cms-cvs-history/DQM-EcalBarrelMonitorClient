@@ -1,8 +1,8 @@
 /*
  * \file testEcalBarrelMonitorIntegrityClient.cpp
  *
- *  $Date: 2007/06/14 07:16:15 $
- *  $Revision: 1.31 $
+ *  $Date: 2007/07/27 15:05:17 $
+ *  $Revision: 1.32 $
  *  \author G. Della Ricca
  *
  */
@@ -73,7 +73,7 @@ void *pth1(void *) {
     // draw monitoring objects every monitoring cycle
     if ( updates != last_plotting ) {
 
-      me = mui->get("Collector/FU0/EcalBarrel/EcalInfo/STATUS");
+      me = mui->getBEInterface()->get("Collector/FU0/EcalBarrel/EcalInfo/STATUS");
       if ( me ) {
         s = me->valueString();
         status = "unknown";
@@ -83,21 +83,21 @@ void *pth1(void *) {
         cout << "status = " << status << endl;
       }
 
-      me = mui->get("Collector/FU0/EcalBarrel/EcalInfo/RUN");
+      me = mui->getBEInterface()->get("Collector/FU0/EcalBarrel/EcalInfo/RUN");
       if ( me ) {
         s = me->valueString();
         run = s.substr(2,s.length()-2);
         cout << "run = " << run << endl;
       }
 
-      me = mui->get("Collector/FU0/EcalBarrel/EcalInfo/EVT");
+      me = mui->getBEInterface()->get("Collector/FU0/EcalBarrel/EcalInfo/EVT");
       if ( me ) {
         s = me->valueString();
         evt = s.substr(2,s.length()-2);
         cout << "event = " << evt << endl;
       }
 
-      me = mui->get("Collector/FU0/EcalBarrel/EcalInfo/RUNTYPE");
+      me = mui->getBEInterface()->get("Collector/FU0/EcalBarrel/EcalInfo/RUNTYPE");
       if ( me ) {
         s = me->valueString();
         if ( atoi(s.substr(2,s.size()-2).c_str()) == EcalDCCHeaderBlock::COSMIC ) type = "COSMIC";
@@ -120,8 +120,8 @@ void *pth1(void *) {
       TH1F* h1;
       TH2F* h2;
 
-      //      me = mui->get("Collector/FU0/EcalBarrel/EBIntegrityTask/EBIT DCC size error");
-      me = mui->get("EcalBarrel/Sums/EBIntegrityTask/EBIT DCC size error");
+      //      me = mui->getBEInterface()->get("Collector/FU0/EcalBarrel/EBIntegrityTask/EBIT DCC size error");
+      me = mui->getBEInterface()->get("EcalBarrel/Sums/EBIntegrityTask/EBIT DCC size error");
       h1 = UtilsClient::getHisto<TH1F*>(me);
       if ( h1 ) {
         c1->cd();
@@ -130,8 +130,8 @@ void *pth1(void *) {
         c1->Update();
       }
     
-      //      me = mui->get("Collector/FU0/EcalBarrel/EBIntegrityTask/Gain/EBIT gain EB+01");
-      me = mui->get("EcalBarrel/Sums/EBIntegrityTask/Gain/EBIT gain EB+01");
+      //      me = mui->getBEInterface()->get("Collector/FU0/EcalBarrel/EBIntegrityTask/Gain/EBIT gain EB+01");
+      me = mui->getBEInterface()->get("EcalBarrel/Sums/EBIntegrityTask/Gain/EBIT gain EB+01");
       h2 = UtilsClient::getHisto<TH2F*>(me);
       if ( h2 ) {
         c2->cd(1);
@@ -140,8 +140,8 @@ void *pth1(void *) {
         c2->Update();
       }
 
-      //      me = mui->get("Collector/FU0/EcalBarrel/EBIntegrityTask/ChId/EBIT ChId EB+01");
-      me = mui->get("EcalBarrel/Sums/EBIntegrityTask/ChId/EBIT ChId EB+01");
+      //      me = mui->getBEInterface()->get("Collector/FU0/EcalBarrel/EBIntegrityTask/ChId/EBIT ChId EB+01");
+      me = mui->getBEInterface()->get("EcalBarrel/Sums/EBIntegrityTask/ChId/EBIT ChId EB+01");
       h2 = UtilsClient::getHisto<TH2F*>(me);
       if ( h2 ) {
         c2->cd(2);
@@ -150,8 +150,8 @@ void *pth1(void *) {
         c2->Update();
       }
 
-      //      me = mui->get("Collector/FU0/EcalBarrel/EBIntegrityTask/TTId/EBIT TTId EB+01");
-      me = mui->get("EcalBarrel/Sums/EBIntegrityTask/TTId/EBIT TTId EB+01");
+      //      me = mui->getBEInterface()->get("Collector/FU0/EcalBarrel/EBIntegrityTask/TTId/EBIT TTId EB+01");
+      me = mui->getBEInterface()->get("EcalBarrel/Sums/EBIntegrityTask/TTId/EBIT TTId EB+01");
       h2 = UtilsClient::getHisto<TH2F*>(me);
       if ( h2 ) {
         c2->cd(3);
@@ -160,8 +160,8 @@ void *pth1(void *) {
         c2->Update();
       }
 
-      //      me = mui->get("Collector/FU0/EcalBarrel/EBIntegrityTask/TTBlockSize/EBIT TTBlockSize EB+01");
-      me = mui->get("EcalBarrel/Sums/EBIntegrityTask/TTBlockSize/EBIT TTBlockSize EB+01");
+      //      me = mui->getBEInterface()->get("Collector/FU0/EcalBarrel/EBIntegrityTask/TTBlockSize/EBIT TTBlockSize EB+01");
+      me = mui->getBEInterface()->get("EcalBarrel/Sums/EBIntegrityTask/TTBlockSize/EBIT TTBlockSize EB+01");
       h2 = UtilsClient::getHisto<TH2F*>(me);
       if ( h2 ) {
         c2->cd(4);
@@ -174,8 +174,8 @@ void *pth1(void *) {
       c2->Modified();
       c2->Update();
 
-      // me = mui->get("EcalBarrel/Sums/EBIntegrityTask/TTBlockSize/EBIT TTBlockSize EB+01");
-      me = mui->get("EcalBarrel/Sums/EBIntegrityTask/MemChId/EBIT MemChId EB+01");
+      // me = mui->getBEInterface()->get("EcalBarrel/Sums/EBIntegrityTask/TTBlockSize/EBIT TTBlockSize EB+01");
+      me = mui->getBEInterface()->get("EcalBarrel/Sums/EBIntegrityTask/MemChId/EBIT MemChId EB+01");
        h2 = UtilsClient::getHisto<TH2F*>(me);
        if ( h2 ) {
          c3->cd(1);
@@ -188,7 +188,7 @@ void *pth1(void *) {
       c3->Modified();
       c3->Update();
 
-      me = mui->get("EcalBarrel/Sums/EBIntegrityTask/MemGain/EBIT MemGain EB+01");
+      me = mui->getBEInterface()->get("EcalBarrel/Sums/EBIntegrityTask/MemGain/EBIT MemGain EB+01");
       h2 = UtilsClient::getHisto<TH2F*>(me);
       if ( h2 ) {
         c3->cd(2);
@@ -253,7 +253,7 @@ int main(int argc, char** argv) {
   // start user interface instance
   mui = new MonitorUIRoot(hostname, port_no, cfuname);
 
-  mui->setVerbose(1);
+  mui->getBEInterface()->setVerbose(1);
 
   // will attempt to reconnect upon connection problems (w/ a 5-sec delay)
   mui->setReconnectDelay(5);
