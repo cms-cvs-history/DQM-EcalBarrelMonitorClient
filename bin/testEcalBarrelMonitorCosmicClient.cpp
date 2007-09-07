@@ -1,8 +1,8 @@
 /*
  * \file testEcalBarrelMonitorCosmicClient.cpp
  *
- *  $Date: 2007/08/17 09:05:04 $
- *  $Revision: 1.29 $
+ *  $Date: 2007/09/06 19:54:10 $
+ *  $Revision: 1.30 $
  *  \author G. Della Ricca
  *
  */
@@ -111,8 +111,7 @@ void *pth1(void *) {
 
       TProfile2D* h;
 
-//      me = mui->getBEInterface()->get("Collector/Ecal/EcalBarrel/EBCosmicTask/Cut/EBCT energy cut EB+01");
-      me = mui->getBEInterface()->get("EcalBarrel/Sums/EBCosmicTask/Cut/EBCT energy cut EB+01");
+      me = mui->getBEInterface()->get("Collector/Ecal/EcalBarrel/EBCosmicTask/Cut/EBCT energy cut EB+01");
       h = UtilsClient::getHisto<TProfile2D*>(me);
       if ( h ) {
         c1->cd();
@@ -122,8 +121,7 @@ void *pth1(void *) {
         c1->Update();
       }
 
-//      me = mui->getBEInterface()->get("Collector/Ecal/EcalBarrel/EBCosmicTask/Sel/EBCT energy sel EB+01");
-      me = mui->getBEInterface()->get("EcalBarrel/Sums/EBCosmicTask/Sel/EBCT energy sel EB+01");
+      me = mui->getBEInterface()->get("Collector/Ecal/EcalBarrel/EBCosmicTask/Sel/EBCT energy sel EB+01");
       h = UtilsClient::getHisto<TProfile2D*>(me);
       if ( h ) {
         c2->cd();
@@ -189,14 +187,6 @@ int main(int argc, char** argv) {
   mui->subscribe("*/EcalBarrel/EcalInfo/RUNTYPE");
   mui->subscribe("*/EcalBarrel/EBCosmicTask/Cut/EBCT energy cut EB+01");
   mui->subscribe("*/EcalBarrel/EBCosmicTask/Sel/EBCT energy sel EB+01");
-
-  CollateMonitorElement* cme;
-
-  cme = mui->collateProf2D("EBCT energy cut EB+01", "EBCT energy cut EB+01", "EcalBarrel/Sums/EBCosmicTask/Cut");
-  mui->add(cme, "*/EcalBarrel/EBCosmicTask/Cut/EBCT energy cut EB+01");
-
-  cme = mui->collateProf2D("EBCT energy sel EB+01", "EBCT energy sel EB+01", "EcalBarrel/Sums/EBCosmicTask/Sel");
-  mui->add(cme, "*/EcalBarrel/EBCosmicTask/Sel/EBCT energy sel EB+01");
 
   TThread *th1 = new TThread("th1",pth1);
 

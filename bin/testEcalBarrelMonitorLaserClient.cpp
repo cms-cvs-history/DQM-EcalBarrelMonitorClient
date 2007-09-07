@@ -1,8 +1,8 @@
 /*
  * \file testEcalBarrelMonitorLaserClient.cpp
  *
- *  $Date: 2007/08/17 09:05:05 $
- *  $Revision: 1.32 $
+ *  $Date: 2007/09/06 19:54:10 $
+ *  $Revision: 1.33 $
  *  \author G. Della Ricca
  *
  */
@@ -115,8 +115,7 @@ void *pth1(void *) {
 
       TProfile2D* h;
 
-//      me = mui->getBEInterface()->get("Collector/Ecal/EcalBarrel/EBLaserTask/Laser1/EBLT amplitude EB+01 L1");
-      me = mui->getBEInterface()->get("EcalBarrel/Sums/EBLaserTask/Laser1/EBLT amplitude EB+01 L1");
+      me = mui->getBEInterface()->get("Collector/Ecal/EcalBarrel/EBLaserTask/Laser1/EBLT amplitude EB+01 L1");
       h = UtilsClient::getHisto<TProfile2D*>(me);
       if ( h ) {
         c1->cd();
@@ -125,8 +124,7 @@ void *pth1(void *) {
         c1->Update();
       }
 
-//      me = mui->getBEInterface()->get("Collector/Ecal/EcalBarrel/EBLaserTask/Laser2/EBLT amplitude EB+01 L2");
-      me = mui->getBEInterface()->get("EcalBarrel/Sums/EBLaserTask/Laser2/EBLT amplitude EB+01 L2");
+      me = mui->getBEInterface()->get("Collector/Ecal/EcalBarrel/EBLaserTask/Laser2/EBLT amplitude EB+01 L2");
       h = UtilsClient::getHisto<TProfile2D*>(me);
       if ( h ) {
         c2->cd();
@@ -135,8 +133,7 @@ void *pth1(void *) {
         c2->Update();
       }
 
-//      me = mui->getBEInterface()->get("Collector/Ecal/EcalBarrel/EBLaserTask/Laser1/EBLT shape EB+01 L1");
-      me = mui->getBEInterface()->get("EcalBarrel/Sums/EBLaserTask/Laser1/EBLT shape EB+01 L1");
+      me = mui->getBEInterface()->get("Collector/Ecal/EcalBarrel/EBLaserTask/Laser1/EBLT shape EB+01 L1");
       h = UtilsClient::getHisto<TProfile2D*>(me);
       if ( h ) {
         c3->cd();
@@ -145,8 +142,7 @@ void *pth1(void *) {
         c3->Update();
       }
 
-//      me = mui->getBEInterface()->get("Collector/Ecal/EcalBarrel/EBLaserTask/Laser2/EBLT shape EB+01 L2");
-      me = mui->getBEInterface()->get("EcalBarrel/Sums/EBLaserTask/Laser2/EBLT shape EB+01 L2");
+      me = mui->getBEInterface()->get("Collector/Ecal/EcalBarrel/EBLaserTask/Laser2/EBLT shape EB+01 L2");
       h = UtilsClient::getHisto<TProfile2D*>(me);
       if ( h ) {
         c4->cd();
@@ -219,20 +215,6 @@ int main(int argc, char** argv) {
   mui->subscribe("*/EcalBarrel/EBLaserTask/Laser1/EBLT amplitude EB+01 L1");
   mui->subscribe("*/EcalBarrel/EBLaserTask/Laser2/EBLT shape EB+01 L2");
   mui->subscribe("*/EcalBarrel/EBLaserTask/Laser2/EBLT amplitude EB+01 L2");
-
-  CollateMonitorElement* cme;
-
-  cme = mui->collateProf2D("EBLT shape EB+01 L1", "EBLT shape EB+01 L1", "EcalBarrel/Sums/EBLaserTask/Laser1");
-  mui->add(cme, "*/EcalBarrel/EBLaserTask/Laser1/EBLT shape EB+01 L1");
-
-  cme = mui->collateProf2D("EBLT amplitude EB+01 L1", "EBLT amplitude EB+01 L1", "EcalBarrel/Sums/EBLaserTask/Laser1");
-  mui->add(cme, "*/EcalBarrel/EBLaserTask/Laser1/EBLT amplitude EB+01 L1");
-
-  cme = mui->collateProf2D("EBLT shape EB+01 L2", "EBLT shape EB+01 L2", "EcalBarrel/Sums/EBLaserTask/Laser2");
-  mui->add(cme, "*/EcalBarrel/EBLaserTask/Laser2/EBLT shape EB+01 L2");
-
-  cme = mui->collateProf2D("EBLT amplitude EB+01 L2", "EBLT amplitude EB+01 L2", "EcalBarrel/Sums/EBLaserTask/Laser2");
-  mui->add(cme, "*/EcalBarrel/EBLaserTask/Laser2/EBLT amplitude EB+01 L2");
 
   TThread *th1 = new TThread("th1",pth1);
 

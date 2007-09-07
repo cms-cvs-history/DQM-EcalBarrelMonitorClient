@@ -1,8 +1,8 @@
 /*
  * \file testEcalBarrelMonitorClient.cpp
  *
- *  $Date: 2007/08/17 09:05:04 $
- *  $Revision: 1.33 $
+ *  $Date: 2007/09/06 19:54:10 $
+ *  $Revision: 1.34 $
  *  \author G. Della Ricca
  *
  */
@@ -111,8 +111,7 @@ void *pth1(void *) {
 
       TH1F* h;
 
-//      me = mui->getBEInterface()->get("Collector/Ecal/EcalBarrel/EcalInfo/EVTTYPE");
-      me = mui->getBEInterface()->get("EcalBarrel/Sums/EcalInfo/EVTTYPE");
+      me = mui->getBEInterface()->get("Collector/Ecal/EcalBarrel/EcalInfo/EVTTYPE");
       h = UtilsClient::getHisto<TH1F*>(me);
       if ( h ) {
         c1->cd();
@@ -122,8 +121,7 @@ void *pth1(void *) {
 
       TH2F* h2;
 
-//      me = mui->getBEInterface()->get("Collector/Ecal/EcalBarrel/EcalEvent/EBMM event EB+01");
-      me = mui->getBEInterface()->get("EcalBarrel/Sums/EcalEvent/EBMM event EB+01");
+      me = mui->getBEInterface()->get("Collector/Ecal/EcalBarrel/EcalEvent/EBMM event EB+01");
       h2 = UtilsClient::getHisto<TH2F*>(me);
       if ( h2 ) {
         c2->cd();
@@ -189,14 +187,6 @@ int main(int argc, char** argv) {
   mui->subscribe("*/EcalBarrel/EcalInfo/EVTTYPE");
   mui->subscribe("*/EcalBarrel/EcalInfo/RUNTYPE");
   mui->subscribe("*/EcalBarrel/EcalEvent/EBMM event EB+01");
-
-  CollateMonitorElement* cme;
-
-  cme = mui->collate1D("EVTTYPE", "EVTTYPE", "EcalBarrel/Sums/EcalInfo");
-  mui->add(cme, "*/EcalBarrel/EcalInfo/EVTTYPE");
-
-  cme = mui->collate2D("EBMM event EB+01", "EBMM event EB+01", "EcalBarrel/Sums/EcalEvent");
-  mui->add(cme, "*/EcalBarrel/EcalEvent/EBMM event EB+01");
 
   TThread *th1 = new TThread("th1", pth1);
 

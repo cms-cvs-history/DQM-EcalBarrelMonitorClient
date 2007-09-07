@@ -10,7 +10,6 @@ module ecalBarrelMonitorClient = EcalBarrelMonitorClient{
   untracked bool mergeRuns = false
   untracked string location = ""
   untracked string baseHtmlDir = ""
-  untracked bool collateSources = false
   untracked bool cloneME = true
   untracked bool enableQT = true
   untracked bool enableSubRunDb = false
