@@ -1,6 +1,4 @@
 
-initialize-source-client: Playback + EB-Source + (external Collector) + EB-Client
-
 initialize-source-sm-standalone: Playback + StorageManager + EB-Source&Client
 
 initialize-source-sm-standalone-daemon: Playback + StorageManager + EB-Source&Client + (external Collector)
@@ -19,7 +17,7 @@ eval `scramv1 run -csh`
 cd CMSSW_1_4_0/src/DQM/EcalBarrelMonitorClient/test/
 eval `scramv1 run -csh`
 
-./initialize-source-client -host=localhost.localdomain -collector=localhost.localdomain
+./initialize-source-sm-standalone -host=localhost.localdomain -collector=localhost.localdomain
 
 (after log/localhost.localdomain.40000.log & log/localhost.localdomain.40001.log are 'Ready')
 ./configure
