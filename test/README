@@ -1,9 +1,9 @@
 
-initialize-source-sm-standalone: Playback + StorageManager + EB-Source&Client
+initialize-source-sm-client:            Playback + EcalDQM-Source + StorageManager + EcalDQM-Client
 
-initialize-source-sm-client: Playback + EB-Source + StorageManager + EB-Client
+initialize-source-sm-standalone:        Playback + StorageManager + EcalDQM-Source&Client
 
-initialize-source-sm-standalone-daemon: Playback + StorageManager + EB-Source&Client + (external Collector)
+initialize-source-sm-standalone-daemon: Playback + StorageManager + EcalDQM-Source&Client + (external Collector)
 
 --- terminal1:
 
