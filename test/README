@@ -7,22 +7,22 @@ initialize-source-sm-standalone-daemon: Playback + StorageManager + EcalDQM-Sour
 
 --- terminal1:
 
-cd CMSSW_1_4_0/
+cd CMSSW_1_6_0/
 eval `scramv1 run -csh`
 
 ./bin/slc4_ia32_gcc345/DQMCollector
 
 --- terminal2:
 
-cd CMSSW_1_4_0/src/DQM/EcalBarrelMonitorClient/test/
+cd CMSSW_1_6_0/src/DQM/EcalBarrelMonitorClient/test/
 eval `scramv1 run -csh`
 
-./initialize-source-sm-client -host=localhost.localdomain -collector=localhost.localdomain
+./initialize-source-sm-client -host=localhost.localdomain -collector=localhost.localdomain -playback=/tmp/h4b.00014790.A.0.0.root
 
-(after log/localhost.localdomain.40000.log & log/localhost.localdomain.40001.log are 'Ready')
+(after logs are 'Ready')
 ./configure
 
-(after log/localhost.localdomain.40000.log & log/localhost.localdomain.40001.log are 'Ready')
+(after logs are 'Ready')
 ./enable
 
 (if needed)
@@ -34,13 +34,13 @@ eval `scramv1 run -csh`
 
 --- terminal3:
 
-cd CMSSW_1_4_0/src/DQM/EcalBarrelMonitorClient/test/
+cd CMSSW_1_6_0/src/DQM/EcalBarrelMonitorClient/test/
 
 tail -f log/localhost.localdomain.40000.log
 
 --- terminal4:
 
-cd CMSSW_1_4_0/src/DQM/EcalBarrelMonitorClient/test/
+cd CMSSW_1_6_0/src/DQM/EcalBarrelMonitorClient/test/
 
 tail -f log/localhost.localdomain.40001.log
 
