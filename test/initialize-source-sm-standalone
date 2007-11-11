@@ -18,8 +18,6 @@ print "\n============================================================";
 print "\ninitialize ...";
 print "\n============================================================\n";
 
-my $PBfile;
-
 # hostname, default
 my $hostname = $ENV{"HOST"};
 my $collectorhost = $ENV{"HOST"};
@@ -80,15 +78,13 @@ use Getopt::Long;
 Getopt::Long::config('bundling_override');
 %opts = ();
 
-GetOptions( \%opts, "host|h=s", "collector|c=s", "playback|p=s" );
+GetOptions( \%opts, "host|h=s", "collector|c=s" );
 
 $hostname = $opts{'host'} if ( $opts{'host'} ) ;
 $collectorhost = $opts{'collector'} if ( $opts{'collector'} );
-$PBfile = $opts{'playback'} if ( $opts{'playback'} );
 
 print "hostname = $hostname\n";
 print "collector = $collectorhost\n";
-print "playback file = $PBfile\n";
 
 #
 # make directories
@@ -117,7 +113,7 @@ print CFG makeCfgSm();
 close(CFG);
 
 open(CFG,">./cfg/playback.cfg") or die ("Can't open file: $!\n");
-print CFG makeCfgPlayback($PBfile);
+print CFG makeCfgPlayback();
 close(CFG);
 
 open(CFG,">./cfg/client.cfg") or die ("Can't open file: $!\n");
@@ -538,23 +534,6 @@ sub makeCfgSm
 ################################################################################
 sub makeCfgPlayback
 {
-    my ($file) = (@_);
-
-    my @input_files;
-
-    if ($file =~ m/\.root$/) {
-	push (@input_files, $file);
-    }
-    else {
-	open (FILELIST,$file);
-	while (<FILELIST>) {
-	    my $next_file = $_;
-	    chomp($next_file);
-	    if ($next_file =~ m/\.root$/) { push (@input_files, $next_file); }
-	    else { print("Error: $next_file does not appear to be a ROOT file.\n"); }
-	}
-    }
-    
     my $result = "";
 
     $result = $result . "process PLAYBACK = {\n";
@@ -564,12 +543,11 @@ sub makeCfgPlayback
 
     $result = $result . "  \n";
     $result = $result . "  #     untracked PSet maxEvents = {untracked int32 input = 300}\n";
-    $result = $result . "  source = PoolSource {\n";
-    $result = $result . "    untracked vstring fileNames = {";
-    foreach (@input_files) {
-      $result = $result . "\n      'file:" . $_ . "',";
-    }
-    $result =~ s/,$/\n    \}\n/;
+    $result = $result . "  source = NewEventStreamFileReader {\n";
+    $result = $result . "       untracked vstring fileNames = {\n";
+    $result = $result . "         'file:/tmp/GlobalAug07.00017123.0001.A.storageManager.0.0000.dat',\n";
+    $result = $result . "         'file:/tmp/GlobalAug07.00017123.0002.A.storageManager.0.0000.dat'\n";
+    $result = $result . "       }\n";
     $result = $result . "  }\n";
 
     $result = $result . "  \n";
@@ -638,13 +616,12 @@ sub makeCfgClient
     $result = $result . "  // modules\n";
 
     $result = $result . "  \n";
-    $result = $result . "include \"EventFilter/EcalTBRawToDigi/data/EcalUnpackerData.cfi\"\n";
+    $result = $result . "include \"EventFilter/EcalRawToDigiDev/data/EcalUnpackerMapping.cfi\"\n";
+    $result = $result . "include \"EventFilter/EcalRawToDigiDev/data/EcalUnpackerData.cfi\"\n";
     $result = $result . "  \n";
-    $result = $result . "#include \"EventFilter/EcalRawToDigiDev/data/EcalUnpackerMapping.cfi\"\n";
-    $result = $result . "#include \"EventFilter/EcalRawToDigiDev/data/EcalUnpackerData.cfi\"\n";
-    $result = $result . "#  replace ecalEBunpacker.FEDs = {13}\n";
-    $result = $result . "#  replace ecalEBunpacker.orderedFedList = {13}\n";
-    $result = $result . "#  replace ecalEBunpacker.orderedDCCIdList = {28}\n";
+    $result = $result . "  replace ecalEBunpacker.FEDs = {643}\n";
+    $result = $result . "  replace ecalEBunpacker.orderedFedList = {643}\n";
+    $result = $result . "  replace ecalEBunpacker.orderedDCCIdList = {41}\n";
 
     $result = $result . "  \n";
     $result = $result . "  module ecalUncalibHit = ecalFixedAlphaBetaFitUncalibRecHit from \"RecoLocalCalo/EcalRecProducers/data/ecalFixedAlphaBetaFitUncalibRecHit.cfi\"\n";
@@ -679,7 +656,7 @@ sub makeCfgClient
     $result = $result . "  replace ecalBarrelMonitorClient.prefixME = \"\"\n";
     $result = $result . "  replace ecalBarrelMonitorClient.clientName = \"EcalBarrelMonitorClient\"\n";
     $result = $result . "  replace ecalBarrelMonitorClient.enableServer = false\n";
-    $result = $result . "  replace ecalBarrelMonitorClient.superModules = { 19 }\n";
+    $result = $result . "  replace ecalBarrelMonitorClient.superModules = { 32 }\n";
     
 #    $result = $result . "  replace ecalBarrelMonitorClient.verbose = true\n";
 
