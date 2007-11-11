@@ -5,6 +5,10 @@ initialize-source-sm-standalone:        Playback + StorageManager + EcalDQM-Sour
 
 initialize-source-sm-standalone-daemon: Playback + StorageManager + EcalDQM-Source&Client + (external Collector)
 
+--- as root:
+
+echo '1073741824' > /proc/sys/kernel/shmmax
+
 --- terminal1:
 
 cd CMSSW_1_6_0/

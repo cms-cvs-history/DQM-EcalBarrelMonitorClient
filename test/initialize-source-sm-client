@@ -66,6 +66,7 @@ my $PTlibname = "libpttcp.so";
 my $SMperl = 
     $ENV{"CMSSW_RELEASE_BASE"} .
     "/src/EventFilter/StorageManager/scripts/perl";
+
 my $SMout = "/tmp/sm";
 
 my $pwd = `pwd`; chomp $pwd;
@@ -447,6 +448,7 @@ sub makeCfgFu
     $result = $result . "  \n";
     $result = $result . "include \"EventFilter/EcalTBRawToDigi/data/EcalUnpackerData.cfi\"\n";
     $result = $result . "  \n";
+    $result = $result . "#include \"EventFilter/EcalRawToDigiDev/data/EcalUnpackerMapping.cfi\"\n";
     $result = $result . "#include \"EventFilter/EcalRawToDigiDev/data/EcalUnpackerData.cfi\"\n";
     $result = $result . "#  replace ecalEBunpacker.FEDs = {13}\n";
     $result = $result . "#  replace ecalEBunpacker.orderedFedList = {13}\n";
@@ -530,6 +532,12 @@ sub makeCfgFu
     $result = $result . "  \n";
 
     $result = $result . "  \n";
+    $result = $result . "  service = PrescaleService {\n";
+    $result = $result . "    uint32 prescaleFactor = 1\n";
+    $result = $result . "    vstring InitialConfig = { \"1\", \"1\", \"1\" }\n";
+    $result = $result . "  }\n";
+
+    $result = $result . "  \n";
     $result = $result . "  service = MessageLogger {\n";
     $result = $result . "    untracked vstring destinations = { \"cout\" }\n";
     $result = $result . "    untracked PSet cout = {\n";
@@ -539,12 +547,6 @@ sub makeCfgFu
 
     $result = $result . "  \n";
     $result = $result . "  service = DaqMonitorROOTBackEnd { }\n";
-
-    $result = $result . "  \n";
-    $result = $result . "  service = PrescaleService {\n";
-    $result = $result . "    uint32 prescaleFactor = 1\n";
-    $result = $result . "    vstring InitialConfig = { \"1\", \"1\", \"1\" }\n";
-    $result = $result . "  }\n";
 
     $result = $result . "  \n";
     $result = $result . "  service = FUShmDQMOutputService {\n";
@@ -621,7 +623,7 @@ sub makeCfgPlayback
 	    my $next_file = $_;
 	    chomp($next_file);
 	    if ($next_file =~ m/\.root$/) { push (@input_files, $next_file); }
-	    else { print("ERROR: $next_file does not appear to be a ROOT file.\n"); }
+	    else { print("Error: $next_file does not appear to be a ROOT file.\n"); }
 	}
     }
     
@@ -652,17 +654,17 @@ sub makeCfgPlayback
     $result = $result . "  // services\n";
 
     $result = $result . "  \n";
+    $result = $result . "  service = PrescaleService {\n";
+    $result = $result . "    uint32 prescaleFactor = 1\n";
+    $result = $result . "    vstring InitialConfig = { \"1\", \"1\", \"1\" }\n";
+    $result = $result . "  }\n";
+
+    $result = $result . "  \n";
     $result = $result . "  service = MessageLogger {\n";
     $result = $result . "    untracked vstring destinations = { \"cout\" }\n";
     $result = $result . "    untracked PSet cout = {\n";
     $result = $result . "      untracked string threshold = \"FATAL\"\n";
     $result = $result . "    }\n";
-    $result = $result . "  }\n";
-
-    $result = $result . "  \n";
-    $result = $result . "  service = PrescaleService {\n";
-    $result = $result . "    uint32 prescaleFactor = 1\n";
-    $result = $result . "    vstring InitialConfig = { \"1\", \"1\", \"1\" }\n";
     $result = $result . "  }\n";
 
     $result = $result . "  \n";
@@ -727,6 +729,12 @@ sub makeCfgClient
 
     $result = $result . "  \n";
     $result = $result . "  // services\n";
+
+    $result = $result . "  \n";
+    $result = $result . "  service = PrescaleService {\n";
+    $result = $result . "    uint32 prescaleFactor = 1\n";
+    $result = $result . "    vstring InitialConfig = { \"1\", \"1\", \"1\" }\n";
+    $result = $result . "  }\n";
 
     $result = $result . "  \n";
     $result = $result . "  service = DaqMonitorROOTBackEnd { }\n";
@@ -929,7 +937,7 @@ sub makeCtlDestroy
     $result = $result . "print \"$cmd ...\\n\";\n\n";
     $result = $result . "`$cmd`;\n\n";
     $result = $result . "print \"remove files and dirs ...\n\";\n\n";
-    $result = $result . "`rm -rf cfg/ soap/ xml/ log/ $SMout " .
+    $result = $result . "`rm -rf cfg/ soap/ xml/ log/ $SMout /tmp/dummyScript.log " .
 	"configure enable halt stop gennums.txt summaryCatalog.txt test.root`;\n\n";
     $result = $result . "print \"FUShmCleanUp_t ...\\n\";\n\n";
     $result = $result . "`FUShmCleanUp_t`;\n\n";
