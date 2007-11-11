@@ -21,7 +21,7 @@ eval `scramv1 run -csh`
 cd CMSSW_1_6_0/src/DQM/EcalBarrelMonitorClient/test/
 eval `scramv1 run -csh`
 
-./initialize-source-sm-client -host=localhost.localdomain -collector=localhost.localdomain -playback=/tmp/h4b.00014790.A.0.0.root
+./initialize-source-sm-client -host=localhost.localdomain -collector=localhost.localdomain
 
 (after logs are 'Ready')
 ./configure
