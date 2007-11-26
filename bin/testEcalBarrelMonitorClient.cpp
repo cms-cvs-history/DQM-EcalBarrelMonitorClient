@@ -1,8 +1,8 @@
 /*
  * \file testEcalBarrelMonitorClient.cpp
  *
- *  $Date: 2007/09/07 22:30:02 $
- *  $Revision: 1.35 $
+ *  $Date: 2007/11/10 18:48:01 $
+ *  $Revision: 1.36 $
  *  \author G. Della Ricca
  *
  */
@@ -10,7 +10,7 @@
 #include "DQMServices/Core/interface/MonitorElement.h"
 #include "DQMServices/UI/interface/MonitorUIRoot.h"
 
-#include "DataFormats/EcalRawData/interface/EcalRawDataCollections.h"
+#include "DataFormats/EcalRawData/interface/EcalDCCHeaderBlock.h"
 
 #include "DQM/EcalCommon/interface/UtilsClient.h"
 
