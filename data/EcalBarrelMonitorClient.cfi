@@ -23,12 +23,13 @@ module ecalBarrelMonitorClient = EcalBarrelMonitorClient{
   untracked bool enableExit = false
   untracked bool enableMonitorDaemon = true
   untracked bool enableStateMachine = false
-  untracked string prefixME = "Collector/FU0/"
+  untracked string prefixME = ""
+#  untracked string prefixME = "Collector/FU0/"
 #  untracked string prefixME = "EvF/FU0/"
   untracked string clientName = "EcalBarrelMonitorClient"
   untracked string hostName = "localhost"
   untracked int32 hostPort = 9090
-  untracked bool enableServer = true
+  untracked bool enableServer = false
   untracked int32 serverPort = 9090
   untracked vint32 superModules = { 01, 02, 03, 04, 05, 06, 07, 08, 09, 10,
                                     11, 12, 13, 14, 15, 16 ,17, 18, 19, 20,
