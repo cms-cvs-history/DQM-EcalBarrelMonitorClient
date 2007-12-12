@@ -21,8 +21,8 @@ module ecalBarrelMonitorClient = EcalBarrelMonitorClient{
                                        "Cosmic",
                                        "BeamCalo", "BeamHodo" }
   untracked bool enableExit = false
-  untracked bool enableMonitorDaemon = true
-  untracked bool enableUpdate = true
+  untracked bool enableMonitorDaemon = false
+  untracked bool enableUpdate = false
   untracked string prefixME = ""
 #  untracked string prefixME = "Collector/FU0/"
 #  untracked string prefixME = "EvF/FU0/"
