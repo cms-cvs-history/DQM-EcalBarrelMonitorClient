@@ -1,8 +1,8 @@
 /*
  * \file testEcalBarrelMonitorClient.cpp
  *
- *  $Date: 2007/11/26 22:32:47 $
- *  $Revision: 1.37 $
+ *  $Date: 2007/11/28 09:47:38 $
+ *  $Revision: 1.38 $
  *  \author G. Della Ricca
  *
  */
@@ -44,12 +44,7 @@ void *pth1(void *) {
     stay_in_loop = mui->update();
 
     // subscribe to new monitorable matching pattern
-    mui->subscribeNew("*/EcalBarrel/EcalInfo/STATUS");
-    mui->subscribeNew("*/EcalBarrel/EcalInfo/RUN");
-    mui->subscribeNew("*/EcalBarrel/EcalInfo/EVT");
-    mui->subscribeNew("*/EcalBarrel/EcalInfo/EVTTYPE");
-    mui->subscribeNew("*/EcalBarrel/EcalInfo/RUNTYPE");
-    mui->subscribeNew("*/EcalBarrel/EcalEvent/EBMM event EB+01*");
+    mui->subscribeNew("*/EcalBarrel/*");
 
     // # of full monitoring cycles processed
     int updates = mui->getNumUpdates();
@@ -181,12 +176,7 @@ int main(int argc, char** argv) {
   mui->setReconnectDelay(5);
 
   // subscribe to all monitorable matching pattern
-  mui->subscribe("*/EcalBarrel/EcalInfo/STATUS");
-  mui->subscribe("*/EcalBarrel/EcalInfo/RUN");
-  mui->subscribe("*/EcalBarrel/EcalInfo/EVT");
-  mui->subscribe("*/EcalBarrel/EcalInfo/EVTTYPE");
-  mui->subscribe("*/EcalBarrel/EcalInfo/RUNTYPE");
-  mui->subscribe("*/EcalBarrel/EcalEvent/EBMM event EB+01");
+  mui->subscribe("*/EcalBarrel/*");
 
   TThread *th1 = new TThread("th1", pth1);
 
@@ -194,7 +184,7 @@ int main(int argc, char** argv) {
 
   try { app.Run(kTRUE); } catch (...) { throw; }
 
-  mui->unsubscribe("*");
+  mui->unsubscribe("*/EcalBarrel/*");
 
   exit_now = true;
 
