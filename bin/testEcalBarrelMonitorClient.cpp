@@ -1,8 +1,8 @@
 /*
  * \file testEcalBarrelMonitorClient.cpp
  *
- *  $Date: 2007/11/28 09:47:38 $
- *  $Revision: 1.38 $
+ *  $Date: 2007/12/15 11:34:15 $
+ *  $Revision: 1.39 $
  *  \author G. Della Ricca
  *
  */
@@ -41,7 +41,7 @@ void *pth1(void *) {
   while ( stay_in_loop && ! exit_now ) {
 
     // this is the "main" loop where we receive monitoring
-    stay_in_loop = mui->update();
+    stay_in_loop = mui->doMonitoring();
 
     // subscribe to new monitorable matching pattern
     mui->subscribeNew("*/EcalBarrel/*");
