@@ -616,13 +616,12 @@ sub makeCfgClient
     $result = $result . "  // modules\n";
 
     $result = $result . "  \n";
-    $result = $result . "include \"EventFilter/EcalTBRawToDigi/data/EcalUnpackerData.cfi\"\n";
+    $result = $result . "include \"EventFilter/EcalRawToDigiDev/data/EcalUnpackerMapping.cfi\"\n";
+    $result = $result . "include \"EventFilter/EcalRawToDigiDev/data/EcalUnpackerData.cfi\"\n";
     $result = $result . "  \n";
-    $result = $result . "#include \"EventFilter/EcalRawToDigiDev/data/EcalUnpackerMapping.cfi\"\n";
-    $result = $result . "#include \"EventFilter/EcalRawToDigiDev/data/EcalUnpackerData.cfi\"\n";
-    $result = $result . "#  replace ecalEBunpacker.FEDs = {13}\n";
-    $result = $result . "#  replace ecalEBunpacker.orderedFedList = {13}\n";
-    $result = $result . "#  replace ecalEBunpacker.orderedDCCIdList = {28}\n";
+    $result = $result . "  replace ecalEBunpacker.FEDs = {643}\n";
+    $result = $result . "  replace ecalEBunpacker.orderedFedList = {643}\n";
+    $result = $result . "  replace ecalEBunpacker.orderedDCCIdList = {41}\n";
 
     $result = $result . "  \n";
     $result = $result . "  module ecalUncalibHit = ecalFixedAlphaBetaFitUncalibRecHit from \"RecoLocalCalo/EcalRecProducers/data/ecalFixedAlphaBetaFitUncalibRecHit.cfi\"\n";
@@ -655,7 +654,7 @@ sub makeCfgClient
     $result = $result . "  replace ecalBarrelMonitorClient.location = \"H4\"\n";
     $result = $result . "  replace ecalBarrelMonitorClient.baseHtmlDir = \".\"\n";
     $result = $result . "  replace ecalBarrelMonitorClient.clientName = \"EcalBarrelMonitorClient\"\n";
-    $result = $result . "  replace ecalBarrelMonitorClient.superModules = { 19 }\n";
+    $result = $result . "  replace ecalBarrelMonitorClient.superModules = { 32 }\n";
     
 #    $result = $result . "  replace ecalBarrelMonitorClient.verbose = true\n";
 
@@ -689,6 +688,15 @@ sub makeCfgClient
     $result = $result . "  \n";
     $result = $result . "  // services\n";
 
+    $result = $result . "  \n";
+    $result = $result . "  service = PrescaleService {\n";
+    $result = $result . "    uint32 prescaleFactor = 1\n";
+    $result = $result . "    vstring InitialConfig = { \"1\", \"1\", \"1\" }\n";
+    $result = $result . "  }\n";
+
+    $result = $result . "  \n"; 
+    $result = $result . "  service = DaqMonitorROOTBackEnd{ }\n";
+
     $result = $result . "  \n"; 
     $result = $result . "  es_source = EcalTrivialConditionRetriever {\n";
     $result = $result . "    untracked double adcToGeVEBConstant = 0.00875\n";
@@ -708,12 +716,6 @@ sub makeCfgClient
     $result = $result . "  \n";
 
     $result = $result . "  \n";
-    $result = $result . "  service = PrescaleService {\n";
-    $result = $result . "    uint32 prescaleFactor = 1\n";
-    $result = $result . "    vstring InitialConfig = { \"1\", \"1\", \"1\" }\n";
-    $result = $result . "  }\n";
-
-    $result = $result . "  \n";
     $result = $result . "  service = FUShmDQMOutputService {\n";
     $result = $result . "    untracked int32 initialMessageBufferSize=1000000\n";
     $result = $result . "    double          lumiSectionsPerUpdate   =    1.0\n";
@@ -724,9 +726,6 @@ sub makeCfgClient
 
     $result = $result . "  \n"; 
     $result = $result . "  service = ModuleWebRegistry { }\n";
-
-    $result = $result . "  \n"; 
-    $result = $result . "  service = DaqMonitorROOTBackEnd{ }\n";
 
 #    $result = $result . "  \n";
 #    $result = $result . "  service = DQMShipMonitoring {\n";

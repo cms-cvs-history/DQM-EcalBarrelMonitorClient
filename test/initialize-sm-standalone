@@ -688,14 +688,14 @@ sub makeCfgClient
     $result = $result . "  \n";
     $result = $result . "  // services\n";
 
-    $result = $result . "  \n"; 
-    $result = $result . "  service = DaqMonitorROOTBackEnd{ }\n";
-
     $result = $result . "  \n";
     $result = $result . "  service = PrescaleService {\n";
     $result = $result . "    uint32 prescaleFactor = 1\n";
     $result = $result . "    vstring InitialConfig = { \"1\", \"1\", \"1\" }\n";
     $result = $result . "  }\n";
+
+    $result = $result . "  \n"; 
+    $result = $result . "  service = DaqMonitorROOTBackEnd{ }\n";
 
     $result = $result . "  \n"; 
     $result = $result . "  es_source = EcalTrivialConditionRetriever {\n";
