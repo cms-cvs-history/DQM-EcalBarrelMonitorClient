@@ -1,8 +1,8 @@
 /*
  * \file testEcalBarrelMonitorClient.cpp
  *
- *  $Date: 2007/12/15 21:03:46 $
- *  $Revision: 1.40 $
+ *  $Date: 2007/12/16 09:09:35 $
+ *  $Revision: 1.41 $
  *  \author G. Della Ricca
  *
  */
@@ -182,7 +182,7 @@ int main(int argc, char** argv) {
 
   th1->Run();
 
-  try { app.Run(kTRUE); } catch (...) { throw; }
+  app.Run(kTRUE);
 
   mui->unsubscribe("*/EcalBarrel/*");
 
