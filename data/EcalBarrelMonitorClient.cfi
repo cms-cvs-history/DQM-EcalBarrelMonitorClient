@@ -22,6 +22,7 @@ module ecalBarrelMonitorClient = EcalBarrelMonitorClient{
                                        "BeamCalo", "BeamHodo" }
   untracked bool enableExit = false
   untracked bool enableMonitorDaemon = false
+  untracked bool enableCleanup = false
   untracked bool enableUpdate = false
   untracked string prefixME = ""
 #  untracked string prefixME = "Collector/FU0/"
