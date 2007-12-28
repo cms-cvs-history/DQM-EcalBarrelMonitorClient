@@ -640,14 +640,10 @@ sub makeCfgClient
 
     $result = $result . "  \n";
     $result = $result . "  replace ecalBarrelMonitorModule.enableMonitorDaemon = true\n";
-    $result = $result . "  replace ecalBarrelMonitorModule.enableCleanup = false\n";
 #    $result = $result . "  replace ecalBarrelMonitorModule.verbose = true\n";
 
     $result = $result . "  \n";
     $result = $result . "include \"DQM/EcalBarrelMonitorTasks/data/EcalBarrelMonitorTasks.cfi\"\n";
-
-    $result = $result . "  \n";
-    $result = $result . "include \"DQM/EcalBarrelMonitorTasks/data/disableCleanup.cff\"\n";
 
     $result = $result . "include \"DQM/EcalBarrelMonitorClient/data/EcalBarrelMonitorClient.cfi\"\n";
     $result = $result . "  \n";
