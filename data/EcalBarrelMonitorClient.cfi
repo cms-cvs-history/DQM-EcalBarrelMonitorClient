@@ -20,7 +20,6 @@ module ecalBarrelMonitorClient = EcalBarrelMonitorClient{
                                        "Laser", "Timing",
                                        "Cosmic",
                                        "BeamCalo", "BeamHodo" }
-  untracked bool enableExit = false
   untracked bool enableMonitorDaemon = false
   untracked bool enableCleanup = false
   untracked bool enableUpdate = false
