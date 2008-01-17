@@ -1,8 +1,8 @@
 /*
  * \file testEcalBarrelMonitorClient.cpp
  *
- *  $Date: 2007/12/16 09:09:35 $
- *  $Revision: 1.41 $
+ *  $Date: 2007/12/18 09:57:54 $
+ *  $Revision: 1.42 $
  *  \author G. Della Ricca
  *
  */
@@ -17,6 +17,8 @@
 #include "TROOT.h"
 #include "TApplication.h"
 #include "TThread.h"
+
+#include "TCanvas.h"
 
 #include <iostream>
 #include <math.h>
