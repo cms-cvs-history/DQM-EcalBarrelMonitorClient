@@ -16,6 +16,7 @@ module ecalBarrelMonitorClient = EcalBarrelMonitorClient{
   untracked int32 htmlRefreshTime = 5
   untracked vstring enabledClients = { "Integrity",
                                        "StatusFlags",
+                                       "Occupancy",
                                        "PedestalOnline",
                                        "Pedestal", "TestPulse",
                                        "Laser", "Timing",
