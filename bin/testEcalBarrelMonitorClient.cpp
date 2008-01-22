@@ -1,8 +1,8 @@
 /*
  * \file testEcalBarrelMonitorClient.cpp
  *
- *  $Date: 2007/12/18 09:57:54 $
- *  $Revision: 1.42 $
+ *  $Date: 2008/01/17 09:34:40 $
+ *  $Revision: 1.43 $
  *  \author G. Della Ricca
  *
  */
@@ -14,7 +14,6 @@
 
 #include "DQM/EcalCommon/interface/UtilsClient.h"
 
-#include "TROOT.h"
 #include "TApplication.h"
 #include "TThread.h"
 
