@@ -1,9 +1,0 @@
-<bin file=testEcalBarrelMonitorClient.cpp>
-  <use name=DataFormats/EcalRawData>
-  <use name=DQM/EcalCommon>
-  <use name=DQMServices/Core>
-  <use name=DQMServices/UI>
-  <use name=root>
-  <use name=rootcore>
-  <use name=rootthread>
-</bin>
