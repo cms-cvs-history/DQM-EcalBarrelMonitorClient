@@ -639,7 +639,6 @@ sub makeCfgClient
     $result = $result . "include \"DQM/EcalBarrelMonitorModule/data/EcalBarrelMonitorModule.cfi\"\n";
 
     $result = $result . "  \n";
-    $result = $result . "  replace ecalBarrelMonitorModule.enableMonitorDaemon = true\n";
 #    $result = $result . "  replace ecalBarrelMonitorModule.verbose = true\n";
 
     $result = $result . "  \n";
@@ -653,8 +652,6 @@ sub makeCfgClient
     $result = $result . "  replace ecalBarrelMonitorClient.superModules = { 32 }\n";
     
 #    $result = $result . "  replace ecalBarrelMonitorClient.verbose = true\n";
-
-    $result = $result . "  replace ecalBarrelMonitorClient.enableMonitorDaemon = false\n";
 
     $result = $result . "  \n";
     $result = $result . "  module preScaler = Prescaler { int32 prescaleFactor = 1 }\n";
