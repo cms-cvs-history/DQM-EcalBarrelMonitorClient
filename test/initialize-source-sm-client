@@ -732,6 +732,20 @@ sub makeCfgClient
     $result = $result . "    }\n"; 
     $result = $result . "  }\n";
 
+#    $result = $result . "  \n";
+#    $result = $result . "  service = DQMShipMonitoring {\n";
+#    $result = $result . "    untracked uint32 period = 1\n";
+#    $result = $result . "  }\n";
+
+#    $result = $result . "  \n";
+#    $result = $result . "include \"DQMServices/Examples/test/dqm_monitorDaemon.cfi\"\n";
+#    $result = $result . "  \n";
+#    $result = $result . "  replace MonitorDaemon.UpdateDelay = 100\n";
+#    $result = $result . "  replace MonitorDaemon.maxAttempts2Reconnect = 99999\n";
+#    $result = $result . "  replace MonitorDaemon.DestinationAddress = \"".$collectorhost."\"\n";
+#    $result = $result . "  replace MonitorDaemon.SendPort = 9090\n";
+#    $result = $result . "  replace MonitorDaemon.NameAsSource = \"EB\"\n";
+
     $result = $result . "}\n";
 
     return $result;
