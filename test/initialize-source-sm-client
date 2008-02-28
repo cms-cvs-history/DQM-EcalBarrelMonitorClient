@@ -648,7 +648,7 @@ sub makeCfgPlayback
     $result = $result . "  // modules\n";
 
     $result = $result . "  \n";
-    $result = $result . "  module playback = PlaybackRawDataProviderImpl {\n";
+    $result = $result . "  module playback = PlaybackRawDataProvider {\n";
     $result = $result . "    untracked uint32 queueSize = 32\n";
     $result = $result . "  }\n";
 

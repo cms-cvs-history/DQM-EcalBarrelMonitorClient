@@ -577,7 +577,7 @@ sub makeCfgPlayback
     $result = $result . "  // modules\n";
 
     $result = $result . "  \n";
-    $result = $result . "  module playback = PlaybackRawDataProviderImpl {\n";
+    $result = $result . "  module playback = PlaybackRawDataProvider {\n";
     $result = $result . "    untracked uint32 queueSize = 32\n";
     $result = $result . "  }\n";
 
@@ -726,13 +726,13 @@ sub makeCfgClient
 #    $result = $result . "  }\n";
 
     $result = $result . "  \n";
-    $result = $result . "include \"DQMServices/Daemon/test/data/dqm_monitorDaemon.cfi\"\n";
+    $result = $result . "include \"DQMServices/Examples/test/dqm_monitorDaemon.cfi\"\n";
     $result = $result . "  \n";
     $result = $result . "  replace MonitorDaemon.UpdateDelay = 100\n";
     $result = $result . "  replace MonitorDaemon.maxAttempts2Reconnect = 99999\n";
     $result = $result . "  replace MonitorDaemon.DestinationAddress = \"".$collectorhost."\"\n";
     $result = $result . "  replace MonitorDaemon.SendPort = 9090\n";
-    $result = $result . "  replace MonitorDaemon.NameAsSource = \"ECAL\"\n";
+    $result = $result . "  replace MonitorDaemon.NameAsSource = \"EB\"\n";
  
     $result = $result . "  \n";
     $result = $result . "  service = MessageLogger {\n";
