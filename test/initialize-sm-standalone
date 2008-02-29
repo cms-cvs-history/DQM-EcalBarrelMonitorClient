@@ -688,7 +688,7 @@ sub makeCfgClient
     $result = $result . "  }\n";
 
     $result = $result . "  \n"; 
-    $result = $result . "  service = DaqMonitorROOTBackEnd{ }\n";
+    $result = $result . "include \"DQMServices/Core/data/DQM.cfg\"\n";
 
     $result = $result . "  \n"; 
     $result = $result . "  es_source = EcalTrivialConditionRetriever {\n";
