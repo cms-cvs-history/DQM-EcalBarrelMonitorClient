@@ -10,10 +10,9 @@ module ecalBarrelMonitorClient = EcalBarrelMonitorClient{
   untracked string location = ""
   untracked string baseHtmlDir = ""
   untracked bool cloneME = true
-  untracked bool enableSubRunDb = false
-  untracked int32 dbRefreshTime = 15
-  untracked bool enableSubRunHtml = false
-  untracked int32 htmlRefreshTime = 5
+  untracked int32 updateTime = 0
+  untracked int32 dbUpdateTime = 0
+  untracked int32 htmlUpdateTime = 0
   untracked vstring enabledClients = { "Integrity",
                                        "StatusFlags",
                                        "Occupancy",
