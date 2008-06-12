@@ -477,7 +477,7 @@ sub makeCfgFu
     $result = $result . "  // sequences\n";
 
     $result = $result . "  \n";
-    $result = $result . "  sequence ecalBarrelDataSequence = { preScaler,\n";
+    $result = $result . "  sequence ecalDataSequence = { preScaler,\n";
     $result = $result . "                                      ecalEBunpacker,\n";
     $result = $result . "                                      ecalUncalibHit,\n";
     $result = $result . "                                      ecalRecHit }\n";
@@ -500,7 +500,7 @@ sub makeCfgFu
     $result = $result . "  // paths\n";
 
     $result = $result . "  \n";
-    $result = $result . "  path p = { ecalBarrelDataSequence, ecalBarrelMonitorSequence }\n";
+    $result = $result . "  path p = { ecalDataSequence, ecalBarrelMonitorSequence }\n";
 
     $result = $result . "  \n";
     $result = $result . "  endpath q = { ecalBarrelCosmicTasksSequence, out }\n";
