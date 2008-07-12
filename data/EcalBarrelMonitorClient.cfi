@@ -5,6 +5,7 @@ module ecalBarrelMonitorClient = EcalBarrelMonitorClient{
   untracked int32  dbHostPort = 1521
   untracked string dbUserName = ""
   untracked string dbPassword = ""
+  untracked string dbTagName = "CMSSW"
   untracked string maskFile = "maskfile.dat"
   untracked bool mergeRuns = false
   untracked string location = ""
