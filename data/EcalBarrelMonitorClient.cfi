@@ -36,5 +36,6 @@ module ecalBarrelMonitorClient = EcalBarrelMonitorClient{
                                     31, 32, 33, 34, 35, 36 }
   untracked bool verbose = true
   untracked bool debug = false
+  untracked int32 prescaleFactor = 1
 }
 
