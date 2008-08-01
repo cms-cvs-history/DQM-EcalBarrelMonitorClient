@@ -11,14 +11,14 @@ echo '1073741824' > /proc/sys/kernel/shmmax
 
 --- terminal1:
 
-cd CMSSW_2_0_0/
+cd CMSSW_2_1_0/
 eval `scramv1 run -csh`
 
 ./bin/slc4_ia32_gcc345/DQMCollector
 
 --- terminal2:
 
-cd CMSSW_2_0_0/src/DQM/EcalBarrelMonitorClient/test/
+cd CMSSW_2_1_0/src/DQM/EcalBarrelMonitorClient/test/
 eval `scramv1 run -csh`
 
 ./initialize-source-sm-client -host=localhost.localdomain -collector=localhost.localdomain
@@ -38,13 +38,13 @@ eval `scramv1 run -csh`
 
 --- terminal3:
 
-cd CMSSW_2_0_0/src/DQM/EcalBarrelMonitorClient/test/
+cd CMSSW_2_1_0/src/DQM/EcalBarrelMonitorClient/test/
 
 tail -f log/localhost.localdomain.40000.log
 
 --- terminal4:
 
-cd CMSSW_2_0_0/src/DQM/EcalBarrelMonitorClient/test/
+cd CMSSW_2_1_0/src/DQM/EcalBarrelMonitorClient/test/
 
 tail -f log/localhost.localdomain.40001.log
 
