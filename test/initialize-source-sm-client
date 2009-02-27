@@ -694,7 +694,6 @@ sub makeCfgClient
     $result = $result . "include \"DQM/EcalBarrelMonitorClient/data/EcalBarrelMonitorClient.cfi\"\n";
     $result = $result . "  \n";
     $result = $result . "  replace ecalBarrelMonitorClient.location = \"H4\"\n";
-    $result = $result . "  replace ecalBarrelMonitorClient.baseHtmlDir = \".\"\n";
     $result = $result . "  replace ecalBarrelMonitorClient.clientName = \"EcalBarrelMonitorClient\"\n";
     $result = $result . "  replace ecalBarrelMonitorClient.superModules = { 19 }\n";
     
