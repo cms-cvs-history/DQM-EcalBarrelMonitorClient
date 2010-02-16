@@ -7,7 +7,6 @@
 #endif
 
 #include <DQM/EcalBarrelMonitorClient/interface/EcalBarrelMonitorClient.h>
-#include <DQM/EcalBarrelMonitorClient/interface/EBTrendClient.h>
 
 DEFINE_FWK_MODULE(EcalBarrelMonitorClient);
-DEFINE_FWK_MODULE(EBTrendClient);
+
