@@ -4,8 +4,8 @@
 /*
  * \file EcalBarrelMonitorClient.h
  *
- * $Date: 2009/11/09 14:10:04 $
- * $Revision: 1.120 $
+ * $Date: 2010/08/04 06:27:10 $
+ * $Revision: 1.122 $
  * \author G. Della Ricca
  * \author F. Cossutti
  *
@@ -85,7 +85,7 @@ void softReset(bool flag);
 void beginRunDb(void);
 
 /// WriteDB
-void writeDb();
+void writeDb(void);
 
 /// EndRunDB
 void endRunDb(void);
