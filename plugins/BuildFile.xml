@@ -1,3 +1,6 @@
+<use   name="OnlineDB/EcalCondDB"/>
+<flags   CPPDEFINES="WITH_ECAL_COND_DB"/>
+
 <use   name="DQM/EcalBarrelMonitorClient"/>
 <library   file="plugins.cc" name="DQMEcalBarrelMonitorClientPlugins">
   <flags   EDM_PLUGIN="1"/>
