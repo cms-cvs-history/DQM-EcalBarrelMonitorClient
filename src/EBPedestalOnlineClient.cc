@@ -1,8 +1,8 @@
 /*
  * \file EBPedestalOnlineClient.cc
  *
- * $Date: 2010/08/04 08:20:13 $
- * $Revision: 1.157 $
+ * $Date: 2010/08/04 19:05:25 $
+ * $Revision: 1.156.2.1 $
  * \author G. Della Ricca
  * \author F. Cossutti
  *
@@ -338,7 +338,7 @@ void EBPedestalOnlineClient::analyze(void) {
           float val;
 
           val = 1.;
-          if ( fabs(mean03 - expectedMean_) > discrepancyMean_ )
+          if ( std::abs(mean03 - expectedMean_) > discrepancyMean_ )
             val = 0.;
           if ( rms03 > RMSThreshold_ )
             val = 0.;
