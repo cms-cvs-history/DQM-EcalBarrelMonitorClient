@@ -1,8 +1,8 @@
 /*
  * \file EBPedestalOnlineClient.cc
  *
- * $Date: 2010/08/04 19:05:25 $
- * $Revision: 1.156.2.1 $
+ * $Date: 2010/08/30 13:41:09 $
+ * $Revision: 1.156.2.2 $
  * \author G. Della Ricca
  * \author F. Cossutti
  *
@@ -31,7 +31,7 @@
 #include "DQM/EcalCommon/interface/UtilsClient.h"
 #include "DQM/EcalCommon/interface/Numbers.h"
 
-#include <DQM/EcalBarrelMonitorClient/interface/EBPedestalOnlineClient.h>
+#include "DQM/EcalBarrelMonitorClient/interface/EBPedestalOnlineClient.h"
 
 EBPedestalOnlineClient::EBPedestalOnlineClient(const edm::ParameterSet& ps) {
 

@@ -1,8 +1,8 @@
 /*
  * \file EBOccupancyClient.cc
  *
- * $Date: 2010/08/04 08:20:13 $
- * $Revision: 1.40 $
+ * $Date: 2010/08/04 19:05:24 $
+ * $Revision: 1.39.2.1 $
  * \author G. Della Ricca
  * \author F. Cossutti
  *
@@ -27,7 +27,7 @@
 #include "DQM/EcalCommon/interface/UtilsClient.h"
 #include "DQM/EcalCommon/interface/Numbers.h"
 
-#include <DQM/EcalBarrelMonitorClient/interface/EBOccupancyClient.h>
+#include "DQM/EcalBarrelMonitorClient/interface/EBOccupancyClient.h"
 
 EBOccupancyClient::EBOccupancyClient(const edm::ParameterSet& ps) {
 

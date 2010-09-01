@@ -1,8 +1,8 @@
 /*
  * \file EBPedestalClient.cc
  *
- * $Date: 2010/08/04 19:05:25 $
- * $Revision: 1.221.2.1 $
+ * $Date: 2010/08/30 13:41:09 $
+ * $Revision: 1.221.2.2 $
  * \author G. Della Ricca
  * \author F. Cossutti
  *
@@ -33,7 +33,7 @@
 #include "DQM/EcalCommon/interface/UtilsClient.h"
 #include "DQM/EcalCommon/interface/Numbers.h"
 
-#include <DQM/EcalBarrelMonitorClient/interface/EBPedestalClient.h>
+#include "DQM/EcalBarrelMonitorClient/interface/EBPedestalClient.h"
 
 // #define COMMON_NOISE_ANALYSIS
 
