@@ -1,8 +1,8 @@
 /*
  * \file EBLaserClient.cc
  *
- * $Date: 2010/09/01 09:32:59 $
- * $Revision: 1.269.2.5 $
+ * $Date: 2010/09/16 13:56:44 $
+ * $Revision: 1.269.2.6 $
  * \author G. Della Ricca
  * \author G. Franzoni
  *
@@ -840,13 +840,13 @@ bool EBLaserClient::writeDb(EcalCondDBInterface* econn, RunIOV* runiov, MonRunIO
   EcalLogicID ecid;
 
   MonLaserBlueDat apd_bl;
-  map<EcalLogicID, MonLaserBlueDat> dataset1_bl;
+  std::map<EcalLogicID, MonLaserBlueDat> dataset1_bl;
   MonLaserGreenDat apd_gr;
-  map<EcalLogicID, MonLaserGreenDat> dataset1_gr;
+  std::map<EcalLogicID, MonLaserGreenDat> dataset1_gr;
   MonLaserIRedDat apd_ir;
-  map<EcalLogicID, MonLaserIRedDat> dataset1_ir;
+  std::map<EcalLogicID, MonLaserIRedDat> dataset1_ir;
   MonLaserRedDat apd_rd;
-  map<EcalLogicID, MonLaserRedDat> dataset1_rd;
+  std::map<EcalLogicID, MonLaserRedDat> dataset1_rd;
 
   for ( unsigned int i=0; i<superModules_.size(); i++ ) {
 
@@ -1047,21 +1047,21 @@ bool EBLaserClient::writeDb(EcalCondDBInterface* econn, RunIOV* runiov, MonRunIO
       if ( dataset1_gr.size() != 0 ) econn->insertDataArraySet(&dataset1_gr, moniov);
       if ( dataset1_rd.size() != 0 ) econn->insertDataArraySet(&dataset1_rd, moniov);
       if ( verbose_ ) std::cout << "done." << std::endl;
-    } catch (runtime_error &e) {
-      cerr << e.what() << std::endl;
+    } catch (std::runtime_error &e) {
+      std::cerr << e.what() << std::endl;
     }
   }
 
   if ( verbose_ ) std::cout << std::endl;
 
   MonPNBlueDat pn_bl;
-  map<EcalLogicID, MonPNBlueDat> dataset2_bl;
+  std::map<EcalLogicID, MonPNBlueDat> dataset2_bl;
   MonPNGreenDat pn_gr;
-  map<EcalLogicID, MonPNGreenDat> dataset2_gr;
+  std::map<EcalLogicID, MonPNGreenDat> dataset2_gr;
   MonPNIRedDat pn_ir;
-  map<EcalLogicID, MonPNIRedDat> dataset2_ir;
+  std::map<EcalLogicID, MonPNIRedDat> dataset2_ir;
   MonPNRedDat pn_rd;
-  map<EcalLogicID, MonPNRedDat> dataset2_rd;
+  std::map<EcalLogicID, MonPNRedDat> dataset2_rd;
 
   for ( unsigned int i=0; i<superModules_.size(); i++ ) {
 
@@ -1327,21 +1327,21 @@ bool EBLaserClient::writeDb(EcalCondDBInterface* econn, RunIOV* runiov, MonRunIO
       if ( dataset2_gr.size() != 0 ) econn->insertDataArraySet(&dataset2_gr, moniov);
       if ( dataset2_rd.size() != 0 ) econn->insertDataArraySet(&dataset2_rd, moniov);
       if ( verbose_ ) std::cout << "done." << std::endl;
-    } catch (runtime_error &e) {
-      cerr << e.what() << std::endl;
+    } catch (std::runtime_error &e) {
+      std::cerr << e.what() << std::endl;
     }
   }
 
   if ( verbose_ ) std::cout << std::endl;
 
   MonTimingLaserBlueCrystalDat t_bl;
-  map<EcalLogicID, MonTimingLaserBlueCrystalDat> dataset3_bl;
+  std::map<EcalLogicID, MonTimingLaserBlueCrystalDat> dataset3_bl;
   MonTimingLaserGreenCrystalDat t_gr;
-  map<EcalLogicID, MonTimingLaserGreenCrystalDat> dataset3_gr;
+  std::map<EcalLogicID, MonTimingLaserGreenCrystalDat> dataset3_gr;
   MonTimingLaserIRedCrystalDat t_ir;
-  map<EcalLogicID, MonTimingLaserIRedCrystalDat> dataset3_ir;
+  std::map<EcalLogicID, MonTimingLaserIRedCrystalDat> dataset3_ir;
   MonTimingLaserRedCrystalDat t_rd;
-  map<EcalLogicID, MonTimingLaserRedCrystalDat> dataset3_rd;
+  std::map<EcalLogicID, MonTimingLaserRedCrystalDat> dataset3_rd;
 
   for ( unsigned int i=0; i<superModules_.size(); i++ ) {
 
@@ -1510,8 +1510,8 @@ bool EBLaserClient::writeDb(EcalCondDBInterface* econn, RunIOV* runiov, MonRunIO
       if ( dataset3_gr.size() != 0 ) econn->insertDataArraySet(&dataset3_gr, moniov);
       if ( dataset3_rd.size() != 0 ) econn->insertDataArraySet(&dataset3_rd, moniov);
       if ( verbose_ ) std::cout << "done." << std::endl;
-    } catch (runtime_error &e) {
-      cerr << e.what() << std::endl;
+    } catch (std::runtime_error &e) {
+      std::cerr << e.what() << std::endl;
     }
   }
 
@@ -2462,7 +2462,7 @@ void EBLaserClient::analyze(void) {
 
 #ifdef WITH_ECAL_COND_DB
   if ( EcalErrorMask::mapCrystalErrors_.size() != 0 ) {
-    map<EcalLogicID, RunCrystalErrorsDat>::const_iterator m;
+    std::map<EcalLogicID, RunCrystalErrorsDat>::const_iterator m;
     for (m = EcalErrorMask::mapCrystalErrors_.begin(); m != EcalErrorMask::mapCrystalErrors_.end(); m++) {
 
       if ( (m->second).getErrorBits() & bits01 ) {
@@ -2489,7 +2489,7 @@ void EBLaserClient::analyze(void) {
   }
 
   if ( EcalErrorMask::mapTTErrors_.size() != 0 ) {
-    map<EcalLogicID, RunTTErrorsDat>::const_iterator m;
+    std::map<EcalLogicID, RunTTErrorsDat>::const_iterator m;
     for (m = EcalErrorMask::mapTTErrors_.begin(); m != EcalErrorMask::mapTTErrors_.end(); m++) {
 
       if ( (m->second).getErrorBits() & bits01 ) {
@@ -2520,7 +2520,7 @@ void EBLaserClient::analyze(void) {
   }
 
   if ( EcalErrorMask::mapPNErrors_.size() != 0 ) {
-    map<EcalLogicID, RunPNErrorsDat>::const_iterator m;
+    std::map<EcalLogicID, RunPNErrorsDat>::const_iterator m;
     for (m = EcalErrorMask::mapPNErrors_.begin(); m != EcalErrorMask::mapPNErrors_.end(); m++) {
 
       if ( (m->second).getErrorBits() & (bits01|bits02) ) {

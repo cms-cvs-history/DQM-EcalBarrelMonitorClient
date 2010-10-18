@@ -1,8 +1,8 @@
 /*
  * \file EBTestPulseClient.cc
  *
- * $Date: 2010/08/30 13:41:09 $
- * $Revision: 1.229.2.2 $
+ * $Date: 2010/09/01 09:33:01 $
+ * $Revision: 1.229.2.3 $
  * \author G. Della Ricca
  * \author F. Cossutti
  *
@@ -405,9 +405,9 @@ bool EBTestPulseClient::writeDb(EcalCondDBInterface* econn, RunIOV* runiov, MonR
   EcalLogicID ecid;
 
   MonTestPulseDat adc;
-  map<EcalLogicID, MonTestPulseDat> dataset1;
+  std::map<EcalLogicID, MonTestPulseDat> dataset1;
   MonPulseShapeDat shape;
-  map<EcalLogicID, MonPulseShapeDat> dataset2;
+  std::map<EcalLogicID, MonPulseShapeDat> dataset2;
 
   for ( unsigned int i=0; i<superModules_.size(); i++ ) {
 
@@ -510,21 +510,21 @@ bool EBTestPulseClient::writeDb(EcalCondDBInterface* econn, RunIOV* runiov, MonR
             }
 
             if ( verbose_ ) {
-              std::cout << "sample01 = " << flush;
+              std::cout << "sample01 = " << std::flush;
               for ( unsigned int i = 0; i < sample01.size(); i++ ) {
-                std::cout << sample01[i] << " " << flush;
+                std::cout << sample01[i] << " " << std::flush;
               }
               std::cout << std::endl;
 
-              std::cout << "sample02 = " << flush;
+              std::cout << "sample02 = " << std::flush;
               for ( unsigned int i = 0; i < sample02.size(); i++ ) {
-                std::cout << sample02[i] << " " << flush;
+                std::cout << sample02[i] << " " << std::flush;
               }
               std::cout << std::endl;
 
-              std::cout << "sample03 = " << flush;
+              std::cout << "sample03 = " << std::flush;
               for ( unsigned int i = 0; i < sample03.size(); i++ ) {
-                std::cout << sample03[i] << " " << flush;
+                std::cout << sample03[i] << " " << std::flush;
               }
               std::cout << std::endl;
             }
@@ -558,15 +558,15 @@ bool EBTestPulseClient::writeDb(EcalCondDBInterface* econn, RunIOV* runiov, MonR
       if ( dataset1.size() != 0 ) econn->insertDataArraySet(&dataset1, moniov);
       if ( dataset2.size() != 0 ) econn->insertDataSet(&dataset2, moniov);
       if ( verbose_ ) std::cout << "done." << std::endl;
-    } catch (runtime_error &e) {
-      cerr << e.what() << std::endl;
+    } catch (std::runtime_error &e) {
+      std::cerr << e.what() << std::endl;
     }
   }
 
   if ( verbose_ ) std::cout << std::endl;
 
   MonPNMGPADat pn;
-  map<EcalLogicID, MonPNMGPADat> dataset3;
+  std::map<EcalLogicID, MonPNMGPADat> dataset3;
 
   for ( unsigned int i=0; i<superModules_.size(); i++ ) {
 
@@ -652,8 +652,8 @@ bool EBTestPulseClient::writeDb(EcalCondDBInterface* econn, RunIOV* runiov, MonR
       if ( verbose_ ) std::cout << "Inserting MonPNMGPADat ..." << std::endl;
       if ( dataset3.size() != 0 ) econn->insertDataArraySet(&dataset3, moniov);
       if ( verbose_ ) std::cout << "done." << std::endl;
-    } catch (runtime_error &e) {
-      cerr << e.what() << std::endl;
+    } catch (std::runtime_error &e) {
+      std::cerr << e.what() << std::endl;
     }
   }
 
@@ -1042,7 +1042,7 @@ void EBTestPulseClient::analyze(void) {
 
 #ifdef WITH_ECAL_COND_DB
   if ( EcalErrorMask::mapCrystalErrors_.size() != 0 ) {
-    map<EcalLogicID, RunCrystalErrorsDat>::const_iterator m;
+    std::map<EcalLogicID, RunCrystalErrorsDat>::const_iterator m;
     for (m = EcalErrorMask::mapCrystalErrors_.begin(); m != EcalErrorMask::mapCrystalErrors_.end(); m++) {
 
       if ( (m->second).getErrorBits() & bits01 ) {
@@ -1100,7 +1100,7 @@ void EBTestPulseClient::analyze(void) {
   }
 
   if ( EcalErrorMask::mapTTErrors_.size() != 0 ) {
-    map<EcalLogicID, RunTTErrorsDat>::const_iterator m;
+    std::map<EcalLogicID, RunTTErrorsDat>::const_iterator m;
     for (m = EcalErrorMask::mapTTErrors_.begin(); m != EcalErrorMask::mapTTErrors_.end(); m++) {
 
       if ( (m->second).getErrorBits() & bits01 ) {
@@ -1170,7 +1170,7 @@ void EBTestPulseClient::analyze(void) {
   }
 
   if ( EcalErrorMask::mapPNErrors_.size() != 0 ) {
-    map<EcalLogicID, RunPNErrorsDat>::const_iterator m;
+    std::map<EcalLogicID, RunPNErrorsDat>::const_iterator m;
     for (m = EcalErrorMask::mapPNErrors_.begin(); m != EcalErrorMask::mapPNErrors_.end(); m++) {
 
       if ( (m->second).getErrorBits() & bits01 ) {

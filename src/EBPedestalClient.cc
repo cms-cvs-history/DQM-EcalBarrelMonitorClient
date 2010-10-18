@@ -1,8 +1,8 @@
 /*
  * \file EBPedestalClient.cc
  *
- * $Date: 2010/08/30 13:41:09 $
- * $Revision: 1.221.2.2 $
+ * $Date: 2010/09/01 09:33:00 $
+ * $Revision: 1.221.2.3 $
  * \author G. Della Ricca
  * \author F. Cossutti
  *
@@ -506,7 +506,7 @@ bool EBPedestalClient::writeDb(EcalCondDBInterface* econn, RunIOV* runiov, MonRu
   EcalLogicID ecid;
 
   MonPedestalsDat p;
-  map<EcalLogicID, MonPedestalsDat> dataset1;
+  std::map<EcalLogicID, MonPedestalsDat> dataset1;
 
   for ( unsigned int i=0; i<superModules_.size(); i++ ) {
 
@@ -595,15 +595,15 @@ bool EBPedestalClient::writeDb(EcalCondDBInterface* econn, RunIOV* runiov, MonRu
       if ( verbose_ ) std::cout << "Inserting MonPedestalsDat ..." << std::endl;
       if ( dataset1.size() != 0 ) econn->insertDataArraySet(&dataset1, moniov);
       if ( verbose_ ) std::cout << "done." << std::endl;
-    } catch (runtime_error &e) {
-      cerr << e.what() << std::endl;
+    } catch (std::runtime_error &e) {
+      std::cerr << e.what() << std::endl;
     }
   }
 
   if ( verbose_ ) std::cout << std::endl;
 
   MonPNPedDat pn;
-  map<EcalLogicID, MonPNPedDat> dataset2;
+  std::map<EcalLogicID, MonPNPedDat> dataset2;
 
   for ( unsigned int i=0; i<superModules_.size(); i++ ) {
 
@@ -677,8 +677,8 @@ bool EBPedestalClient::writeDb(EcalCondDBInterface* econn, RunIOV* runiov, MonRu
       if ( verbose_ ) std::cout << "Inserting MonPNPedDat ..." << std::endl;
       if ( dataset2.size() != 0 ) econn->insertDataArraySet(&dataset2, moniov);
       if ( verbose_ ) std::cout << "done." << std::endl;
-    } catch (runtime_error &e) {
-      cerr << e.what() << std::endl;
+    } catch (std::runtime_error &e) {
+      std::cerr << e.what() << std::endl;
     }
   }
 
@@ -1117,7 +1117,7 @@ void EBPedestalClient::analyze(void) {
 
 #ifdef WITH_ECAL_COND_DB
   if ( EcalErrorMask::mapCrystalErrors_.size() != 0 ) {
-    map<EcalLogicID, RunCrystalErrorsDat>::const_iterator m;
+    std::map<EcalLogicID, RunCrystalErrorsDat>::const_iterator m;
     for (m = EcalErrorMask::mapCrystalErrors_.begin(); m != EcalErrorMask::mapCrystalErrors_.end(); m++) {
 
       if ( (m->second).getErrorBits() & bits01 ) {
@@ -1175,7 +1175,7 @@ void EBPedestalClient::analyze(void) {
   }
 
   if ( EcalErrorMask::mapTTErrors_.size() != 0 ) {
-    map<EcalLogicID, RunTTErrorsDat>::const_iterator m;
+    std::map<EcalLogicID, RunTTErrorsDat>::const_iterator m;
     for (m = EcalErrorMask::mapTTErrors_.begin(); m != EcalErrorMask::mapTTErrors_.end(); m++) {
 
       if ( (m->second).getErrorBits() & bits01 ) {
@@ -1245,7 +1245,7 @@ void EBPedestalClient::analyze(void) {
   }
 
   if ( EcalErrorMask::mapPNErrors_.size() != 0 ) {
-    map<EcalLogicID, RunPNErrorsDat>::const_iterator m;
+    std::map<EcalLogicID, RunPNErrorsDat>::const_iterator m;
     for (m = EcalErrorMask::mapPNErrors_.begin(); m != EcalErrorMask::mapPNErrors_.end(); m++) {
 
       if ( (m->second).getErrorBits() & bits01 ) {
