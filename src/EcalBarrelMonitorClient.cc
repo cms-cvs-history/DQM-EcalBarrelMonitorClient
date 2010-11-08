@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorClient.cc
  *
- * $Date: 2010/11/03 13:46:59 $
- * $Revision: 1.485.2.5 $
+ * $Date: 2010/11/03 14:49:20 $
+ * $Revision: 1.485.2.6 $
  * \author G. Della Ricca
  * \author F. Cossutti
  *
@@ -496,6 +496,9 @@ EcalBarrelMonitorClient::EcalBarrelMonitorClient(const edm::ParameterSet& ps) {
     clientsNames_.push_back( "TriggerTower" );
 
     clientsRuns_.insert(std::pair<EBClient*,int>( clients_.back(), EcalDCCHeaderBlock::COSMIC ));
+    clientsRuns_.insert(std::pair<EBClient*,int>( clients_.back(), EcalDCCHeaderBlock::LASER_STD ));
+    clientsRuns_.insert(std::pair<EBClient*,int>( clients_.back(), EcalDCCHeaderBlock::PEDESTAL_STD ));
+    clientsRuns_.insert(std::pair<EBClient*,int>( clients_.back(), EcalDCCHeaderBlock::TESTPULSE_MGPA ));
     clientsRuns_.insert(std::pair<EBClient*,int>( clients_.back(), EcalDCCHeaderBlock::BEAMH4 ));
     clientsRuns_.insert(std::pair<EBClient*,int>( clients_.back(), EcalDCCHeaderBlock::BEAMH2 ));
     clientsRuns_.insert(std::pair<EBClient*,int>( clients_.back(), EcalDCCHeaderBlock::MTCC ));
@@ -516,6 +519,9 @@ EcalBarrelMonitorClient::EcalBarrelMonitorClient(const edm::ParameterSet& ps) {
     clientsNames_.push_back( "Cluster" );
 
     clientsRuns_.insert(std::pair<EBClient*,int>( clients_.back(), EcalDCCHeaderBlock::COSMIC ));
+    clientsRuns_.insert(std::pair<EBClient*,int>( clients_.back(), EcalDCCHeaderBlock::LASER_STD ));
+    clientsRuns_.insert(std::pair<EBClient*,int>( clients_.back(), EcalDCCHeaderBlock::PEDESTAL_STD ));
+    clientsRuns_.insert(std::pair<EBClient*,int>( clients_.back(), EcalDCCHeaderBlock::TESTPULSE_MGPA ));
     clientsRuns_.insert(std::pair<EBClient*,int>( clients_.back(), EcalDCCHeaderBlock::BEAMH4 ));
     clientsRuns_.insert(std::pair<EBClient*,int>( clients_.back(), EcalDCCHeaderBlock::BEAMH2 ));
     clientsRuns_.insert(std::pair<EBClient*,int>( clients_.back(), EcalDCCHeaderBlock::MTCC ));
@@ -536,6 +542,11 @@ EcalBarrelMonitorClient::EcalBarrelMonitorClient(const edm::ParameterSet& ps) {
     clientsNames_.push_back( "Timing" );
 
     clientsRuns_.insert(std::pair<EBClient*,int>( clients_.back(), EcalDCCHeaderBlock::COSMIC ));
+    clientsRuns_.insert(std::pair<EBClient*,int>( clients_.back(), EcalDCCHeaderBlock::LASER_STD ));
+    clientsRuns_.insert(std::pair<EBClient*,int>( clients_.back(), EcalDCCHeaderBlock::PEDESTAL_STD ));
+    clientsRuns_.insert(std::pair<EBClient*,int>( clients_.back(), EcalDCCHeaderBlock::TESTPULSE_MGPA ));
+    clientsRuns_.insert(std::pair<EBClient*,int>( clients_.back(), EcalDCCHeaderBlock::BEAMH4 ));
+    clientsRuns_.insert(std::pair<EBClient*,int>( clients_.back(), EcalDCCHeaderBlock::BEAMH2 ));
     clientsRuns_.insert(std::pair<EBClient*,int>( clients_.back(), EcalDCCHeaderBlock::MTCC ));
 
     clientsRuns_.insert(std::pair<EBClient*,int>( clients_.back(), EcalDCCHeaderBlock::COSMICS_GLOBAL ));
