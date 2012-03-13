@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorClient.cc
  *
- * $Date: 2010/11/10 16:52:35 $
- * $Revision: 1.503 $
+ * $Date: 2011/09/02 13:55:01 $
+ * $Revision: 1.504 $
  * \author G. Della Ricca
  * \author F. Cossutti
  *
@@ -637,47 +637,6 @@ void EcalBarrelMonitorClient::beginJob(void) {
 
   if ( summaryClient_ ) summaryClient_->beginJob();
 
-  // summary for DQM GUI
-
-  MonitorElement* me;
-
-  dqmStore_->setCurrentFolder( prefixME_ + "/EventInfo" );
-
-  me = dqmStore_->get(prefixME_ + "/EventInfo/reportSummary");
-  if ( me ) {
-    dqmStore_->removeElement(me->getName());
-  }
-  me = dqmStore_->bookFloat("reportSummary");
-  me->Fill(-1.0);
-
-  dqmStore_->setCurrentFolder( prefixME_ + "/EventInfo/reportSummaryContents" );
-
-  std::string name;
-  for (int i = 0; i < 36; i++) {
-    name = "EcalBarrel_" + Numbers::sEB(i+1);
-    me = dqmStore_->get(prefixME_ + "/EventInfo/reportSummaryContents/" + name);
-    if ( me ) {
-      dqmStore_->removeElement(me->getName());
-    }
-    me = dqmStore_->bookFloat(name);
-    me->Fill(-1.0);
-  }
-
-  dqmStore_->setCurrentFolder( prefixME_ + "/EventInfo" );
-
-  me = dqmStore_->get(prefixME_ + "/EventInfo/reportSummaryMap");
-  if ( me ) {
-    dqmStore_->removeElement(me->getName());
-  }
-  me = dqmStore_->book2D("reportSummaryMap","reportSummaryMap", 72, 0., 72., 34, 0., 34);
-  for ( int iettx = 0; iettx < 34; iettx++ ) {
-    for ( int ipttx = 0; ipttx < 72; ipttx++ ) {
-      me->setBinContent( ipttx+1, iettx+1, -1.0 );
-    }
-  }
-  me->setAxisTitle("jphi", 1);
-  me->setAxisTitle("jeta", 2);
-
 }
 
 void EcalBarrelMonitorClient::beginRun(void) {
@@ -732,6 +691,47 @@ void EcalBarrelMonitorClient::beginRun(const edm::Run& r, const edm::EventSetup&
   evt_ = 0;
 
   jevt_ = 0;
+
+  // summary for DQM GUI
+
+  MonitorElement* me;
+
+  dqmStore_->setCurrentFolder( prefixME_ + "/EventInfo" );
+
+  me = dqmStore_->get(prefixME_ + "/EventInfo/reportSummary");
+  if ( me ) {
+    dqmStore_->removeElement(me->getName());
+  }
+  me = dqmStore_->bookFloat("reportSummary");
+  me->Fill(-1.0);
+
+  dqmStore_->setCurrentFolder( prefixME_ + "/EventInfo/reportSummaryContents" );
+
+  std::string name;
+  for (int i = 0; i < 36; i++) {
+    name = "EcalBarrel_" + Numbers::sEB(i+1);
+    me = dqmStore_->get(prefixME_ + "/EventInfo/reportSummaryContents/" + name);
+    if ( me ) {
+      dqmStore_->removeElement(me->getName());
+    }
+    me = dqmStore_->bookFloat(name);
+    me->Fill(-1.0);
+  }
+
+  dqmStore_->setCurrentFolder( prefixME_ + "/EventInfo" );
+
+  me = dqmStore_->get(prefixME_ + "/EventInfo/reportSummaryMap");
+  if ( me ) {
+    dqmStore_->removeElement(me->getName());
+  }
+  me = dqmStore_->book2D("reportSummaryMap","reportSummaryMap", 72, 0., 72., 34, 0., 34);
+  for ( int iettx = 0; iettx < 34; iettx++ ) {
+    for ( int ipttx = 0; ipttx < 72; ipttx++ ) {
+      me->setBinContent( ipttx+1, iettx+1, -1.0 );
+    }
+  }
+  me->setAxisTitle("jphi", 1);
+  me->setAxisTitle("jeta", 2);
 
 }
 
