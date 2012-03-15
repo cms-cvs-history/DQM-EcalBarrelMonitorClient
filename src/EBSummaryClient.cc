@@ -1,8 +1,8 @@
 /*
  * \file EBSummaryClient.cc
  *
- * $Date: 2011/09/02 13:55:01 $
- * $Revision: 1.222 $
+ * $Date: 2011/09/02 14:02:36 $
+ * $Revision: 1.223 $
  * \author G. Della Ricca
  *
 */
@@ -53,6 +53,8 @@ EBSummaryClient::EBSummaryClient(const edm::ParameterSet& ps) {
 
   // prefixME path
   prefixME_ = ps.getUntrackedParameter<std::string>("prefixME", "");
+
+  eventInfoFolder_ = ps.getUntrackedParameter<std::string>("eventInfoFolder", "EventInfo");
 
   // enableCleanup_ switch
   enableCleanup_ = ps.getUntrackedParameter<bool>("enableCleanup", false);
@@ -2006,20 +2008,38 @@ void EBSummaryClient::analyze(void) {
   MonitorElement* me;
 
   float reportSummary = -1.0;
+  float nEB(61200.);
   if ( nValidChannels != 0 )
     reportSummary = 1.0 - float(nGlobalErrors)/float(nValidChannels);
-  me = dqmStore_->get(prefixME_ + "/EventInfo/reportSummary");
-  if ( me ) me->Fill(reportSummary);
+  me = dqmStore_->get(eventInfoFolder_ + "/reportSummary_EB");
+  if ( me )
+    me->Fill(reportSummary);
+  else
+    nEB = 0.;
+
+  // workaround for new EB+EE configuration
+  float eeSummary(0.);
+  float nEE(14648.);
+  me = dqmStore_->get(eventInfoFolder_ + "/reportSummary_EE");
+  if (me)
+    eeSummary = me->getFloatValue();
+  else
+    nEE = 0.;
+
+  me = dqmStore_->get(eventInfoFolder_ + "/reportSummary");
+  if (me)
+    me->Fill((reportSummary * nEB + eeSummary * nEE) / (nEB + nEE));
 
   for (int i = 0; i < 36; i++) {
     float reportSummaryEB = -1.0;
     if ( nValidChannelsEB[i] != 0 )
       reportSummaryEB = 1.0 - float(nGlobalErrorsEB[i])/float(nValidChannelsEB[i]);
-    me = dqmStore_->get(prefixME_ + "/EventInfo/reportSummaryContents/EcalBarrel_" + Numbers::sEB(i+1));
+    me = dqmStore_->get(eventInfoFolder_ + "/reportSummaryContents/EcalBarrel_" + Numbers::sEB(i+1));
     if ( me ) me->Fill(reportSummaryEB);
   }
 
-  me = dqmStore_->get(prefixME_ + "/EventInfo/reportSummaryMap");
+  me = dqmStore_->get(eventInfoFolder_ + "/reportSummaryMap_EB");
+  MonitorElement* mecomb(dqmStore_->get(eventInfoFolder_ + "/reportSummaryMap"));
   if ( me ) {
 
     int nValidChannelsTT[72][34];
@@ -2055,7 +2075,8 @@ void EBSummaryClient::analyze(void) {
           xval = 1.0 - float(nGlobalErrorsTT[ipttx][iettx])/float(nValidChannelsTT[ipttx][iettx]);
 
         me->setBinContent( ipttx+1, iettx+1, xval );
-
+	if(mecomb)
+	  mecomb->setBinContent(ipttx + 1, iettx + 21, xval);
       }
     }
 
