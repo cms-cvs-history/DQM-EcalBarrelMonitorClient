@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorClient.cc
  *
- * $Date: 2012/03/13 14:25:25 $
- * $Revision: 1.504.2.1 $
+ * $Date: 2012/03/15 13:13:42 $
+ * $Revision: 1.504.2.2 $
  * \author G. Della Ricca
  * \author F. Cossutti
  *
@@ -696,63 +696,66 @@ void EcalBarrelMonitorClient::beginRun(const edm::Run& r, const edm::EventSetup&
 
   // summary for DQM GUI
 
-  MonitorElement* me;
+  if(eventInfoFolder_.find("Calibration") == std::string::npos){
 
-  dqmStore_->setCurrentFolder( eventInfoFolder_ );
+    MonitorElement* me;
 
-  me = dqmStore_->get(eventInfoFolder_ + "/reportSummary_EB");
-  if ( me ) {
-    dqmStore_->removeElement(me->getName());
-  }
-  me = dqmStore_->bookFloat("reportSummary_EB");
-  me->Fill(-1.0);
+    dqmStore_->setCurrentFolder( eventInfoFolder_ );
 
-  me = dqmStore_->get(eventInfoFolder_ + "/reportSummary");
-  if ( me ) {
-    dqmStore_->removeElement(me->getName());
-  }
-  me = dqmStore_->bookFloat("reportSummary");
-  me->Fill(-1.0);
-
-  dqmStore_->setCurrentFolder( eventInfoFolder_ + "/reportSummaryContents" );
-
-  std::string name;
-  for (int i = 0; i < 36; i++) {
-    name = "EcalBarrel_" + Numbers::sEB(i+1);
-    me = dqmStore_->get(eventInfoFolder_ + "/reportSummaryContents/" + name);
+    me = dqmStore_->get(eventInfoFolder_ + "/reportSummary_EB");
     if ( me ) {
       dqmStore_->removeElement(me->getName());
     }
-    me = dqmStore_->bookFloat(name);
+    me = dqmStore_->bookFloat("reportSummary_EB");
     me->Fill(-1.0);
-  }
 
-  dqmStore_->setCurrentFolder( eventInfoFolder_ );
+    me = dqmStore_->get(eventInfoFolder_ + "/reportSummary");
+    if ( me ) {
+      dqmStore_->removeElement(me->getName());
+    }
+    me = dqmStore_->bookFloat("reportSummary");
+    me->Fill(-1.0);
 
-  me = dqmStore_->get(eventInfoFolder_ + "/reportSummaryMap_EB");
-  if ( me ) {
-    dqmStore_->removeElement(me->getName());
-  }
-  me = dqmStore_->book2D("reportSummaryMap_EB","reportSummaryMap_EB", 72, 0., 72., 34, 0., 34);
-  for ( int iettx = 0; iettx < 34; iettx++ ) {
-    for ( int ipttx = 0; ipttx < 72; ipttx++ ) {
-      me->setBinContent( ipttx+1, iettx+1, -1.0 );
+    dqmStore_->setCurrentFolder( eventInfoFolder_ + "/reportSummaryContents" );
+
+    std::string name;
+    for (int i = 0; i < 36; i++) {
+      name = "EcalBarrel_" + Numbers::sEB(i+1);
+      me = dqmStore_->get(eventInfoFolder_ + "/reportSummaryContents/" + name);
+      if ( me ) {
+	dqmStore_->removeElement(me->getName());
+      }
+      me = dqmStore_->bookFloat(name);
+      me->Fill(-1.0);
+    }
+
+    dqmStore_->setCurrentFolder( eventInfoFolder_ );
+
+    me = dqmStore_->get(eventInfoFolder_ + "/reportSummaryMap_EB");
+    if ( me ) {
+      dqmStore_->removeElement(me->getName());
+    }
+
+    me = dqmStore_->book2D("reportSummaryMap_EB","EcalBarrel Report Summary Map", 72, 0., 72., 34, 0., 34);
+    for ( int iettx = 0; iettx < 34; iettx++ ) {
+      for ( int ipttx = 0; ipttx < 72; ipttx++ ) {
+	me->setBinContent( ipttx+1, iettx+1, -1.0 );
+      }
+    }
+    me->setAxisTitle("jphi", 1);
+    me->setAxisTitle("jeta", 2);
+
+    me = dqmStore_->get(eventInfoFolder_ + "/reportSummaryMap");
+    if ( me ) {
+      dqmStore_->removeElement(me->getName());
+    }
+    me = dqmStore_->book2D("reportSummaryMap","Ecal Report Summary Map", 72, 0., 360., 54, 0., 270);
+    for ( int iettx = 0; iettx < 54; iettx++ ) {
+      for ( int ipttx = 0; ipttx < 72; ipttx++ ) {
+	me->setBinContent( ipttx+1, iettx+1, -1.0 );
+      }
     }
   }
-  me->setAxisTitle("jphi", 1);
-  me->setAxisTitle("jeta", 2);
-
-  me = dqmStore_->get(eventInfoFolder_ + "/reportSummaryMap");
-  if ( me ) {
-    dqmStore_->removeElement(me->getName());
-  }
-  me = dqmStore_->book2D("reportSummaryMap","Ecal Report Summary Map", 72, 0., 360., 54, 0., 270);
-  for ( int iettx = 0; iettx < 54; iettx++ ) {
-    for ( int ipttx = 0; ipttx < 72; ipttx++ ) {
-      me->setBinContent( ipttx+1, iettx+1, -1.0 );
-    }
-  }
-
 }
 
 void EcalBarrelMonitorClient::endJob(void) {

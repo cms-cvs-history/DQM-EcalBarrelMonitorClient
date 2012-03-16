@@ -1,8 +1,8 @@
 /*
  * \file EBSummaryClient.cc
  *
- * $Date: 2011/09/02 14:02:36 $
- * $Revision: 1.223 $
+ * $Date: 2012/03/15 13:13:37 $
+ * $Revision: 1.223.2.1 $
  * \author G. Della Ricca
  *
 */
@@ -28,6 +28,7 @@
 
 #include "DQM/EcalBarrelMonitorClient/interface/EBStatusFlagsClient.h"
 #include "DQM/EcalBarrelMonitorClient/interface/EBIntegrityClient.h"
+#include "DQM/EcalBarrelMonitorClient/interface/EBOccupancyClient.h"
 #include "DQM/EcalBarrelMonitorClient/interface/EBLaserClient.h"
 #include "DQM/EcalBarrelMonitorClient/interface/EBPedestalClient.h"
 #include "DQM/EcalBarrelMonitorClient/interface/EBPedestalOnlineClient.h"
@@ -209,501 +210,545 @@ void EBSummaryClient::endRun(void) {
 
 void EBSummaryClient::setup(void) {
 
+  bool integrityClient(false);
+  bool occupancyClient(false);
+  bool statusFlagsClient(false);
+  bool pedestalOnlineClient(false);
+  bool laserClient(false);
+  bool pedestalClient(false);
+  bool testPulseClient(false);
+  bool timingClient(false);
+  bool triggerTowerClient(false);
+
+  for(unsigned i = 0; i < clients_.size(); i++){
+
+    if(dynamic_cast<EBIntegrityClient*>(clients_[i])) integrityClient = true;
+    if(dynamic_cast<EBOccupancyClient*>(clients_[i])) occupancyClient = true;
+    if(dynamic_cast<EBStatusFlagsClient*>(clients_[i])) statusFlagsClient = true;
+    if(dynamic_cast<EBPedestalOnlineClient*>(clients_[i])) pedestalOnlineClient = true;
+    if(dynamic_cast<EBLaserClient*>(clients_[i])) laserClient = true;
+    if(dynamic_cast<EBPedestalClient*>(clients_[i])) pedestalClient = true;
+    if(dynamic_cast<EBTestPulseClient*>(clients_[i])) testPulseClient = true;
+    if(dynamic_cast<EBTimingClient*>(clients_[i])) timingClient = true;
+    if(dynamic_cast<EBTriggerTowerClient*>(clients_[i])) triggerTowerClient = true;
+
+  }
+
   std::string name;
 
   dqmStore_->setCurrentFolder( prefixME_ + "/EBSummaryClient" );
 
-  if ( meIntegrity_ ) dqmStore_->removeElement( meIntegrity_->getName() );
-  name = "EBIT integrity quality summary";
-  meIntegrity_ = dqmStore_->book2D(name, name, 360, 0., 360., 170, -85., 85.);
-  meIntegrity_->setAxisTitle("jphi", 1);
-  meIntegrity_->setAxisTitle("jeta", 2);
+  if(integrityClient){
+    if ( meIntegrity_ ) dqmStore_->removeElement( meIntegrity_->getName() );
+    name = "EBIT integrity quality summary";
+    meIntegrity_ = dqmStore_->book2D(name, name, 360, 0., 360., 170, -85., 85.);
+    meIntegrity_->setAxisTitle("jphi", 1);
+    meIntegrity_->setAxisTitle("jeta", 2);
 
-  if ( meIntegrityErr_ ) dqmStore_->removeElement( meIntegrityErr_->getName() );
-  name = "EBIT integrity quality errors summary";
-  meIntegrityErr_ = dqmStore_->book1D(name, name, 36, 1, 37);
-  for (int i = 0; i < 36; i++) {
-    meIntegrityErr_->setBinLabel(i+1, Numbers::sEB(i+1).c_str(), 1);
-  }
-
-  if ( meIntegrityPN_ ) dqmStore_->removeElement( meIntegrityPN_->getName() );
-  name = "EBIT PN integrity quality summary";
-  meIntegrityPN_ = dqmStore_->book2D(name, name, 90, 0., 90., 20, -10., 10.);
-  meIntegrityPN_->setAxisTitle("jchannel", 1);
-  meIntegrityPN_->setAxisTitle("jpseudo-strip", 2);
-
-  if ( meOccupancy_ ) dqmStore_->removeElement( meOccupancy_->getName() );
-  name = "EBOT digi occupancy summary";
-  meOccupancy_ = dqmStore_->book2D(name, name, 360, 0., 360., 170, -85., 85.);
-  meOccupancy_->setAxisTitle("jphi", 1);
-  meOccupancy_->setAxisTitle("jeta", 2);
-
-  if ( meOccupancy1D_ ) dqmStore_->removeElement( meOccupancy1D_->getName() );
-  name = "EBOT digi occupancy summary 1D";
-  meOccupancy1D_ = dqmStore_->book1D(name, name, 36, 1, 37);
-  for (int i = 0; i < 36; i++) {
-    meOccupancy1D_->setBinLabel(i+1, Numbers::sEB(i+1).c_str(), 1);
-  }
-
-  if ( meOccupancyPN_ ) dqmStore_->removeElement( meOccupancyPN_->getName() );
-  name = "EBOT PN digi occupancy summary";
-  meOccupancyPN_ = dqmStore_->book2D(name, name, 90, 0., 90., 20, -10., 10.);
-  meOccupancyPN_->setAxisTitle("jchannel", 1);
-  meOccupancyPN_->setAxisTitle("jpseudo-strip", 2);
-
-  if ( meStatusFlags_ ) dqmStore_->removeElement( meStatusFlags_->getName() );
-  name = "EBSFT front-end status summary";
-  meStatusFlags_ = dqmStore_->book2D(name, name, 72, 0., 72., 34, -17., 17.);
-  meStatusFlags_->setAxisTitle("jphi'", 1);
-  meStatusFlags_->setAxisTitle("jeta'", 2);
-
-  if ( meStatusFlagsErr_ ) dqmStore_->removeElement( meStatusFlagsErr_->getName() );
-  name = "EBSFT front-end status errors summary";
-  meStatusFlagsErr_ = dqmStore_->book1D(name, name, 36, 1, 37);
-  for (int i = 0; i < 36; i++) {
-    meStatusFlagsErr_->setBinLabel(i+1, Numbers::sEB(i+1).c_str(), 1);
-  }
-
-  if ( mePedestalOnline_ ) dqmStore_->removeElement( mePedestalOnline_->getName() );
-  name = "EBPOT pedestal quality summary G12";
-  mePedestalOnline_ = dqmStore_->book2D(name, name, 360, 0., 360., 170, -85., 85.);
-  mePedestalOnline_->setAxisTitle("jphi", 1);
-  mePedestalOnline_->setAxisTitle("jeta", 2);
-
-  if ( mePedestalOnlineErr_ ) dqmStore_->removeElement( mePedestalOnlineErr_->getName() );
-  name = "EBPOT pedestal quality errors summary G12";
-  mePedestalOnlineErr_ = dqmStore_->book1D(name, name, 36, 1, 37);
-  for (int i = 0; i < 36; i++) {
-    mePedestalOnlineErr_->setBinLabel(i+1, Numbers::sEB(i+1).c_str(), 1);
-  }
-
-  if ( mePedestalOnlineRMSMap_ ) dqmStore_->removeElement( mePedestalOnlineRMSMap_->getName() );
-  name = "EBPOT pedestal G12 RMS map";
-  mePedestalOnlineRMSMap_ = dqmStore_->book2D(name, name, 360, 0., 360., 170, -85., 85.);
-  mePedestalOnlineRMSMap_->setAxisTitle("jphi", 1);
-  mePedestalOnlineRMSMap_->setAxisTitle("jeta", 2);
-
-  if ( mePedestalOnlineMean_ ) dqmStore_->removeElement( mePedestalOnlineMean_->getName() );
-  name = "EBPOT pedestal G12 mean";
-  mePedestalOnlineMean_ = dqmStore_->bookProfile(name, name, 36, 1, 37, 100, 150., 250.);
-  for (int i = 0; i < 36; i++) {
-    mePedestalOnlineMean_->setBinLabel(i+1, Numbers::sEB(i+1).c_str(), 1);
-  }
-
-  if ( mePedestalOnlineRMS_ ) dqmStore_->removeElement( mePedestalOnlineRMS_->getName() );
-  name = "EBPOT pedestal G12 rms";
-  mePedestalOnlineRMS_ = dqmStore_->bookProfile(name, name, 36, 1, 37, 100, 0., 10.);
-  for (int i = 0; i < 36; i++) {
-    mePedestalOnlineRMS_->setBinLabel(i+1, Numbers::sEB(i+1).c_str(), 1);
-  }
-
-  if ( find(laserWavelengths_.begin(), laserWavelengths_.end(), 1) != laserWavelengths_.end() ) {
-
-    if ( meLaserL1_ ) dqmStore_->removeElement( meLaserL1_->getName() );
-    name = "EBLT laser quality summary L1";
-    meLaserL1_ = dqmStore_->book2D(name, name, 360, 0., 360., 170, -85., 85.);
-    meLaserL1_->setAxisTitle("jphi", 1);
-    meLaserL1_->setAxisTitle("jeta", 2);
-
-    if ( meLaserL1Err_ ) dqmStore_->removeElement( meLaserL1Err_->getName() );
-    name = "EBLT laser quality errors summary L1";
-    meLaserL1Err_ = dqmStore_->book1D(name, name, 36, 1, 37);
+    if ( meIntegrityErr_ ) dqmStore_->removeElement( meIntegrityErr_->getName() );
+    name = "EBIT integrity quality errors summary";
+    meIntegrityErr_ = dqmStore_->book1D(name, name, 36, 1, 37);
     for (int i = 0; i < 36; i++) {
-      meLaserL1Err_->setBinLabel(i+1, Numbers::sEB(i+1).c_str(), 1);
+      meIntegrityErr_->setBinLabel(i+1, Numbers::sEB(i+1).c_str(), 1);
     }
 
-    if ( meLaserL1PN_ ) dqmStore_->removeElement( meLaserL1PN_->getName() );
-    name = "EBLT PN laser quality summary L1";
-    meLaserL1PN_ = dqmStore_->book2D(name, name, 90, 0., 90., 20, -10., 10.);
-    meLaserL1PN_->setAxisTitle("jchannel", 1);
-    meLaserL1PN_->setAxisTitle("jpseudo-strip", 2);
-
-    if ( meLaserL1PNErr_ ) dqmStore_->removeElement( meLaserL1PNErr_->getName() );
-    name = "EBLT PN laser quality errors summary L1";
-    meLaserL1PNErr_ = dqmStore_->book1D(name, name, 36, 1, 37);
-    for (int i = 0; i < 36; i++) {
-      meLaserL1PNErr_->setBinLabel(i+1, Numbers::sEB(i+1).c_str(), 1);
-    }
-
-    if ( meLaserL1Ampl_ ) dqmStore_->removeElement( meLaserL1Ampl_->getName() );
-    name = "EBLT laser L1 amplitude summary";
-    meLaserL1Ampl_ = dqmStore_->bookProfile(name, name, 36, 1, 37, 4096, 0., 4096., "s");
-    for (int i = 0; i < 36; i++) {
-      meLaserL1Ampl_->setBinLabel(i+1, Numbers::sEB(i+1).c_str(), 1);
-    }
-
-    if ( meLaserL1Timing_ ) dqmStore_->removeElement( meLaserL1Timing_->getName() );
-    name = "EBLT laser L1 timing summary";
-    meLaserL1Timing_ = dqmStore_->bookProfile(name, name, 36, 1, 37, 100, 0., 10., "s");
-    for (int i = 0; i < 36; i++) {
-      meLaserL1Timing_->setBinLabel(i+1, Numbers::sEB(i+1).c_str(), 1);
-    }
-
-    if ( meLaserL1AmplOverPN_ ) dqmStore_->removeElement( meLaserL1AmplOverPN_->getName() );
-    name = "EBLT laser L1 amplitude over PN summary";
-    meLaserL1AmplOverPN_ = dqmStore_->bookProfile(name, name, 36, 1, 37, 4096, 0., 4096.*12., "s");
-    for (int i = 0; i < 36; i++) {
-      meLaserL1AmplOverPN_->setBinLabel(i+1, Numbers::sEB(i+1).c_str(), 1);
-    }
-
+    if ( meIntegrityPN_ ) dqmStore_->removeElement( meIntegrityPN_->getName() );
+    name = "EBIT PN integrity quality summary";
+    meIntegrityPN_ = dqmStore_->book2D(name, name, 90, 0., 90., 20, -10., 10.);
+    meIntegrityPN_->setAxisTitle("jchannel", 1);
+    meIntegrityPN_->setAxisTitle("jpseudo-strip", 2);
   }
 
-  if ( find(laserWavelengths_.begin(), laserWavelengths_.end(), 2) != laserWavelengths_.end() ) {
+  if(occupancyClient){
+    if ( meOccupancy_ ) dqmStore_->removeElement( meOccupancy_->getName() );
+    name = "EBOT digi occupancy summary";
+    meOccupancy_ = dqmStore_->book2D(name, name, 360, 0., 360., 170, -85., 85.);
+    meOccupancy_->setAxisTitle("jphi", 1);
+    meOccupancy_->setAxisTitle("jeta", 2);
 
-    if ( meLaserL2_ ) dqmStore_->removeElement( meLaserL2_->getName() );
-    name = "EBLT laser quality summary L2";
-    meLaserL2_ = dqmStore_->book2D(name, name, 360, 0., 360., 170, -85., 85.);
-    meLaserL2_->setAxisTitle("jphi", 1);
-    meLaserL2_->setAxisTitle("jeta", 2);
-
-    if ( meLaserL2Err_ ) dqmStore_->removeElement( meLaserL2Err_->getName() );
-    name = "EBLT laser quality errors summary L2";
-    meLaserL2Err_ = dqmStore_->book1D(name, name, 36, 1, 37);
+    if ( meOccupancy1D_ ) dqmStore_->removeElement( meOccupancy1D_->getName() );
+    name = "EBOT digi occupancy summary 1D";
+    meOccupancy1D_ = dqmStore_->book1D(name, name, 36, 1, 37);
     for (int i = 0; i < 36; i++) {
-      meLaserL2Err_->setBinLabel(i+1, Numbers::sEB(i+1).c_str(), 1);
+      meOccupancy1D_->setBinLabel(i+1, Numbers::sEB(i+1).c_str(), 1);
     }
 
-    if ( meLaserL2PN_ ) dqmStore_->removeElement( meLaserL2PN_->getName() );
-    name = "EBLT PN laser quality summary L2";
-    meLaserL2PN_ = dqmStore_->book2D(name, name, 90, 0., 90., 20, -10., 10.);
-    meLaserL2PN_->setAxisTitle("jchannel", 1);
-    meLaserL2PN_->setAxisTitle("jpseudo-strip", 2);
+    if ( meOccupancyPN_ ) dqmStore_->removeElement( meOccupancyPN_->getName() );
+    name = "EBOT PN digi occupancy summary";
+    meOccupancyPN_ = dqmStore_->book2D(name, name, 90, 0., 90., 20, -10., 10.);
+    meOccupancyPN_->setAxisTitle("jchannel", 1);
+    meOccupancyPN_->setAxisTitle("jpseudo-strip", 2);
 
-    if ( meLaserL2PNErr_ ) dqmStore_->removeElement( meLaserL2PNErr_->getName() );
-    name = "EBLT PN laser quality errors summary L2";
-    meLaserL2PNErr_ = dqmStore_->book1D(name, name, 36, 1, 37);
+    if( meRecHitEnergy_ ) dqmStore_->removeElement( meRecHitEnergy_->getName() );
+    name = "EBOT energy summary";
+    meRecHitEnergy_ = dqmStore_->book2D(name, name, 360, 0., 360., 170, -85., 85.);
+    meRecHitEnergy_->setAxisTitle("jphi", 1);
+    meRecHitEnergy_->setAxisTitle("jeta", 2);
+  }
+
+  if(statusFlagsClient){
+    if ( meStatusFlags_ ) dqmStore_->removeElement( meStatusFlags_->getName() );
+    name = "EBSFT front-end status summary";
+    meStatusFlags_ = dqmStore_->book2D(name, name, 72, 0., 72., 34, -17., 17.);
+    meStatusFlags_->setAxisTitle("jphi'", 1);
+    meStatusFlags_->setAxisTitle("jeta'", 2);
+
+    if ( meStatusFlagsErr_ ) dqmStore_->removeElement( meStatusFlagsErr_->getName() );
+    name = "EBSFT front-end status errors summary";
+    meStatusFlagsErr_ = dqmStore_->book1D(name, name, 36, 1, 37);
     for (int i = 0; i < 36; i++) {
-      meLaserL2PNErr_->setBinLabel(i+1, Numbers::sEB(i+1).c_str(), 1);
+      meStatusFlagsErr_->setBinLabel(i+1, Numbers::sEB(i+1).c_str(), 1);
+    }
+  }
+
+  if(pedestalOnlineClient){
+    if ( mePedestalOnline_ ) dqmStore_->removeElement( mePedestalOnline_->getName() );
+    name = "EBPOT pedestal quality summary G12";
+    mePedestalOnline_ = dqmStore_->book2D(name, name, 360, 0., 360., 170, -85., 85.);
+    mePedestalOnline_->setAxisTitle("jphi", 1);
+    mePedestalOnline_->setAxisTitle("jeta", 2);
+
+    if ( mePedestalOnlineErr_ ) dqmStore_->removeElement( mePedestalOnlineErr_->getName() );
+    name = "EBPOT pedestal quality errors summary G12";
+    mePedestalOnlineErr_ = dqmStore_->book1D(name, name, 36, 1, 37);
+    for (int i = 0; i < 36; i++) {
+      mePedestalOnlineErr_->setBinLabel(i+1, Numbers::sEB(i+1).c_str(), 1);
     }
 
-    if ( meLaserL2Ampl_ ) dqmStore_->removeElement( meLaserL2Ampl_->getName() );
-    name = "EBLT laser L2 amplitude summary";
-    meLaserL2Ampl_ = dqmStore_->bookProfile(name, name, 36, 1, 37, 4096, 0., 4096., "s");
+    if ( mePedestalOnlineRMSMap_ ) dqmStore_->removeElement( mePedestalOnlineRMSMap_->getName() );
+    name = "EBPOT pedestal G12 RMS map";
+    mePedestalOnlineRMSMap_ = dqmStore_->book2D(name, name, 360, 0., 360., 170, -85., 85.);
+    mePedestalOnlineRMSMap_->setAxisTitle("jphi", 1);
+    mePedestalOnlineRMSMap_->setAxisTitle("jeta", 2);
+
+    if ( mePedestalOnlineMean_ ) dqmStore_->removeElement( mePedestalOnlineMean_->getName() );
+    name = "EBPOT pedestal G12 mean";
+    mePedestalOnlineMean_ = dqmStore_->bookProfile(name, name, 36, 1, 37, 100, 150., 250.);
     for (int i = 0; i < 36; i++) {
-      meLaserL2Ampl_->setBinLabel(i+1, Numbers::sEB(i+1).c_str(), 1);
+      mePedestalOnlineMean_->setBinLabel(i+1, Numbers::sEB(i+1).c_str(), 1);
     }
 
-    if ( meLaserL2Timing_ ) dqmStore_->removeElement( meLaserL2Timing_->getName() );
-    name = "EBLT laser L2 timing summary";
-    meLaserL2Timing_ = dqmStore_->bookProfile(name, name, 36, 1, 37, 100, 0., 10., "s");
+    if ( mePedestalOnlineRMS_ ) dqmStore_->removeElement( mePedestalOnlineRMS_->getName() );
+    name = "EBPOT pedestal G12 rms";
+    mePedestalOnlineRMS_ = dqmStore_->bookProfile(name, name, 36, 1, 37, 100, 0., 10.);
     for (int i = 0; i < 36; i++) {
-      meLaserL2Timing_->setBinLabel(i+1, Numbers::sEB(i+1).c_str(), 1);
+      mePedestalOnlineRMS_->setBinLabel(i+1, Numbers::sEB(i+1).c_str(), 1);
+    }
+  }
+
+  if(laserClient){
+
+    if ( find(laserWavelengths_.begin(), laserWavelengths_.end(), 1) != laserWavelengths_.end() ) {
+
+      if ( meLaserL1_ ) dqmStore_->removeElement( meLaserL1_->getName() );
+      name = "EBLT laser quality summary L1";
+      meLaserL1_ = dqmStore_->book2D(name, name, 360, 0., 360., 170, -85., 85.);
+      meLaserL1_->setAxisTitle("jphi", 1);
+      meLaserL1_->setAxisTitle("jeta", 2);
+
+      if ( meLaserL1Err_ ) dqmStore_->removeElement( meLaserL1Err_->getName() );
+      name = "EBLT laser quality errors summary L1";
+      meLaserL1Err_ = dqmStore_->book1D(name, name, 36, 1, 37);
+      for (int i = 0; i < 36; i++) {
+	meLaserL1Err_->setBinLabel(i+1, Numbers::sEB(i+1).c_str(), 1);
+      }
+
+      if ( meLaserL1PN_ ) dqmStore_->removeElement( meLaserL1PN_->getName() );
+      name = "EBLT PN laser quality summary L1";
+      meLaserL1PN_ = dqmStore_->book2D(name, name, 90, 0., 90., 20, -10., 10.);
+      meLaserL1PN_->setAxisTitle("jchannel", 1);
+      meLaserL1PN_->setAxisTitle("jpseudo-strip", 2);
+
+      if ( meLaserL1PNErr_ ) dqmStore_->removeElement( meLaserL1PNErr_->getName() );
+      name = "EBLT PN laser quality errors summary L1";
+      meLaserL1PNErr_ = dqmStore_->book1D(name, name, 36, 1, 37);
+      for (int i = 0; i < 36; i++) {
+	meLaserL1PNErr_->setBinLabel(i+1, Numbers::sEB(i+1).c_str(), 1);
+      }
+
+      if ( meLaserL1Ampl_ ) dqmStore_->removeElement( meLaserL1Ampl_->getName() );
+      name = "EBLT laser L1 amplitude summary";
+      meLaserL1Ampl_ = dqmStore_->bookProfile(name, name, 36, 1, 37, 4096, 0., 4096., "s");
+      for (int i = 0; i < 36; i++) {
+	meLaserL1Ampl_->setBinLabel(i+1, Numbers::sEB(i+1).c_str(), 1);
+      }
+
+      if ( meLaserL1Timing_ ) dqmStore_->removeElement( meLaserL1Timing_->getName() );
+      name = "EBLT laser L1 timing summary";
+      meLaserL1Timing_ = dqmStore_->bookProfile(name, name, 36, 1, 37, 100, 0., 10., "s");
+      for (int i = 0; i < 36; i++) {
+	meLaserL1Timing_->setBinLabel(i+1, Numbers::sEB(i+1).c_str(), 1);
+      }
+
+      if ( meLaserL1AmplOverPN_ ) dqmStore_->removeElement( meLaserL1AmplOverPN_->getName() );
+      name = "EBLT laser L1 amplitude over PN summary";
+      meLaserL1AmplOverPN_ = dqmStore_->bookProfile(name, name, 36, 1, 37, 4096, 0., 4096.*12., "s");
+      for (int i = 0; i < 36; i++) {
+	meLaserL1AmplOverPN_->setBinLabel(i+1, Numbers::sEB(i+1).c_str(), 1);
+      }
+
     }
 
-    if ( meLaserL2AmplOverPN_ ) dqmStore_->removeElement( meLaserL2AmplOverPN_->getName() );
-    name = "EBLT laser L2 amplitude over PN summary";
-    meLaserL2AmplOverPN_ = dqmStore_->bookProfile(name, name, 36, 1, 37, 4096, 0., 4096.*12., "s");
-    for (int i = 0; i < 36; i++) {
-      meLaserL2AmplOverPN_->setBinLabel(i+1, Numbers::sEB(i+1).c_str(), 1);
+    if ( find(laserWavelengths_.begin(), laserWavelengths_.end(), 2) != laserWavelengths_.end() ) {
+
+      if ( meLaserL2_ ) dqmStore_->removeElement( meLaserL2_->getName() );
+      name = "EBLT laser quality summary L2";
+      meLaserL2_ = dqmStore_->book2D(name, name, 360, 0., 360., 170, -85., 85.);
+      meLaserL2_->setAxisTitle("jphi", 1);
+      meLaserL2_->setAxisTitle("jeta", 2);
+
+      if ( meLaserL2Err_ ) dqmStore_->removeElement( meLaserL2Err_->getName() );
+      name = "EBLT laser quality errors summary L2";
+      meLaserL2Err_ = dqmStore_->book1D(name, name, 36, 1, 37);
+      for (int i = 0; i < 36; i++) {
+	meLaserL2Err_->setBinLabel(i+1, Numbers::sEB(i+1).c_str(), 1);
+      }
+
+      if ( meLaserL2PN_ ) dqmStore_->removeElement( meLaserL2PN_->getName() );
+      name = "EBLT PN laser quality summary L2";
+      meLaserL2PN_ = dqmStore_->book2D(name, name, 90, 0., 90., 20, -10., 10.);
+      meLaserL2PN_->setAxisTitle("jchannel", 1);
+      meLaserL2PN_->setAxisTitle("jpseudo-strip", 2);
+
+      if ( meLaserL2PNErr_ ) dqmStore_->removeElement( meLaserL2PNErr_->getName() );
+      name = "EBLT PN laser quality errors summary L2";
+      meLaserL2PNErr_ = dqmStore_->book1D(name, name, 36, 1, 37);
+      for (int i = 0; i < 36; i++) {
+	meLaserL2PNErr_->setBinLabel(i+1, Numbers::sEB(i+1).c_str(), 1);
+      }
+
+      if ( meLaserL2Ampl_ ) dqmStore_->removeElement( meLaserL2Ampl_->getName() );
+      name = "EBLT laser L2 amplitude summary";
+      meLaserL2Ampl_ = dqmStore_->bookProfile(name, name, 36, 1, 37, 4096, 0., 4096., "s");
+      for (int i = 0; i < 36; i++) {
+	meLaserL2Ampl_->setBinLabel(i+1, Numbers::sEB(i+1).c_str(), 1);
+      }
+
+      if ( meLaserL2Timing_ ) dqmStore_->removeElement( meLaserL2Timing_->getName() );
+      name = "EBLT laser L2 timing summary";
+      meLaserL2Timing_ = dqmStore_->bookProfile(name, name, 36, 1, 37, 100, 0., 10., "s");
+      for (int i = 0; i < 36; i++) {
+	meLaserL2Timing_->setBinLabel(i+1, Numbers::sEB(i+1).c_str(), 1);
+      }
+
+      if ( meLaserL2AmplOverPN_ ) dqmStore_->removeElement( meLaserL2AmplOverPN_->getName() );
+      name = "EBLT laser L2 amplitude over PN summary";
+      meLaserL2AmplOverPN_ = dqmStore_->bookProfile(name, name, 36, 1, 37, 4096, 0., 4096.*12., "s");
+      for (int i = 0; i < 36; i++) {
+	meLaserL2AmplOverPN_->setBinLabel(i+1, Numbers::sEB(i+1).c_str(), 1);
+      }
+
     }
 
-  }
+    if ( find(laserWavelengths_.begin(), laserWavelengths_.end(), 3) != laserWavelengths_.end() ) {
 
-  if ( find(laserWavelengths_.begin(), laserWavelengths_.end(), 3) != laserWavelengths_.end() ) {
+      if ( meLaserL3_ ) dqmStore_->removeElement( meLaserL3_->getName() );
+      name = "EBLT laser quality summary L3";
+      meLaserL3_ = dqmStore_->book2D(name, name, 360, 0., 360., 170, -85., 85.);
+      meLaserL3_->setAxisTitle("jphi", 1);
+      meLaserL3_->setAxisTitle("jeta", 2);
 
-    if ( meLaserL3_ ) dqmStore_->removeElement( meLaserL3_->getName() );
-    name = "EBLT laser quality summary L3";
-    meLaserL3_ = dqmStore_->book2D(name, name, 360, 0., 360., 170, -85., 85.);
-    meLaserL3_->setAxisTitle("jphi", 1);
-    meLaserL3_->setAxisTitle("jeta", 2);
+      if ( meLaserL3Err_ ) dqmStore_->removeElement( meLaserL3Err_->getName() );
+      name = "EBLT laser quality errors summary L3";
+      meLaserL3Err_ = dqmStore_->book1D(name, name, 36, 1, 37);
+      for (int i = 0; i < 36; i++) {
+	meLaserL3Err_->setBinLabel(i+1, Numbers::sEB(i+1).c_str(), 1);
+      }
 
-    if ( meLaserL3Err_ ) dqmStore_->removeElement( meLaserL3Err_->getName() );
-    name = "EBLT laser quality errors summary L3";
-    meLaserL3Err_ = dqmStore_->book1D(name, name, 36, 1, 37);
-    for (int i = 0; i < 36; i++) {
-      meLaserL3Err_->setBinLabel(i+1, Numbers::sEB(i+1).c_str(), 1);
+      if ( meLaserL3PN_ ) dqmStore_->removeElement( meLaserL3PN_->getName() );
+      name = "EBLT PN laser quality summary L3";
+      meLaserL3PN_ = dqmStore_->book2D(name, name, 90, 0., 90., 20, -10., 10.);
+      meLaserL3PN_->setAxisTitle("jchannel", 1);
+      meLaserL3PN_->setAxisTitle("jpseudo-strip", 2);
+
+      if ( meLaserL3PNErr_ ) dqmStore_->removeElement( meLaserL3PNErr_->getName() );
+      name = "EBLT PN laser quality errors summary L3";
+      meLaserL3PNErr_ = dqmStore_->book1D(name, name, 36, 1, 37);
+      for (int i = 0; i < 36; i++) {
+	meLaserL3PNErr_->setBinLabel(i+1, Numbers::sEB(i+1).c_str(), 1);
+      }
+
+      if ( meLaserL3Ampl_ ) dqmStore_->removeElement( meLaserL3Ampl_->getName() );
+      name = "EBLT laser L3 amplitude summary";
+      meLaserL3Ampl_ = dqmStore_->bookProfile(name, name, 36, 1, 37, 4096, 0., 4096., "s");
+      for (int i = 0; i < 36; i++) {
+	meLaserL3Ampl_->setBinLabel(i+1, Numbers::sEB(i+1).c_str(), 1);
+      }
+
+      if ( meLaserL3Timing_ ) dqmStore_->removeElement( meLaserL3Timing_->getName() );
+      name = "EBLT laser L3 timing summary";
+      meLaserL3Timing_ = dqmStore_->bookProfile(name, name, 36, 1, 37, 100, 0., 10., "s");
+      for (int i = 0; i < 36; i++) {
+	meLaserL3Timing_->setBinLabel(i+1, Numbers::sEB(i+1).c_str(), 1);
+      }
+
+      if ( meLaserL3AmplOverPN_ ) dqmStore_->removeElement( meLaserL3AmplOverPN_->getName() );
+      name = "EBLT laser L3 amplitude over PN summary";
+      meLaserL3AmplOverPN_ = dqmStore_->bookProfile(name, name, 36, 1, 37, 4096, 0., 4096.*12., "s");
+      for (int i = 0; i < 36; i++) {
+	meLaserL3AmplOverPN_->setBinLabel(i+1, Numbers::sEB(i+1).c_str(), 1);
+      }
+
     }
 
-    if ( meLaserL3PN_ ) dqmStore_->removeElement( meLaserL3PN_->getName() );
-    name = "EBLT PN laser quality summary L3";
-    meLaserL3PN_ = dqmStore_->book2D(name, name, 90, 0., 90., 20, -10., 10.);
-    meLaserL3PN_->setAxisTitle("jchannel", 1);
-    meLaserL3PN_->setAxisTitle("jpseudo-strip", 2);
+    if ( find(laserWavelengths_.begin(), laserWavelengths_.end(), 4) != laserWavelengths_.end() ) {
 
-    if ( meLaserL3PNErr_ ) dqmStore_->removeElement( meLaserL3PNErr_->getName() );
-    name = "EBLT PN laser quality errors summary L3";
-    meLaserL3PNErr_ = dqmStore_->book1D(name, name, 36, 1, 37);
-    for (int i = 0; i < 36; i++) {
-      meLaserL3PNErr_->setBinLabel(i+1, Numbers::sEB(i+1).c_str(), 1);
+      if ( meLaserL4_ ) dqmStore_->removeElement( meLaserL4_->getName() );
+      name = "EBLT laser quality summary L4";
+      meLaserL4_ = dqmStore_->book2D(name, name, 360, 0., 360., 170, -85., 85.);
+      meLaserL4_->setAxisTitle("jphi", 1);
+      meLaserL4_->setAxisTitle("jeta", 2);
+
+      if ( meLaserL4Err_ ) dqmStore_->removeElement( meLaserL4Err_->getName() );
+      name = "EBLT laser quality errors summary L4";
+      meLaserL4Err_ = dqmStore_->book1D(name, name, 36, 1, 37);
+      for (int i = 0; i < 36; i++) {
+	meLaserL4Err_->setBinLabel(i+1, Numbers::sEB(i+1).c_str(), 1);
+      }
+
+      if ( meLaserL4PN_ ) dqmStore_->removeElement( meLaserL4PN_->getName() );
+      name = "EBLT PN laser quality summary L4";
+      meLaserL4PN_ = dqmStore_->book2D(name, name, 90, 0., 90., 20, -10., 10.);
+      meLaserL4PN_->setAxisTitle("jchannel", 1);
+      meLaserL4PN_->setAxisTitle("jpseudo-strip", 2);
+
+      if ( meLaserL4PNErr_ ) dqmStore_->removeElement( meLaserL4PNErr_->getName() );
+      name = "EBLT PN laser quality errors summary L4";
+      meLaserL4PNErr_ = dqmStore_->book1D(name, name, 36, 1, 37);
+      for (int i = 0; i < 36; i++) {
+	meLaserL4PNErr_->setBinLabel(i+1, Numbers::sEB(i+1).c_str(), 1);
+      }
+
+      if ( meLaserL4Ampl_ ) dqmStore_->removeElement( meLaserL4Ampl_->getName() );
+      name = "EBLT laser L4 amplitude summary";
+      meLaserL4Ampl_ = dqmStore_->bookProfile(name, name, 36, 1, 37, 4096, 0., 4096., "s");
+      for (int i = 0; i < 36; i++) {
+	meLaserL4Ampl_->setBinLabel(i+1, Numbers::sEB(i+1).c_str(), 1);
+      }
+
+      if ( meLaserL4Timing_ ) dqmStore_->removeElement( meLaserL4Timing_->getName() );
+      name = "EBLT laser L4 timing summary";
+      meLaserL4Timing_ = dqmStore_->bookProfile(name, name, 36, 1, 37, 100, 0., 10., "s");
+      for (int i = 0; i < 36; i++) {
+	meLaserL4Timing_->setBinLabel(i+1, Numbers::sEB(i+1).c_str(), 1);
+      }
+
+      if ( meLaserL4AmplOverPN_ ) dqmStore_->removeElement( meLaserL4AmplOverPN_->getName() );
+      name = "EBLT laser L4 amplitude over PN summary";
+      meLaserL4AmplOverPN_ = dqmStore_->bookProfile(name, name, 36, 1, 37, 4096, 0., 4096.*12., "s");
+      for (int i = 0; i < 36; i++) {
+	meLaserL4AmplOverPN_->setBinLabel(i+1, Numbers::sEB(i+1).c_str(), 1);
+      }
+
+    }
+  }
+
+  if(pedestalClient){
+    if (find(MGPAGains_.begin(), MGPAGains_.end(), 1) != MGPAGains_.end() ) {
+
+      if( mePedestalG01_ ) dqmStore_->removeElement( mePedestalG01_->getName() );
+      name = "EBPT pedestal quality G01 summary";
+      mePedestalG01_ = dqmStore_->book2D(name, name, 360, 0., 360., 170, -85., 85.);
+      mePedestalG01_->setAxisTitle("jphi", 1);
+      mePedestalG01_->setAxisTitle("jeta", 2);
+
     }
 
-    if ( meLaserL3Ampl_ ) dqmStore_->removeElement( meLaserL3Ampl_->getName() );
-    name = "EBLT laser L3 amplitude summary";
-    meLaserL3Ampl_ = dqmStore_->bookProfile(name, name, 36, 1, 37, 4096, 0., 4096., "s");
-    for (int i = 0; i < 36; i++) {
-      meLaserL3Ampl_->setBinLabel(i+1, Numbers::sEB(i+1).c_str(), 1);
+    if (find(MGPAGains_.begin(), MGPAGains_.end(), 6) != MGPAGains_.end() ) {
+
+      if( mePedestalG06_ ) dqmStore_->removeElement( mePedestalG06_->getName() );
+      name = "EBPT pedestal quality G06 summary";
+      mePedestalG06_ = dqmStore_->book2D(name, name, 360, 0., 360., 170, -85., 85.);
+      mePedestalG06_->setAxisTitle("jphi", 1);
+      mePedestalG06_->setAxisTitle("jeta", 2);
+
     }
 
-    if ( meLaserL3Timing_ ) dqmStore_->removeElement( meLaserL3Timing_->getName() );
-    name = "EBLT laser L3 timing summary";
-    meLaserL3Timing_ = dqmStore_->bookProfile(name, name, 36, 1, 37, 100, 0., 10., "s");
-    for (int i = 0; i < 36; i++) {
-      meLaserL3Timing_->setBinLabel(i+1, Numbers::sEB(i+1).c_str(), 1);
+    if (find(MGPAGains_.begin(), MGPAGains_.end(), 12) != MGPAGains_.end() ) {
+
+      if( mePedestalG12_ ) dqmStore_->removeElement( mePedestalG12_->getName() );
+      name = "EBPT pedestal quality G12 summary";
+      mePedestalG12_ = dqmStore_->book2D(name, name, 360, 0., 360., 170, -85., 85.);
+      mePedestalG12_->setAxisTitle("jphi", 1);
+      mePedestalG12_->setAxisTitle("jeta", 2);
+
     }
 
-    if ( meLaserL3AmplOverPN_ ) dqmStore_->removeElement( meLaserL3AmplOverPN_->getName() );
-    name = "EBLT laser L3 amplitude over PN summary";
-    meLaserL3AmplOverPN_ = dqmStore_->bookProfile(name, name, 36, 1, 37, 4096, 0., 4096.*12., "s");
-    for (int i = 0; i < 36; i++) {
-      meLaserL3AmplOverPN_->setBinLabel(i+1, Numbers::sEB(i+1).c_str(), 1);
+    if (find(MGPAGainsPN_.begin(), MGPAGainsPN_.end(), 1) != MGPAGainsPN_.end() ) {
+
+      if( mePedestalPNG01_ ) dqmStore_->removeElement( mePedestalPNG01_->getName() );
+      name = "EBPT PN pedestal quality G01 summary";
+      mePedestalPNG01_ = dqmStore_->book2D(name, name, 90, 0., 90., 20, -10, 10.);
+      mePedestalPNG01_->setAxisTitle("jchannel", 1);
+      mePedestalPNG01_->setAxisTitle("jpseudo-strip", 2);
+
     }
 
+    if (find(MGPAGainsPN_.begin(), MGPAGainsPN_.end(), 16) != MGPAGainsPN_.end() ) {
+
+      if( mePedestalPNG16_ ) dqmStore_->removeElement( mePedestalPNG16_->getName() );
+      name = "EBPT PN pedestal quality G16 summary";
+      mePedestalPNG16_ = dqmStore_->book2D(name, name, 90, 0., 90., 20, -10, 10.);
+      mePedestalPNG16_->setAxisTitle("jchannel", 1);
+      mePedestalPNG16_->setAxisTitle("jpseudo-strip", 2);
+
+    }
   }
 
-  if ( find(laserWavelengths_.begin(), laserWavelengths_.end(), 4) != laserWavelengths_.end() ) {
+  if(testPulseClient){
+    if (find(MGPAGains_.begin(), MGPAGains_.end(), 1) != MGPAGains_.end() ) {
 
-    if ( meLaserL4_ ) dqmStore_->removeElement( meLaserL4_->getName() );
-    name = "EBLT laser quality summary L4";
-    meLaserL4_ = dqmStore_->book2D(name, name, 360, 0., 360., 170, -85., 85.);
-    meLaserL4_->setAxisTitle("jphi", 1);
-    meLaserL4_->setAxisTitle("jeta", 2);
+      if( meTestPulseG01_ ) dqmStore_->removeElement( meTestPulseG01_->getName() );
+      name = "EBTPT test pulse quality G01 summary";
+      meTestPulseG01_ = dqmStore_->book2D(name, name, 360, 0., 360., 170, -85., 85.);
+      meTestPulseG01_->setAxisTitle("jphi", 1);
+      meTestPulseG01_->setAxisTitle("jeta", 2);
 
-    if ( meLaserL4Err_ ) dqmStore_->removeElement( meLaserL4Err_->getName() );
-    name = "EBLT laser quality errors summary L4";
-    meLaserL4Err_ = dqmStore_->book1D(name, name, 36, 1, 37);
-    for (int i = 0; i < 36; i++) {
-      meLaserL4Err_->setBinLabel(i+1, Numbers::sEB(i+1).c_str(), 1);
     }
 
-    if ( meLaserL4PN_ ) dqmStore_->removeElement( meLaserL4PN_->getName() );
-    name = "EBLT PN laser quality summary L4";
-    meLaserL4PN_ = dqmStore_->book2D(name, name, 90, 0., 90., 20, -10., 10.);
-    meLaserL4PN_->setAxisTitle("jchannel", 1);
-    meLaserL4PN_->setAxisTitle("jpseudo-strip", 2);
+    if (find(MGPAGains_.begin(), MGPAGains_.end(), 6) != MGPAGains_.end() ) {
 
-    if ( meLaserL4PNErr_ ) dqmStore_->removeElement( meLaserL4PNErr_->getName() );
-    name = "EBLT PN laser quality errors summary L4";
-    meLaserL4PNErr_ = dqmStore_->book1D(name, name, 36, 1, 37);
-    for (int i = 0; i < 36; i++) {
-      meLaserL4PNErr_->setBinLabel(i+1, Numbers::sEB(i+1).c_str(), 1);
+      if( meTestPulseG06_ ) dqmStore_->removeElement( meTestPulseG06_->getName() );
+      name = "EBTPT test pulse quality G06 summary";
+      meTestPulseG06_ = dqmStore_->book2D(name, name, 360, 0., 360., 170, -85., 85.);
+      meTestPulseG06_->setAxisTitle("jphi", 1);
+      meTestPulseG06_->setAxisTitle("jeta", 2);
+
     }
 
-    if ( meLaserL4Ampl_ ) dqmStore_->removeElement( meLaserL4Ampl_->getName() );
-    name = "EBLT laser L4 amplitude summary";
-    meLaserL4Ampl_ = dqmStore_->bookProfile(name, name, 36, 1, 37, 4096, 0., 4096., "s");
-    for (int i = 0; i < 36; i++) {
-      meLaserL4Ampl_->setBinLabel(i+1, Numbers::sEB(i+1).c_str(), 1);
+    if (find(MGPAGains_.begin(), MGPAGains_.end(), 12) != MGPAGains_.end() ) {
+
+      if( meTestPulseG12_ ) dqmStore_->removeElement( meTestPulseG12_->getName() );
+      name = "EBTPT test pulse quality G12 summary";
+      meTestPulseG12_ = dqmStore_->book2D(name, name, 360, 0., 360., 170, -85., 85.);
+      meTestPulseG12_->setAxisTitle("jphi", 1);
+      meTestPulseG12_->setAxisTitle("jeta", 2);
+
     }
 
-    if ( meLaserL4Timing_ ) dqmStore_->removeElement( meLaserL4Timing_->getName() );
-    name = "EBLT laser L4 timing summary";
-    meLaserL4Timing_ = dqmStore_->bookProfile(name, name, 36, 1, 37, 100, 0., 10., "s");
-    for (int i = 0; i < 36; i++) {
-      meLaserL4Timing_->setBinLabel(i+1, Numbers::sEB(i+1).c_str(), 1);
+    if (find(MGPAGainsPN_.begin(), MGPAGainsPN_.end(), 1) != MGPAGainsPN_.end() ) {
+
+      if( meTestPulsePNG01_ ) dqmStore_->removeElement( meTestPulsePNG01_->getName() );
+      name = "EBTPT PN test pulse quality G01 summary";
+      meTestPulsePNG01_ = dqmStore_->book2D(name, name, 90, 0., 90., 20, -10., 10.);
+      meTestPulsePNG01_->setAxisTitle("jchannel", 1);
+      meTestPulsePNG01_->setAxisTitle("jpseudo-strip", 2);
+
     }
 
-    if ( meLaserL4AmplOverPN_ ) dqmStore_->removeElement( meLaserL4AmplOverPN_->getName() );
-    name = "EBLT laser L4 amplitude over PN summary";
-    meLaserL4AmplOverPN_ = dqmStore_->bookProfile(name, name, 36, 1, 37, 4096, 0., 4096.*12., "s");
-    for (int i = 0; i < 36; i++) {
-      meLaserL4AmplOverPN_->setBinLabel(i+1, Numbers::sEB(i+1).c_str(), 1);
+    if (find(MGPAGainsPN_.begin(), MGPAGainsPN_.end(), 16) != MGPAGainsPN_.end() ) {
+
+      if( meTestPulsePNG16_ ) dqmStore_->removeElement( meTestPulsePNG16_->getName() );
+      name = "EBTPT PN test pulse quality G16 summary";
+      meTestPulsePNG16_ = dqmStore_->book2D(name, name, 90, 0., 90., 20, -10., 10.);
+      meTestPulsePNG16_->setAxisTitle("jchannel", 1);
+      meTestPulsePNG16_->setAxisTitle("jpseudo-strip", 2);
+
     }
 
-  }
+    if (find(MGPAGains_.begin(), MGPAGains_.end(), 1) != MGPAGains_.end() ) {
 
-  if (find(MGPAGains_.begin(), MGPAGains_.end(), 1) != MGPAGains_.end() ) {
+      if( meTestPulseAmplG01_ ) dqmStore_->removeElement( meTestPulseAmplG01_->getName() );
+      name = "EBTPT test pulse amplitude G01 summary";
+      meTestPulseAmplG01_ = dqmStore_->bookProfile(name, name, 36, 1, 37, 4096, 0., 4096.*12., "s");
+      for (int i = 0; i < 36; i++) {
+	meTestPulseAmplG01_->setBinLabel(i+1, Numbers::sEB(i+1).c_str(), 1);
+      }
 
-    if( mePedestalG01_ ) dqmStore_->removeElement( mePedestalG01_->getName() );
-    name = "EBPT pedestal quality G01 summary";
-    mePedestalG01_ = dqmStore_->book2D(name, name, 360, 0., 360., 170, -85., 85.);
-    mePedestalG01_->setAxisTitle("jphi", 1);
-    mePedestalG01_->setAxisTitle("jeta", 2);
-
-  }
-
-  if (find(MGPAGains_.begin(), MGPAGains_.end(), 6) != MGPAGains_.end() ) {
-
-    if( mePedestalG06_ ) dqmStore_->removeElement( mePedestalG06_->getName() );
-    name = "EBPT pedestal quality G06 summary";
-    mePedestalG06_ = dqmStore_->book2D(name, name, 360, 0., 360., 170, -85., 85.);
-    mePedestalG06_->setAxisTitle("jphi", 1);
-    mePedestalG06_->setAxisTitle("jeta", 2);
-
-  }
-
-  if (find(MGPAGains_.begin(), MGPAGains_.end(), 12) != MGPAGains_.end() ) {
-
-    if( mePedestalG12_ ) dqmStore_->removeElement( mePedestalG12_->getName() );
-    name = "EBPT pedestal quality G12 summary";
-    mePedestalG12_ = dqmStore_->book2D(name, name, 360, 0., 360., 170, -85., 85.);
-    mePedestalG12_->setAxisTitle("jphi", 1);
-    mePedestalG12_->setAxisTitle("jeta", 2);
-
-  }
-
-  if (find(MGPAGainsPN_.begin(), MGPAGainsPN_.end(), 1) != MGPAGainsPN_.end() ) {
-
-    if( mePedestalPNG01_ ) dqmStore_->removeElement( mePedestalPNG01_->getName() );
-    name = "EBPT PN pedestal quality G01 summary";
-    mePedestalPNG01_ = dqmStore_->book2D(name, name, 90, 0., 90., 20, -10, 10.);
-    mePedestalPNG01_->setAxisTitle("jchannel", 1);
-    mePedestalPNG01_->setAxisTitle("jpseudo-strip", 2);
-
-  }
-
-  if (find(MGPAGainsPN_.begin(), MGPAGainsPN_.end(), 16) != MGPAGainsPN_.end() ) {
-
-    if( mePedestalPNG16_ ) dqmStore_->removeElement( mePedestalPNG16_->getName() );
-    name = "EBPT PN pedestal quality G16 summary";
-    mePedestalPNG16_ = dqmStore_->book2D(name, name, 90, 0., 90., 20, -10, 10.);
-    mePedestalPNG16_->setAxisTitle("jchannel", 1);
-    mePedestalPNG16_->setAxisTitle("jpseudo-strip", 2);
-
-  }
-
-  if (find(MGPAGains_.begin(), MGPAGains_.end(), 1) != MGPAGains_.end() ) {
-
-    if( meTestPulseG01_ ) dqmStore_->removeElement( meTestPulseG01_->getName() );
-    name = "EBTPT test pulse quality G01 summary";
-    meTestPulseG01_ = dqmStore_->book2D(name, name, 360, 0., 360., 170, -85., 85.);
-    meTestPulseG01_->setAxisTitle("jphi", 1);
-    meTestPulseG01_->setAxisTitle("jeta", 2);
-
-  }
-
-  if (find(MGPAGains_.begin(), MGPAGains_.end(), 6) != MGPAGains_.end() ) {
-
-    if( meTestPulseG06_ ) dqmStore_->removeElement( meTestPulseG06_->getName() );
-    name = "EBTPT test pulse quality G06 summary";
-    meTestPulseG06_ = dqmStore_->book2D(name, name, 360, 0., 360., 170, -85., 85.);
-    meTestPulseG06_->setAxisTitle("jphi", 1);
-    meTestPulseG06_->setAxisTitle("jeta", 2);
-
-  }
-
-  if (find(MGPAGains_.begin(), MGPAGains_.end(), 12) != MGPAGains_.end() ) {
-
-    if( meTestPulseG12_ ) dqmStore_->removeElement( meTestPulseG12_->getName() );
-    name = "EBTPT test pulse quality G12 summary";
-    meTestPulseG12_ = dqmStore_->book2D(name, name, 360, 0., 360., 170, -85., 85.);
-    meTestPulseG12_->setAxisTitle("jphi", 1);
-    meTestPulseG12_->setAxisTitle("jeta", 2);
-
-  }
-
-  if (find(MGPAGainsPN_.begin(), MGPAGainsPN_.end(), 1) != MGPAGainsPN_.end() ) {
-
-    if( meTestPulsePNG01_ ) dqmStore_->removeElement( meTestPulsePNG01_->getName() );
-    name = "EBTPT PN test pulse quality G01 summary";
-    meTestPulsePNG01_ = dqmStore_->book2D(name, name, 90, 0., 90., 20, -10., 10.);
-    meTestPulsePNG01_->setAxisTitle("jchannel", 1);
-    meTestPulsePNG01_->setAxisTitle("jpseudo-strip", 2);
-
-  }
-
-  if (find(MGPAGainsPN_.begin(), MGPAGainsPN_.end(), 16) != MGPAGainsPN_.end() ) {
-
-    if( meTestPulsePNG16_ ) dqmStore_->removeElement( meTestPulsePNG16_->getName() );
-    name = "EBTPT PN test pulse quality G16 summary";
-    meTestPulsePNG16_ = dqmStore_->book2D(name, name, 90, 0., 90., 20, -10., 10.);
-    meTestPulsePNG16_->setAxisTitle("jchannel", 1);
-    meTestPulsePNG16_->setAxisTitle("jpseudo-strip", 2);
-
-  }
-
-  if (find(MGPAGains_.begin(), MGPAGains_.end(), 1) != MGPAGains_.end() ) {
-
-    if( meTestPulseAmplG01_ ) dqmStore_->removeElement( meTestPulseAmplG01_->getName() );
-    name = "EBTPT test pulse amplitude G01 summary";
-    meTestPulseAmplG01_ = dqmStore_->bookProfile(name, name, 36, 1, 37, 4096, 0., 4096.*12., "s");
-    for (int i = 0; i < 36; i++) {
-      meTestPulseAmplG01_->setBinLabel(i+1, Numbers::sEB(i+1).c_str(), 1);
     }
 
-  }
+    if (find(MGPAGains_.begin(), MGPAGains_.end(), 6) != MGPAGains_.end() ) {
 
-  if (find(MGPAGains_.begin(), MGPAGains_.end(), 6) != MGPAGains_.end() ) {
+      if( meTestPulseAmplG06_ ) dqmStore_->removeElement( meTestPulseAmplG06_->getName() );
+      name = "EBTPT test pulse amplitude G06 summary";
+      meTestPulseAmplG06_ = dqmStore_->bookProfile(name, name, 36, 1, 37, 4096, 0., 4096.*12., "s");
+      for (int i = 0; i < 36; i++) {
+	meTestPulseAmplG06_->setBinLabel(i+1, Numbers::sEB(i+1).c_str(), 1);
+      }
 
-    if( meTestPulseAmplG06_ ) dqmStore_->removeElement( meTestPulseAmplG06_->getName() );
-    name = "EBTPT test pulse amplitude G06 summary";
-    meTestPulseAmplG06_ = dqmStore_->bookProfile(name, name, 36, 1, 37, 4096, 0., 4096.*12., "s");
-    for (int i = 0; i < 36; i++) {
-      meTestPulseAmplG06_->setBinLabel(i+1, Numbers::sEB(i+1).c_str(), 1);
     }
 
-  }
+    if (find(MGPAGains_.begin(), MGPAGains_.end(), 12) != MGPAGains_.end() ) {
 
-  if (find(MGPAGains_.begin(), MGPAGains_.end(), 12) != MGPAGains_.end() ) {
+      if( meTestPulseAmplG12_ ) dqmStore_->removeElement( meTestPulseAmplG12_->getName() );
+      name = "EBTPT test pulse amplitude G12 summary";
+      meTestPulseAmplG12_ = dqmStore_->bookProfile(name, name, 36, 1, 37, 4096, 0., 4096.*12., "s");
+      for (int i = 0; i < 36; i++) {
+	meTestPulseAmplG12_->setBinLabel(i+1, Numbers::sEB(i+1).c_str(), 1);
+      }
 
-    if( meTestPulseAmplG12_ ) dqmStore_->removeElement( meTestPulseAmplG12_->getName() );
-    name = "EBTPT test pulse amplitude G12 summary";
-    meTestPulseAmplG12_ = dqmStore_->bookProfile(name, name, 36, 1, 37, 4096, 0., 4096.*12., "s");
-    for (int i = 0; i < 36; i++) {
-      meTestPulseAmplG12_->setBinLabel(i+1, Numbers::sEB(i+1).c_str(), 1);
     }
-
   }
 
-  if( meRecHitEnergy_ ) dqmStore_->removeElement( meRecHitEnergy_->getName() );
-  name = "EBOT energy summary";
-  meRecHitEnergy_ = dqmStore_->book2D(name, name, 360, 0., 360., 170, -85., 85.);
-  meRecHitEnergy_->setAxisTitle("jphi", 1);
-  meRecHitEnergy_->setAxisTitle("jeta", 2);
+  if(timingClient){
+    if( meTiming_ ) dqmStore_->removeElement( meTiming_->getName() );
+    name = "EBTMT timing quality summary";
+    meTiming_ = dqmStore_->book2D(name, name, 72, 0., 360., 34, -85., 85.);
+    meTiming_->setAxisTitle("jphi", 1);
+    meTiming_->setAxisTitle("jeta", 2);
 
-  if( meTiming_ ) dqmStore_->removeElement( meTiming_->getName() );
-  name = "EBTMT timing quality summary";
-  meTiming_ = dqmStore_->book2D(name, name, 72, 0., 360., 34, -85., 85.);
-  meTiming_->setAxisTitle("jphi", 1);
-  meTiming_->setAxisTitle("jeta", 2);
+    if( meTimingMean1D_ ) dqmStore_->removeElement( meTimingMean1D_->getName() );
+    name = "EBTMT timing mean 1D summary";
+    meTimingMean1D_ = dqmStore_->book1D(name, name, 100, -25., 25.);
+    meTimingMean1D_->setAxisTitle("mean (ns)", 1);
 
-  if( meTimingMean1D_ ) dqmStore_->removeElement( meTimingMean1D_->getName() );
-  name = "EBTMT timing mean 1D summary";
-  meTimingMean1D_ = dqmStore_->book1D(name, name, 100, -25., 25.);
-  meTimingMean1D_->setAxisTitle("mean (ns)", 1);
+    if( meTimingRMS1D_ ) dqmStore_->removeElement( meTimingRMS1D_->getName() );
+    name = "EBTMT timing rms 1D summary";
+    meTimingRMS1D_ = dqmStore_->book1D(name, name, 100, 0.0, 10.0);
+    meTimingRMS1D_->setAxisTitle("rms (ns)", 1);
 
-  if( meTimingRMS1D_ ) dqmStore_->removeElement( meTimingRMS1D_->getName() );
-  name = "EBTMT timing rms 1D summary";
-  meTimingRMS1D_ = dqmStore_->book1D(name, name, 100, 0.0, 10.0);
-  meTimingRMS1D_->setAxisTitle("rms (ns)", 1);
+    if ( meTimingMean_ ) dqmStore_->removeElement( meTimingMean_->getName() );
+    name = "EBTMT timing mean";
+    meTimingMean_ = dqmStore_->bookProfile(name, name, 36, 1, 37, -20., 20.,"");
+    for (int i = 0; i < 36; i++) {
+      meTimingMean_->setBinLabel(i+1, Numbers::sEB(i+1).c_str(), 1);
+    }
+    meTimingMean_->setAxisTitle("mean (ns)", 2);
 
-  if ( meTimingMean_ ) dqmStore_->removeElement( meTimingMean_->getName() );
-  name = "EBTMT timing mean";
-  meTimingMean_ = dqmStore_->bookProfile(name, name, 36, 1, 37, -20., 20.,"");
-  for (int i = 0; i < 36; i++) {
-    meTimingMean_->setBinLabel(i+1, Numbers::sEB(i+1).c_str(), 1);
+    if ( meTimingRMS_ ) dqmStore_->removeElement( meTimingRMS_->getName() );
+    name = "EBTMT timing rms";
+    meTimingRMS_ = dqmStore_->bookProfile(name, name, 36, 1, 37, 100, 0., 10.,"");
+    for (int i = 0; i < 36; i++) {
+      meTimingRMS_->setBinLabel(i+1, Numbers::sEB(i+1).c_str(), 1);
+    }
+    meTimingRMS_->setAxisTitle("rms (ns)", 2);
   }
-  meTimingMean_->setAxisTitle("mean (ns)", 2);
 
-  if ( meTimingRMS_ ) dqmStore_->removeElement( meTimingRMS_->getName() );
-  name = "EBTMT timing rms";
-  meTimingRMS_ = dqmStore_->bookProfile(name, name, 36, 1, 37, 100, 0., 10.,"");
-  for (int i = 0; i < 36; i++) {
-    meTimingRMS_->setBinLabel(i+1, Numbers::sEB(i+1).c_str(), 1);
+  if(triggerTowerClient){
+    if( meTriggerTowerEt_ ) dqmStore_->removeElement( meTriggerTowerEt_->getName() );
+    name = "EBTTT Et trigger tower summary";
+    meTriggerTowerEt_ = dqmStore_->book2D(name, name, 72, 0., 72., 34, -17., 17.);
+    meTriggerTowerEt_->setAxisTitle("jphi'", 1);
+    meTriggerTowerEt_->setAxisTitle("jeta'", 2);
+
+    if( meTriggerTowerEmulError_ ) dqmStore_->removeElement( meTriggerTowerEmulError_->getName() );
+    name = "EBTTT emulator error quality summary";
+    meTriggerTowerEmulError_ = dqmStore_->book2D(name, name, 72, 0., 72., 34, -17., 17.);
+    meTriggerTowerEmulError_->setAxisTitle("jphi'", 1);
+    meTriggerTowerEmulError_->setAxisTitle("jeta'", 2);
+
+    if( meTriggerTowerTiming_ ) dqmStore_->removeElement( meTriggerTowerTiming_->getName() );
+    name = "EBTTT Trigger Primitives Timing summary";
+    meTriggerTowerTiming_ = dqmStore_->book2D(name, name, 72, 0., 72., 34, -17., 17.);
+    meTriggerTowerTiming_->setAxisTitle("jphi'", 1);
+    meTriggerTowerTiming_->setAxisTitle("jeta'", 2);
+    meTriggerTowerTiming_->setAxisTitle("TP data matching emulator", 3);
+
+    if( meTriggerTowerNonSingleTiming_ ) dqmStore_->removeElement( meTriggerTowerNonSingleTiming_->getName() );
+    name = "EBTTT Trigger Primitives Non Single Timing summary";
+    meTriggerTowerNonSingleTiming_ = dqmStore_->book2D(name, name, 72, 0., 72., 34, -17., 17.);
+    meTriggerTowerNonSingleTiming_->setAxisTitle("jphi'", 1);
+    meTriggerTowerNonSingleTiming_->setAxisTitle("jeta'", 2);
+    meTriggerTowerNonSingleTiming_->setAxisTitle("fraction", 3);
   }
-  meTimingRMS_->setAxisTitle("rms (ns)", 2);
 
-  if( meTriggerTowerEt_ ) dqmStore_->removeElement( meTriggerTowerEt_->getName() );
-  name = "EBTTT Et trigger tower summary";
-  meTriggerTowerEt_ = dqmStore_->book2D(name, name, 72, 0., 72., 34, -17., 17.);
-  meTriggerTowerEt_->setAxisTitle("jphi'", 1);
-  meTriggerTowerEt_->setAxisTitle("jeta'", 2);
-
-  if( meTriggerTowerEmulError_ ) dqmStore_->removeElement( meTriggerTowerEmulError_->getName() );
-  name = "EBTTT emulator error quality summary";
-  meTriggerTowerEmulError_ = dqmStore_->book2D(name, name, 72, 0., 72., 34, -17., 17.);
-  meTriggerTowerEmulError_->setAxisTitle("jphi'", 1);
-  meTriggerTowerEmulError_->setAxisTitle("jeta'", 2);
-
-  if( meTriggerTowerTiming_ ) dqmStore_->removeElement( meTriggerTowerTiming_->getName() );
-  name = "EBTTT Trigger Primitives Timing summary";
-  meTriggerTowerTiming_ = dqmStore_->book2D(name, name, 72, 0., 72., 34, -17., 17.);
-  meTriggerTowerTiming_->setAxisTitle("jphi'", 1);
-  meTriggerTowerTiming_->setAxisTitle("jeta'", 2);
-  meTriggerTowerTiming_->setAxisTitle("TP data matching emulator", 3);
-
-  if( meTriggerTowerNonSingleTiming_ ) dqmStore_->removeElement( meTriggerTowerNonSingleTiming_->getName() );
-  name = "EBTTT Trigger Primitives Non Single Timing summary";
-  meTriggerTowerNonSingleTiming_ = dqmStore_->book2D(name, name, 72, 0., 72., 34, -17., 17.);
-  meTriggerTowerNonSingleTiming_->setAxisTitle("jphi'", 1);
-  meTriggerTowerNonSingleTiming_->setAxisTitle("jeta'", 2);
-  meTriggerTowerNonSingleTiming_->setAxisTitle("fraction", 3);
-
-  if( meGlobalSummary_ ) dqmStore_->removeElement( meGlobalSummary_->getName() );
-  name = "EB global summary";
-  meGlobalSummary_ = dqmStore_->book2D(name, name, 360, 0., 360., 170, -85., 85.);
-  meGlobalSummary_->setAxisTitle("jphi", 1);
-  meGlobalSummary_->setAxisTitle("jeta", 2);
-
+  if(meIntegrity_ && mePedestalOnline_ && meTiming_ && meStatusFlags_ && meTriggerTowerEmulError_){
+    if( meGlobalSummary_ ) dqmStore_->removeElement( meGlobalSummary_->getName() );
+    name = "EB global summary";
+    meGlobalSummary_ = dqmStore_->book2D(name, name, 360, 0., 360., 170, -85., 85.);
+    meGlobalSummary_->setAxisTitle("jphi", 1);
+    meGlobalSummary_->setAxisTitle("jeta", 2);
+  }
 }
 
 void EBSummaryClient::cleanup(void) {
@@ -955,7 +1000,7 @@ void EBSummaryClient::analyze(void) {
 
       if ( meRecHitEnergy_ ) meRecHitEnergy_->setBinContent( ipx, iex, 0. );
 
-      if ( meGlobalSummary_ ) meGlobalSummary_->setBinContent( ipx, iex, 6. );
+      if(meIntegrity_ && mePedestalOnline_ && meTiming_ && meStatusFlags_ && meTriggerTowerEmulError_ && meGlobalSummary_ ) meGlobalSummary_->setBinContent( ipx, iex, 6. );
 
     }
   }
@@ -1058,7 +1103,7 @@ void EBSummaryClient::analyze(void) {
   if ( meTriggerTowerTiming_ ) meTriggerTowerTiming_->setEntries( 0 );
   if ( meTriggerTowerNonSingleTiming_ ) meTriggerTowerNonSingleTiming_->setEntries( 0 );
 
-  meGlobalSummary_->setEntries( 0 );
+  if(meIntegrity_ && mePedestalOnline_ && meTiming_ && meStatusFlags_ && meTriggerTowerEmulError_ && meGlobalSummary_ ) meGlobalSummary_->setEntries( 0 );
 
   for ( unsigned int i=0; i<clients_.size(); i++ ) {
 
