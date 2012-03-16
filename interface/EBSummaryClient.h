@@ -4,8 +4,8 @@
 /*
  * \file EBSummaryClient.h
  *
- * $Date: 2010/06/30 15:08:11 $
- * $Revision: 1.57 $
+ * $Date: 2012/03/15 13:12:59 $
+ * $Revision: 1.57.8.1 $
  * \author G. Della Ricca
  *
 */
@@ -84,8 +84,6 @@ bool verbose_;
 bool debug_;
 
 std::string prefixME_;
-
- std::string eventInfoFolder_;
 
 bool enableCleanup_;
 
