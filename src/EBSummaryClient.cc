@@ -1,8 +1,8 @@
 /*
  * \file EBSummaryClient.cc
  *
- * $Date: 2012/03/16 13:16:43 $
- * $Revision: 1.223.2.2 $
+ * $Date: 2012/03/16 14:46:36 $
+ * $Revision: 1.223.2.3 $
  * \author G. Della Ricca
  *
 */
@@ -1189,8 +1189,8 @@ void EBSummaryClient::analyze(void) {
                 ipx = 1+(20-ip)+20*(ism-19);
               }
 
-              meOccupancy_->setBinContent( ipx, iex, xval );
-              if ( xval != 0 ) meOccupancy1D_->Fill( ism, xval );
+              if(meOccupancy_) meOccupancy_->setBinContent( ipx, iex, xval );
+              if ( xval != 0 && meOccupancy1D_) meOccupancy1D_->Fill( ism, xval );
 
             }
 
@@ -1921,6 +1921,7 @@ void EBSummaryClient::analyze(void) {
   } // loop on clients
 
   // The global-summary
+
   int nGlobalErrors = 0;
   int nGlobalErrorsEB[36];
   int nValidChannels = 0;
@@ -1934,7 +1935,7 @@ void EBSummaryClient::analyze(void) {
   for ( int iex = 1; iex <= 170; iex++ ) {
     for ( int ipx = 1; ipx <= 360; ipx++ ) {
 
-      if(meIntegrity_ && mePedestalOnline_ && meTiming_ && meStatusFlags_ && meTriggerTowerEmulError_) {
+      if(meIntegrity_ && mePedestalOnline_ && meTiming_ && meStatusFlags_ && meTriggerTowerEmulError_ && meGlobalSummary_) {
 
         int ism = (ipx-1)/20 + 1 ;
         if ( iex>85 ) ism+=18;
@@ -2065,43 +2066,47 @@ void EBSummaryClient::analyze(void) {
     if ( me ) me->Fill(reportSummaryEB);
   }
 
-  me = dqmStore_->get(prefixME_ + "/EventInfo/reportSummaryMap");
-  if ( me ) {
+  if(meGlobalSummary_){
 
-    int nValidChannelsTT[72][34];
-    int nGlobalErrorsTT[72][34];
-    for ( int iettx = 0; iettx < 34; iettx++ ) {
-      for ( int ipttx = 0; ipttx < 72; ipttx++ ) {
-        nValidChannelsTT[ipttx][iettx] = 0;
-        nGlobalErrorsTT[ipttx][iettx] = 0;
+    me = dqmStore_->get(prefixME_ + "/EventInfo/reportSummaryMap");
+    if ( me ) {
+
+      int nValidChannelsTT[72][34];
+      int nGlobalErrorsTT[72][34];
+      for ( int iettx = 0; iettx < 34; iettx++ ) {
+	for ( int ipttx = 0; ipttx < 72; ipttx++ ) {
+	  nValidChannelsTT[ipttx][iettx] = 0;
+	  nGlobalErrorsTT[ipttx][iettx] = 0;
+	}
       }
-    }
 
-    for ( int iex = 1; iex <= 170; iex++ ) {
-      for ( int ipx = 1; ipx <= 360; ipx++ ) {
+      for ( int iex = 1; iex <= 170; iex++ ) {
+	for ( int ipx = 1; ipx <= 360; ipx++ ) {
 
-        int iettx = (iex-1)/5+1;
-        int ipttx = (ipx-1)/5+1;
+	  int iettx = (iex-1)/5+1;
+	  int ipttx = (ipx-1)/5+1;
 
-        float xval = meGlobalSummary_->getBinContent( ipx, iex );
+	  float xval = meGlobalSummary_->getBinContent( ipx, iex );
 
-        if ( xval >= 0 && xval <= 5 ) {
-          if ( xval != 2 && xval != 5 ) ++nValidChannelsTT[ipttx-1][iettx-1];
-          if ( xval == 0 ) ++nGlobalErrorsTT[ipttx-1][iettx-1];
-        }
+	  if ( xval >= 0 && xval <= 5 ) {
+	    if ( xval != 2 && xval != 5 ) ++nValidChannelsTT[ipttx-1][iettx-1];
+	    if ( xval == 0 ) ++nGlobalErrorsTT[ipttx-1][iettx-1];
+	  }
 
+	}
       }
-    }
 
-    for ( int iettx = 0; iettx < 34; iettx++ ) {
-      for ( int ipttx = 0; ipttx < 72; ipttx++ ) {
+      for ( int iettx = 0; iettx < 34; iettx++ ) {
+	for ( int ipttx = 0; ipttx < 72; ipttx++ ) {
 
-        float xval = -1.0;
-        if ( nValidChannelsTT[ipttx][iettx] != 0 )
-          xval = 1.0 - float(nGlobalErrorsTT[ipttx][iettx])/float(nValidChannelsTT[ipttx][iettx]);
+	  float xval = -1.0;
+	  if ( nValidChannelsTT[ipttx][iettx] != 0 )
+	    xval = 1.0 - float(nGlobalErrorsTT[ipttx][iettx])/float(nValidChannelsTT[ipttx][iettx]);
 
-        me->setBinContent( ipttx+1, iettx+1, xval );
+	  me->setBinContent( ipttx+1, iettx+1, xval );
+	}
       }
+
     }
 
   }

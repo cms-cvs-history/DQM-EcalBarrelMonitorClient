@@ -2,8 +2,8 @@
 /*
  * \file EBIntegrityClient.cc
  *
- * $Date: 2011/08/30 09:33:51 $
- * $Revision: 1.231 $
+ * $Date: 2011/09/02 13:55:01 $
+ * $Revision: 1.232 $
  * \author G. Della Ricca
  * \author G. Franzoni
  *
@@ -55,6 +55,8 @@ EBIntegrityClient::EBIntegrityClient(const edm::ParameterSet& ps) {
 
   // prefixME path
   prefixME_ = ps.getUntrackedParameter<std::string>("prefixME", "");
+
+  subfolder_ = ps.getUntrackedParameter<std::string>("subfolder", "");
 
   // enableCleanup_ switch
   enableCleanup_ = ps.getUntrackedParameter<bool>("enableCleanup", false);
@@ -145,6 +147,9 @@ void EBIntegrityClient::setup(void) {
   std::string name;
 
   dqmStore_->setCurrentFolder( prefixME_ + "/EBIntegrityClient" );
+
+  if(subfolder_.size())
+    dqmStore_->setCurrentFolder( prefixME_ + "/EBIntegrityClient/" + subfolder_);
 
   for ( unsigned int i=0; i<superModules_.size(); i++ ) {
 
