@@ -1,8 +1,8 @@
 /*
  * \file EBSummaryClient.cc
  *
- * $Date: 2012/03/18 15:59:29 $
- * $Revision: 1.223.2.4 $
+ * $Date: 2012/03/18 17:20:52 $
+ * $Revision: 1.223.2.5 $
  * \author G. Della Ricca
  *
 */
@@ -1176,8 +1176,8 @@ void EBSummaryClient::analyze(void) {
                 ipx = 1+(20-ip)+20*(ism-19);
               }
 
-              meIntegrity_->setBinContent( ipx, iex, xval );
-              if( xval == 0 ) meIntegrityErr_->Fill( ism );
+              if(meIntegrity_) meIntegrity_->setBinContent( ipx, iex, xval );
+              if( xval == 0 && meIntegrityErr_) meIntegrityErr_->Fill( ism );
 
             }
 
@@ -1427,7 +1427,7 @@ void EBSummaryClient::analyze(void) {
               ipx = 1+(20-ip)+20*(ism-19);
             }
 
-            meRecHitEnergy_->setBinContent( ipx, iex, xval );
+            if(meRecHitEnergy_) meRecHitEnergy_->setBinContent( ipx, iex, xval );
 
           }
 
@@ -1635,14 +1635,14 @@ void EBSummaryClient::analyze(void) {
             if( me_04 ) {
 
               float xval = me_04->getBinContent(i,j);
-              meIntegrityPN_->setBinContent( ipseudostripx, ichanx, xval );
+              if(meIntegrityPN_) meIntegrityPN_->setBinContent( ipseudostripx, ichanx, xval );
 
             }
 
             if ( h2 ) {
 
               float xval = h2->GetBinContent(i,1);
-              meOccupancyPN_->setBinContent( ipseudostripx, ichanx, xval );
+              if(meOccupancyPN_) meOccupancyPN_->setBinContent( ipseudostripx, ichanx, xval );
 
             }
 
