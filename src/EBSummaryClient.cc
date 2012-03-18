@@ -1,8 +1,8 @@
 /*
  * \file EBSummaryClient.cc
  *
- * $Date: 2012/03/16 14:46:36 $
- * $Revision: 1.223.2.3 $
+ * $Date: 2012/03/18 15:59:29 $
+ * $Revision: 1.223.2.4 $
  * \author G. Della Ricca
  *
 */
@@ -57,6 +57,8 @@ EBSummaryClient::EBSummaryClient(const edm::ParameterSet& ps) {
 
   // enableCleanup_ switch
   enableCleanup_ = ps.getUntrackedParameter<bool>("enableCleanup", false);
+
+  produceReports_ = ps.getUntrackedParameter<bool>("produceReports", true);
 
   // vector of selected Super Modules (Defaults to all 36).
   superModules_.reserve(36);
@@ -237,51 +239,58 @@ void EBSummaryClient::setup(void) {
   dqmStore_->setCurrentFolder( prefixME_ + "/EBSummaryClient" );
 
   if(integrityClient){
-    if ( meIntegrity_ ) dqmStore_->removeElement( meIntegrity_->getName() );
-    name = "EBIT integrity quality summary";
-    meIntegrity_ = dqmStore_->book2D(name, name, 360, 0., 360., 170, -85., 85.);
-    meIntegrity_->setAxisTitle("jphi", 1);
-    meIntegrity_->setAxisTitle("jeta", 2);
+    if(produceReports_){
+      if ( meIntegrity_ ) dqmStore_->removeElement( meIntegrity_->getName() );
+      name = "EBIT integrity quality summary";
+      meIntegrity_ = dqmStore_->book2D(name, name, 360, 0., 360., 170, -85., 85.);
+      meIntegrity_->setAxisTitle("jphi", 1);
+      meIntegrity_->setAxisTitle("jeta", 2);
 
-    if ( meIntegrityErr_ ) dqmStore_->removeElement( meIntegrityErr_->getName() );
-    name = "EBIT integrity quality errors summary";
-    meIntegrityErr_ = dqmStore_->book1D(name, name, 36, 1, 37);
-    for (int i = 0; i < 36; i++) {
-      meIntegrityErr_->setBinLabel(i+1, Numbers::sEB(i+1).c_str(), 1);
+      if ( meIntegrityErr_ ) dqmStore_->removeElement( meIntegrityErr_->getName() );
+      name = "EBIT integrity quality errors summary";
+      meIntegrityErr_ = dqmStore_->book1D(name, name, 36, 1, 37);
+      for (int i = 0; i < 36; i++) {
+	meIntegrityErr_->setBinLabel(i+1, Numbers::sEB(i+1).c_str(), 1);
+      }
     }
-
-    if ( meIntegrityPN_ ) dqmStore_->removeElement( meIntegrityPN_->getName() );
-    name = "EBIT PN integrity quality summary";
-    meIntegrityPN_ = dqmStore_->book2D(name, name, 90, 0., 90., 20, -10., 10.);
-    meIntegrityPN_->setAxisTitle("jchannel", 1);
-    meIntegrityPN_->setAxisTitle("jpseudo-strip", 2);
+    else{
+      if ( meIntegrityPN_ ) dqmStore_->removeElement( meIntegrityPN_->getName() );
+      name = "EBIT PN integrity quality summary";
+      meIntegrityPN_ = dqmStore_->book2D(name, name, 90, 0., 90., 20, -10., 10.);
+      meIntegrityPN_->setAxisTitle("jchannel", 1);
+      meIntegrityPN_->setAxisTitle("jpseudo-strip", 2);
+    }
   }
 
   if(occupancyClient){
-    if ( meOccupancy_ ) dqmStore_->removeElement( meOccupancy_->getName() );
-    name = "EBOT digi occupancy summary";
-    meOccupancy_ = dqmStore_->book2D(name, name, 360, 0., 360., 170, -85., 85.);
-    meOccupancy_->setAxisTitle("jphi", 1);
-    meOccupancy_->setAxisTitle("jeta", 2);
+    if(produceReports_){
+      if ( meOccupancy_ ) dqmStore_->removeElement( meOccupancy_->getName() );
+      name = "EBOT digi occupancy summary";
+      meOccupancy_ = dqmStore_->book2D(name, name, 360, 0., 360., 170, -85., 85.);
+      meOccupancy_->setAxisTitle("jphi", 1);
+      meOccupancy_->setAxisTitle("jeta", 2);
 
-    if ( meOccupancy1D_ ) dqmStore_->removeElement( meOccupancy1D_->getName() );
-    name = "EBOT digi occupancy summary 1D";
-    meOccupancy1D_ = dqmStore_->book1D(name, name, 36, 1, 37);
-    for (int i = 0; i < 36; i++) {
-      meOccupancy1D_->setBinLabel(i+1, Numbers::sEB(i+1).c_str(), 1);
+      if ( meOccupancy1D_ ) dqmStore_->removeElement( meOccupancy1D_->getName() );
+      name = "EBOT digi occupancy summary 1D";
+      meOccupancy1D_ = dqmStore_->book1D(name, name, 36, 1, 37);
+      for (int i = 0; i < 36; i++) {
+	meOccupancy1D_->setBinLabel(i+1, Numbers::sEB(i+1).c_str(), 1);
+      }
+
+      if( meRecHitEnergy_ ) dqmStore_->removeElement( meRecHitEnergy_->getName() );
+      name = "EBOT energy summary";
+      meRecHitEnergy_ = dqmStore_->book2D(name, name, 360, 0., 360., 170, -85., 85.);
+      meRecHitEnergy_->setAxisTitle("jphi", 1);
+      meRecHitEnergy_->setAxisTitle("jeta", 2);
+    }
+    else{
+      if ( meOccupancyPN_ ) dqmStore_->removeElement( meOccupancyPN_->getName() );
+      name = "EBOT PN digi occupancy summary";
+      meOccupancyPN_ = dqmStore_->book2D(name, name, 90, 0., 90., 20, -10., 10.);
+      meOccupancyPN_->setAxisTitle("jchannel", 1);
+      meOccupancyPN_->setAxisTitle("jpseudo-strip", 2);
     }
 
-    if ( meOccupancyPN_ ) dqmStore_->removeElement( meOccupancyPN_->getName() );
-    name = "EBOT PN digi occupancy summary";
-    meOccupancyPN_ = dqmStore_->book2D(name, name, 90, 0., 90., 20, -10., 10.);
-    meOccupancyPN_->setAxisTitle("jchannel", 1);
-    meOccupancyPN_->setAxisTitle("jpseudo-strip", 2);
-
-    if( meRecHitEnergy_ ) dqmStore_->removeElement( meRecHitEnergy_->getName() );
-    name = "EBOT energy summary";
-    meRecHitEnergy_ = dqmStore_->book2D(name, name, 360, 0., 360., 170, -85., 85.);
-    meRecHitEnergy_->setAxisTitle("jphi", 1);
-    meRecHitEnergy_->setAxisTitle("jeta", 2);
   }
 
   if(statusFlagsClient){

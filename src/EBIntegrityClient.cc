@@ -2,8 +2,8 @@
 /*
  * \file EBIntegrityClient.cc
  *
- * $Date: 2011/09/02 13:55:01 $
- * $Revision: 1.232 $
+ * $Date: 2012/03/18 15:59:29 $
+ * $Revision: 1.232.2.1 $
  * \author G. Della Ricca
  * \author G. Franzoni
  *
@@ -241,6 +241,9 @@ void EBIntegrityClient::cleanup(void) {
   }
 
   dqmStore_->setCurrentFolder( prefixME_ + "/EBIntegrityClient" );
+
+  if(subfolder_.size())
+    dqmStore_->setCurrentFolder( prefixME_ + "/EBIntegrityClient/" + subfolder_);
 
   for ( unsigned int i=0; i<superModules_.size(); i++ ) {
 
@@ -653,47 +656,48 @@ void EBIntegrityClient::analyze(void) {
   bits01 |= 1 << EcalDQMStatusHelper::TT_ID_ERROR;
   bits01 |= 1 << EcalDQMStatusHelper::TT_SIZE_ERROR;
 
+  std::string subdir(subfolder_.size() ? subfolder_ + "/" : "");
 
   MonitorElement* me;
 
-  me = dqmStore_->get( prefixME_ + "/EBIntegrityTask/EBIT DCC size error" );
+  me = dqmStore_->get( prefixME_ + "/EBIntegrityTask/" + subdir + "EBIT DCC size error" );
   h00_ = UtilsClient::getHisto( me, cloneME_, h00_ );
 
   for ( unsigned int i=0; i<superModules_.size(); i++ ) {
 
     int ism = superModules_[i];
 
-    me = dqmStore_->get( prefixME_ + "/EBOccupancyTask/EBOT digi occupancy " + Numbers::sEB(ism) );
+    me = dqmStore_->get( prefixME_ + "/EBOccupancyTask/" + subdir + "EBOT digi occupancy " + Numbers::sEB(ism) );
     h_[ism-1] = UtilsClient::getHisto( me, cloneME_, h_[ism-1] );
 
-    me = dqmStore_->get( prefixME_ + "/EBOccupancyTask/EBOT MEM digi occupancy " + Numbers::sEB(ism) );
+    me = dqmStore_->get( prefixME_ + "/EBOccupancyTask/" + subdir + "EBOT MEM digi occupancy " + Numbers::sEB(ism) );
     hmem_[ism-1] = UtilsClient::getHisto( me, cloneME_, hmem_[ism-1] );
 
-    me = dqmStore_->get( prefixME_ + "/EBIntegrityTask/Gain/EBIT gain " + Numbers::sEB(ism) );
+    me = dqmStore_->get( prefixME_ + "/EBIntegrityTask/" + subdir + "Gain/EBIT gain " + Numbers::sEB(ism) );
     h01_[ism-1] = UtilsClient::getHisto( me, cloneME_, h01_[ism-1] );
 
-    me = dqmStore_->get( prefixME_ + "/EBIntegrityTask/ChId/EBIT ChId " + Numbers::sEB(ism) );
+    me = dqmStore_->get( prefixME_ + "/EBIntegrityTask/" + subdir + "ChId/EBIT ChId " + Numbers::sEB(ism) );
     h02_[ism-1] = UtilsClient::getHisto( me, cloneME_, h02_[ism-1] );
 
-    me = dqmStore_->get( prefixME_ + "/EBIntegrityTask/GainSwitch/EBIT gain switch " + Numbers::sEB(ism) );
+    me = dqmStore_->get( prefixME_ + "/EBIntegrityTask/" + subdir + "GainSwitch/EBIT gain switch " + Numbers::sEB(ism) );
     h03_[ism-1] = UtilsClient::getHisto( me, cloneME_, h03_[ism-1] );
 
-    me = dqmStore_->get( prefixME_ + "/EBIntegrityTask/TTId/EBIT TTId " + Numbers::sEB(ism) );
+    me = dqmStore_->get( prefixME_ + "/EBIntegrityTask/" + subdir + "TTId/EBIT TTId " + Numbers::sEB(ism) );
     h04_[ism-1] = UtilsClient::getHisto( me, cloneME_, h04_[ism-1] );
 
-    me = dqmStore_->get( prefixME_ + "/EBIntegrityTask/TTBlockSize/EBIT TTBlockSize " + Numbers::sEB(ism) );
+    me = dqmStore_->get( prefixME_ + "/EBIntegrityTask/" + subdir + "TTBlockSize/EBIT TTBlockSize " + Numbers::sEB(ism) );
     h05_[ism-1] = UtilsClient::getHisto( me, cloneME_, h05_[ism-1] );
 
-    me = dqmStore_->get( prefixME_ + "/EBIntegrityTask/MemChId/EBIT MemChId " + Numbers::sEB(ism) );
+    me = dqmStore_->get( prefixME_ + "/EBIntegrityTask/" + subdir + "MemChId/EBIT MemChId " + Numbers::sEB(ism) );
     h06_[ism-1] = UtilsClient::getHisto( me, cloneME_, h06_[ism-1] );
 
-    me = dqmStore_->get( prefixME_ + "/EBIntegrityTask/MemGain/EBIT MemGain " + Numbers::sEB(ism) );
+    me = dqmStore_->get( prefixME_ + "/EBIntegrityTask/" + subdir + "MemGain/EBIT MemGain " + Numbers::sEB(ism) );
     h07_[ism-1] = UtilsClient::getHisto( me, cloneME_, h07_[ism-1] );
 
-    me = dqmStore_->get( prefixME_ + "/EBIntegrityTask/MemTTId/EBIT MemTTId " + Numbers::sEB(ism) );
+    me = dqmStore_->get( prefixME_ + "/EBIntegrityTask/" + subdir + "MemTTId/EBIT MemTTId " + Numbers::sEB(ism) );
     h08_[ism-1] = UtilsClient::getHisto( me, cloneME_, h08_[ism-1] );
 
-    me = dqmStore_->get( prefixME_ + "/EBIntegrityTask/MemSize/EBIT MemSize " + Numbers::sEB(ism) );
+    me = dqmStore_->get( prefixME_ + "/EBIntegrityTask/" + subdir + "MemSize/EBIT MemSize " + Numbers::sEB(ism) );
     h09_[ism-1] = UtilsClient::getHisto( me, cloneME_, h09_[ism-1] );
 
     float num00;

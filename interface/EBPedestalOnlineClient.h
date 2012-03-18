@@ -4,8 +4,8 @@
 /*
  * \file EBPedestalOnlineClient.h
  *
- * $Date: 2011/05/23 13:27:26 $
- * $Revision: 1.57 $
+ * $Date: 2012/03/18 15:59:20 $
+ * $Revision: 1.57.2.1 $
  * \author G. Della Ricca
  * \author F. Cossutti
  *
@@ -83,8 +83,6 @@ bool verbose_;
 bool debug_;
 
 std::string prefixME_;
-
- std::string subfolder_;
 
 bool enableCleanup_;
 
