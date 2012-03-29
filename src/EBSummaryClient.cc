@@ -1,8 +1,8 @@
 /*
  * \file EBSummaryClient.cc
  *
- * $Date: 2012/03/18 17:46:03 $
- * $Revision: 1.223.2.6 $
+ * $Date: 2012/03/29 13:49:27 $
+ * $Revision: 1.223.2.7 $
  * \author G. Della Ricca
  *
 */
@@ -297,7 +297,7 @@ void EBSummaryClient::setup(void) {
 
   }
 
-  if(statusFlagsClient){
+  if(statusFlagsClient && produceReports_){
     if ( meStatusFlags_ ) dqmStore_->removeElement( meStatusFlags_->getName() );
     name = "EBSFT front-end status summary";
     meStatusFlags_ = dqmStore_->book2D(name, name, 72, 0., 72., 34, -17., 17.);
@@ -312,7 +312,7 @@ void EBSummaryClient::setup(void) {
     }
   }
 
-  if(pedestalOnlineClient && subfolder_ == ""){
+  if(pedestalOnlineClient && produceReports_){
     if ( mePedestalOnline_ ) dqmStore_->removeElement( mePedestalOnline_->getName() );
     name = "EBPOT pedestal quality summary G12";
     mePedestalOnline_ = dqmStore_->book2D(name, name, 360, 0., 360., 170, -85., 85.);
