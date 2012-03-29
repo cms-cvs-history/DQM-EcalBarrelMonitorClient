@@ -1,8 +1,8 @@
 /*
  * \file EBSummaryClient.cc
  *
- * $Date: 2012/03/18 17:20:52 $
- * $Revision: 1.223.2.5 $
+ * $Date: 2012/03/18 17:46:03 $
+ * $Revision: 1.223.2.6 $
  * \author G. Della Ricca
  *
 */
@@ -55,10 +55,14 @@ EBSummaryClient::EBSummaryClient(const edm::ParameterSet& ps) {
   // prefixME path
   prefixME_ = ps.getUntrackedParameter<std::string>("prefixME", "");
 
+  subfolder_ = ps.getUntrackedParameter<std::string>("subfolder", "");
+
   // enableCleanup_ switch
   enableCleanup_ = ps.getUntrackedParameter<bool>("enableCleanup", false);
 
   produceReports_ = ps.getUntrackedParameter<bool>("produceReports", true);
+
+  reducedReports_ = ps.getUntrackedParameter<bool>("produceReports", false);
 
   // vector of selected Super Modules (Defaults to all 36).
   superModules_.reserve(36);
@@ -253,7 +257,7 @@ void EBSummaryClient::setup(void) {
 	meIntegrityErr_->setBinLabel(i+1, Numbers::sEB(i+1).c_str(), 1);
       }
     }
-    else{
+    if(laserClient){
       if ( meIntegrityPN_ ) dqmStore_->removeElement( meIntegrityPN_->getName() );
       name = "EBIT PN integrity quality summary";
       meIntegrityPN_ = dqmStore_->book2D(name, name, 90, 0., 90., 20, -10., 10.);
@@ -283,7 +287,7 @@ void EBSummaryClient::setup(void) {
       meRecHitEnergy_->setAxisTitle("jphi", 1);
       meRecHitEnergy_->setAxisTitle("jeta", 2);
     }
-    else{
+    if(laserClient){
       if ( meOccupancyPN_ ) dqmStore_->removeElement( meOccupancyPN_->getName() );
       name = "EBOT PN digi occupancy summary";
       meOccupancyPN_ = dqmStore_->book2D(name, name, 90, 0., 90., 20, -10., 10.);
@@ -308,7 +312,7 @@ void EBSummaryClient::setup(void) {
     }
   }
 
-  if(pedestalOnlineClient){
+  if(pedestalOnlineClient && subfolder_ == ""){
     if ( mePedestalOnline_ ) dqmStore_->removeElement( mePedestalOnline_->getName() );
     name = "EBPOT pedestal quality summary G12";
     mePedestalOnline_ = dqmStore_->book2D(name, name, 360, 0., 360., 170, -85., 85.);
@@ -749,7 +753,7 @@ void EBSummaryClient::setup(void) {
     meTriggerTowerNonSingleTiming_->setAxisTitle("fraction", 3);
   }
 
-  if(meIntegrity_ && mePedestalOnline_ && meTiming_ && meStatusFlags_ && meTriggerTowerEmulError_){
+  if(meIntegrity_ && mePedestalOnline_ && meStatusFlags_ && (reducedReports_ || (meTiming_ && meTriggerTowerEmulError_))){
     if( meGlobalSummary_ ) dqmStore_->removeElement( meGlobalSummary_->getName() );
     name = "EB global summary";
     meGlobalSummary_ = dqmStore_->book2D(name, name, 360, 0., 360., 170, -85., 85.);
@@ -1007,7 +1011,7 @@ void EBSummaryClient::analyze(void) {
 
       if ( meRecHitEnergy_ ) meRecHitEnergy_->setBinContent( ipx, iex, 0. );
 
-      if(meIntegrity_ && mePedestalOnline_ && meTiming_ && meStatusFlags_ && meTriggerTowerEmulError_ && meGlobalSummary_ ) meGlobalSummary_->setBinContent( ipx, iex, 6. );
+      if(meGlobalSummary_ ) meGlobalSummary_->setBinContent( ipx, iex, 6. );
 
     }
   }
@@ -1110,13 +1114,16 @@ void EBSummaryClient::analyze(void) {
   if ( meTriggerTowerTiming_ ) meTriggerTowerTiming_->setEntries( 0 );
   if ( meTriggerTowerNonSingleTiming_ ) meTriggerTowerNonSingleTiming_->setEntries( 0 );
 
-  if(meIntegrity_ && mePedestalOnline_ && meTiming_ && meStatusFlags_ && meTriggerTowerEmulError_ && meGlobalSummary_ ) meGlobalSummary_->setEntries( 0 );
+  if(meGlobalSummary_ ) meGlobalSummary_->setEntries( 0 );
+
+  std::string subdir(subfolder_ == "" ? "" : subfolder_ + "/");
 
   for ( unsigned int i=0; i<clients_.size(); i++ ) {
 
     EBIntegrityClient* ebic = dynamic_cast<EBIntegrityClient*>(clients_[i]);
     EBStatusFlagsClient* ebsfc = dynamic_cast<EBStatusFlagsClient*>(clients_[i]);
     EBPedestalOnlineClient* ebpoc = dynamic_cast<EBPedestalOnlineClient*>(clients_[i]);
+    if(subfolder_ != "") ebpoc = 0;
 
     EBLaserClient* eblc = dynamic_cast<EBLaserClient*>(clients_[i]);
     EBPedestalClient* ebpc = dynamic_cast<EBPedestalClient*>(clients_[i]);
@@ -1136,10 +1143,10 @@ void EBSummaryClient::analyze(void) {
 
       int ism = superModules_[i];
 
-      me = dqmStore_->get( prefixME_ + "/EBOccupancyTask/EBOT rec hit energy " + Numbers::sEB(ism) );
+      me = dqmStore_->get( prefixME_ + "/EBOccupancyTask/" + subdir + "EBOT rec hit energy " + Numbers::sEB(ism) );
       hot01_[ism-1] = UtilsClient::getHisto( me, cloneME_, hot01_[ism-1] );
 
-      me = dqmStore_->get( prefixME_ + "/EBPedestalOnlineTask/Gain12/EBPOT pedestal " + Numbers::sEB(ism) + " G12" );
+      me = dqmStore_->get( prefixME_ + "/EBPedestalOnlineTask/"+ subdir + "Gain12/EBPOT pedestal " + Numbers::sEB(ism) + " G12" );
       hpot01_[ism-1] = UtilsClient::getHisto( me, cloneME_, hpot01_[ism-1] );
 
       me = dqmStore_->get( prefixME_ + "/EBTriggerTowerTask/EBTTT Et map Real Digis " + Numbers::sEB(ism) );
@@ -1151,7 +1158,7 @@ void EBSummaryClient::analyze(void) {
       me = dqmStore_->get( prefixME_ + "/EcalInfo/EBMM DCC" );
       norm01_ = UtilsClient::getHisto( me, cloneME_, norm01_ );
 
-      me = dqmStore_->get( prefixME_ + "/EBRawDataTask/EBRDT L1A FE errors" );
+      me = dqmStore_->get( prefixME_ + "/EBRawDataTask/" + subdir + "EBRDT L1A FE errors" );
       synch01_ = UtilsClient::getHisto( me, cloneME_, synch01_ );
 
       for ( int ie = 1; ie <= 85; ie++ ) {
@@ -1944,7 +1951,7 @@ void EBSummaryClient::analyze(void) {
   for ( int iex = 1; iex <= 170; iex++ ) {
     for ( int ipx = 1; ipx <= 360; ipx++ ) {
 
-      if(meIntegrity_ && mePedestalOnline_ && meTiming_ && meStatusFlags_ && meTriggerTowerEmulError_ && meGlobalSummary_) {
+      if(meGlobalSummary_) {
 
         int ism = (ipx-1)/20 + 1 ;
         if ( iex>85 ) ism+=18;
@@ -1955,7 +1962,7 @@ void EBSummaryClient::analyze(void) {
         float xval = 6;
         float val_in = meIntegrity_->getBinContent(ipx,iex);
         float val_po = mePedestalOnline_->getBinContent(ipx,iex);
-        float val_tm = meTiming_->getBinContent(ipt,iet);
+        float val_tm = reducedReports_ ? 1. : meTiming_->getBinContent(ipt,iet);
         float val_sf = meStatusFlags_->getBinContent((ipx-1)/5+1,(iex-1)/5+1);
         // float val_ee = meTriggerTowerEmulError_->getBinContent((ipx-1)/5+1,(iex-1)/5+1); // removed from the global summary temporarily
         float val_ee = 1;

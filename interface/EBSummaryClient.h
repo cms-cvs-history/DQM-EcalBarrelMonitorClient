@@ -4,8 +4,8 @@
 /*
  * \file EBSummaryClient.h
  *
- * $Date: 2012/03/16 14:46:34 $
- * $Revision: 1.57.8.2 $
+ * $Date: 2012/03/18 17:20:49 $
+ * $Revision: 1.57.8.3 $
  * \author G. Della Ricca
  *
 */
@@ -85,9 +85,13 @@ bool debug_;
 
 std::string prefixME_;
 
+ std::string subfolder_;
+
 bool enableCleanup_;
 
  bool produceReports_;
+
+ bool reducedReports_;
 
 std::vector<int> superModules_;
 std::vector<int> laserWavelengths_;
