@@ -1,8 +1,8 @@
 /*
  * \file EBPedestalOnlineClient.cc
  *
- * $Date: 2012/03/18 17:20:51 $
- * $Revision: 1.164.2.2 $
+ * $Date: 2012/03/29 13:49:24 $
+ * $Revision: 1.164.2.3 $
  * \author G. Della Ricca
  * \author F. Cossutti
  *
@@ -133,7 +133,7 @@ void EBPedestalOnlineClient::setup(void) {
   dqmStore_->setCurrentFolder( prefixME_ + "/EBPedestalOnlineClient" );
 
   if(subfolder_.size())
-    dqmStore_->setCurrentFolder( prefixME_ + "/EBIntegrityClient/" + subfolder_);
+    dqmStore_->setCurrentFolder( prefixME_ + "/EBPedestalOnlineClient/" + subfolder_);
 
   for ( unsigned int i=0; i<superModules_.size(); i++ ) {
 
@@ -197,7 +197,7 @@ void EBPedestalOnlineClient::cleanup(void) {
   dqmStore_->setCurrentFolder( prefixME_ + "/EBPedestalOnlineClient" );
 
   if(subfolder_.size())
-    dqmStore_->setCurrentFolder( prefixME_ + "/EBIntegrityClient/" + subfolder_);
+    dqmStore_->setCurrentFolder( prefixME_ + "/EBPedestalOnlineClient/" + subfolder_);
 
   for ( unsigned int i=0; i<superModules_.size(); i++ ) {
 
