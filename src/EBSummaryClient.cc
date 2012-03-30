@@ -1,8 +1,8 @@
 /*
  * \file EBSummaryClient.cc
  *
- * $Date: 2012/03/29 13:49:27 $
- * $Revision: 1.223.2.7 $
+ * $Date: 2012/03/29 22:18:16 $
+ * $Revision: 1.223.2.8 $
  * \author G. Della Ricca
  *
 */
@@ -1122,8 +1122,9 @@ void EBSummaryClient::analyze(void) {
 
     EBIntegrityClient* ebic = dynamic_cast<EBIntegrityClient*>(clients_[i]);
     EBStatusFlagsClient* ebsfc = dynamic_cast<EBStatusFlagsClient*>(clients_[i]);
+    if(!produceReports_) ebsfc = 0;
     EBPedestalOnlineClient* ebpoc = dynamic_cast<EBPedestalOnlineClient*>(clients_[i]);
-    if(subfolder_ != "") ebpoc = 0;
+    if(!produceReports_) ebpoc = 0;
 
     EBLaserClient* eblc = dynamic_cast<EBLaserClient*>(clients_[i]);
     EBPedestalClient* ebpc = dynamic_cast<EBPedestalClient*>(clients_[i]);
@@ -1231,8 +1232,8 @@ void EBSummaryClient::analyze(void) {
 
               float xval = me->getBinContent( ie, ip );
 
-              mePedestalOnline_->setBinContent( ipx, iex, xval );
-              if ( xval == 0 ) mePedestalOnlineErr_->Fill( ism );
+              if(mePedestalOnline_) mePedestalOnline_->setBinContent( ipx, iex, xval );
+              if ( xval == 0 && mePedestalOnlineErr_ ) mePedestalOnlineErr_->Fill( ism );
 
             }
 
@@ -1252,11 +1253,11 @@ void EBSummaryClient::analyze(void) {
                 ipx = 1+(20-ip)+20*(ism-19);
               }
 
-              mePedestalOnlineRMSMap_->setBinContent( ipx, iex, rms01 );
+              if(mePedestalOnlineRMSMap_) mePedestalOnlineRMSMap_->setBinContent( ipx, iex, rms01 );
 
-              mePedestalOnlineRMS_->Fill( ism, rms01 );
+              if(mePedestalOnlineRMS_) mePedestalOnlineRMS_->Fill( ism, rms01 );
 
-              mePedestalOnlineMean_->Fill( ism, mean01 );
+              if(mePedestalOnlineMean_) mePedestalOnlineMean_->Fill( ism, mean01 );
 
             }
 

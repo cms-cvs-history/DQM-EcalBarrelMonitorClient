@@ -1,8 +1,8 @@
 /*
  * \file EcalBarrelMonitorClient.cc
  *
- * $Date: 2012/03/16 13:16:44 $
- * $Revision: 1.504.2.3 $
+ * $Date: 2012/03/16 14:46:37 $
+ * $Revision: 1.504.2.4 $
  * \author G. Della Ricca
  * \author F. Cossutti
  *
@@ -198,6 +198,10 @@ EcalBarrelMonitorClient::EcalBarrelMonitorClient(const edm::ParameterSet& ps) {
   }
 
   produceReports_ = ps.getUntrackedParameter<bool>("produceReports", true);
+
+  if (produceReports_){
+    std::cout << " producing reportSummaries" << std::endl;
+  }
 
   // enableCleanup switch
 
