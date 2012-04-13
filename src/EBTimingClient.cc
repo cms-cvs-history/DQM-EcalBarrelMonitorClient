@@ -1,8 +1,8 @@
 /*
  * \file EBTimingClient.cc
  *
- * $Date: 2011/09/02 13:55:01 $
- * $Revision: 1.110 $
+ * $Date: 2011/09/02 14:02:36 $
+ * $Revision: 1.111 $
  * \author G. Della Ricca
  *
 */
@@ -88,6 +88,11 @@ EBTimingClient::EBTimingClient(const edm::ParameterSet& ps) {
   discrepancyMean_ = 2.0;
   RMSThreshold_ = 6.0;
 
+  nHitThreshold_ = ps.getUntrackedParameter<int>("timingNHitThrehold", 5);
+
+  ievt_ = 0;
+  jevt_ = 0;
+  dqmStore_ = 0;
 }
 
 EBTimingClient::~EBTimingClient() {
@@ -274,7 +279,7 @@ bool EBTimingClient::writeDb(EcalCondDBInterface* econn, RunIOV* runiov, MonRunI
 
         bool update01;
 
-        update01 = UtilsClient::getBinStatistics(h01_[ism-1], ie, ip, num01, mean01, rms01);
+        update01 = UtilsClient::getBinStatistics(h01_[ism-1], ie, ip, num01, mean01, rms01, nHitThreshold_);
         // Task timing map is shifted of +50 ns for graphical reasons. Shift back it.
         mean01 -= 50.;
 
@@ -374,7 +379,7 @@ void EBTimingClient::analyze(void) {
         float mean01;
         float rms01;
 
-        update01 = UtilsClient::getBinStatistics(h01_[ism-1], ie, ip, num01, mean01, rms01, 3.);
+        update01 = UtilsClient::getBinStatistics(h01_[ism-1], ie, ip, num01, mean01, rms01, nHitThreshold_);
         // Task timing map is shifted of +50 ns for graphical reasons. Shift back it.
         mean01 -= 50.;
 

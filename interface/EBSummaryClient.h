@@ -4,8 +4,8 @@
 /*
  * \file EBSummaryClient.h
  *
- * $Date: 2012/03/18 17:20:49 $
- * $Revision: 1.57.8.3 $
+ * $Date: 2012/03/29 13:49:23 $
+ * $Revision: 1.57.8.4 $
  * \author G. Della Ricca
  *
 */
@@ -175,6 +175,8 @@ TProfile2D* hpot01_[36];
 TProfile2D* httt01_[36];
 TProfile2D* htmt01_[36];
 TH1F* norm01_, *synch01_;
+
+ int timingNHitThreshold_;
 
 };
 

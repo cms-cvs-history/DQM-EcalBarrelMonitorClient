@@ -44,6 +44,8 @@ ecalBarrelMonitorDbClient = cms.EDAnalyzer("EcalBarrelMonitorDbClient",
     MGPAGainsPN = cms.untracked.vint32(1, 16),
     verbose = cms.untracked.bool(True),
     debug = cms.untracked.bool(False),
-    prescaleFactor = cms.untracked.int32(1)
+    prescaleFactor = cms.untracked.int32(1),
+                                           timingNHitThreshold = cms.untracked.int32(5),
+                                           synchErrorThreshold = cms.untracked.int32(5)
 )
 

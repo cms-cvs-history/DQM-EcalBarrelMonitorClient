@@ -1,8 +1,8 @@
 /*
  * \file EBSummaryClient.cc
  *
- * $Date: 2012/03/29 22:18:16 $
- * $Revision: 1.223.2.8 $
+ * $Date: 2012/03/30 09:35:29 $
+ * $Revision: 1.223.2.9 $
  * \author G. Della Ricca
  *
 */
@@ -80,6 +80,10 @@ EBSummaryClient::EBSummaryClient(const edm::ParameterSet& ps) {
   MGPAGainsPN_.reserve(2);
   for ( unsigned int i = 1; i <= 3; i++ ) MGPAGainsPN_.push_back(i);
   MGPAGainsPN_ = ps.getUntrackedParameter<std::vector<int> >("MGPAGainsPN", MGPAGainsPN_);
+
+  timingNHitThreshold_ = ps.getUntrackedParameter<int>("timingNHitThreshold", 5);
+
+  synchErrorThreshold_ = ps.getUntrackedParameter<int>("synchErrorThreshold", 5);
 
   // summary maps
   meIntegrity_            = 0;
@@ -166,9 +170,6 @@ EBSummaryClient::EBSummaryClient(const edm::ParameterSet& ps) {
     htmt01_[ism-1] = 0;
 
   }
-
-  synchErrorThreshold_ = 0.0;
-
 }
 
 EBSummaryClient::~EBSummaryClient() {
@@ -1116,6 +1117,11 @@ void EBSummaryClient::analyze(void) {
 
   if(meGlobalSummary_ ) meGlobalSummary_->setEntries( 0 );
 
+  MonitorElement* me(0);
+  me = dqmStore_->get(prefixME_ + "/EBTimingTask/EBTMT timing map");
+  TProfile2D* htmt(0);
+  htmt = UtilsClient::getHisto(me, false, htmt);
+
   std::string subdir(subfolder_ == "" ? "" : subfolder_ + "/");
 
   for ( unsigned int i=0; i<clients_.size(); i++ ) {
@@ -1133,7 +1139,6 @@ void EBSummaryClient::analyze(void) {
     EBTimingClient* ebtmc = dynamic_cast<EBTimingClient*>(clients_[i]);
     EBTriggerTowerClient* ebtttc = dynamic_cast<EBTriggerTowerClient*>(clients_[i]);
 
-    MonitorElement *me;
     MonitorElement *me_01, *me_02, *me_03;
     MonitorElement *me_04, *me_05;
     //    MonitorElement *me_f[6], *me_fg[2];
@@ -1443,7 +1448,7 @@ void EBSummaryClient::analyze(void) {
 
             float num02, mean02, rms02;
 
-	    bool update02 = UtilsClient::getBinStatistics(htmt01_[ism-1], ie, ip, num02, mean02, rms02, 3.);
+	    bool update02 = UtilsClient::getBinStatistics(htmt01_[ism-1], ie, ip, num02, mean02, rms02, timingNHitThreshold_);
 
             if ( update02 ) {
 
@@ -1574,38 +1579,40 @@ void EBSummaryClient::analyze(void) {
 
 	    if( htmt01_[ism-1] ){
 
-	      float ent, cont, err;
-	      float num, sum, sumw2;
-	      num = sum = sumw2 = 0.;
-	      bool mask = false;
+	      float num(0.);
+	      bool mask(false);
 
 	      for(int ce=1; ce<=5; ce++){
 		for(int cp=1; cp<=5; cp++){
 
 		  int scie = (ie - 1) * 5 + ce;
 		  int scip = (ip - 1) * 5 + cp; 
-		  int bin = htmt01_[ism-1]->GetBin( scie, scip );
 
-		  // htmt01_ are booked with option "s" -> error = RMS not RMS/sqrt(N)
-		  ent = htmt01_[ism-1]->GetBinEntries( bin );
-		  cont = htmt01_[ism-1]->GetBinContent( bin ) - 50.;
-		  err = htmt01_[ism-1]->GetBinError( bin );
+		  num += htmt01_[ism-1]->GetBinEntries(htmt01_[ism-1]->GetBin(scie, scip));
 
-		  num += ent;
-		  sum += cont * ent;
-		  sumw2 += (err * err + cont * cont) * ent;
-
-		  if( ent > 3. && (std::abs(cont) > 2. || err > 6.) && Masks::maskChannel(ism, scie, scip, chWarnBit, EcalBarrel) ) mask = true;
+		  if(Masks::maskChannel(ism, scie, scip, chWarnBit, EcalBarrel)) mask = true;
 		}
 	      }
 
+	      float nHitThreshold(timingNHitThreshold_ * 18.);
+
+	      bool update01(false);
+	      float num01, mean01, rms01;
+	      update01 = UtilsClient::getBinStatistics(htmt, ipx, iex, num01, mean01, rms01, nHitThreshold);
+
+	      mean01 -= 50.;
+
+	      if(!update01){
+		mean01 = 0.;
+		rms01 = 0.;
+	      }
+
+	      update01 |= num > 1.3 * nHitThreshold;
+
 	      float xval = 2.;
-	      if( num > 10. ){
+	      if(update01){
 
-		float mean = sum / num;
-		float rms = std::sqrt( sumw2 / num - mean * mean );
-
-		if( std::abs(mean) > 2. || rms > 6. ) xval = 0.;
+		if( std::abs(mean01) > 2. || rms01 > 6. || num > 1.3 * num01) xval = 0.;
 		else xval = 1.;
 
 	      }
@@ -2019,12 +2026,9 @@ void EBSummaryClient::analyze(void) {
         // are reverted back to yellow
         float iEntries=0;
 
-        if(norm01_ && synch01_) {
-          float frac_synch_errors = 0.;
-          float norm = norm01_->GetBinContent(ism);
-          if(norm > 0) frac_synch_errors = float(synch01_->GetBinContent(ism))/float(norm);
-          float val_sy = (frac_synch_errors <= synchErrorThreshold_);
-          if(val_sy==0) xval=0;
+        if(synch01_) {
+	  float synchErrors = synch01_->GetBinContent(ism);
+          if(synchErrors > synchErrorThreshold_) xval=0;
         }
 
         std::vector<int>::iterator iter = find(superModules_.begin(), superModules_.end(), ism);
@@ -2065,8 +2069,6 @@ void EBSummaryClient::analyze(void) {
 
     }
   }
-
-  MonitorElement* me;
 
   float reportSummary = -1.0;
   if ( nValidChannels != 0 )
