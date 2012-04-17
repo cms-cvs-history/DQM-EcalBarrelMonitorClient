@@ -1,8 +1,8 @@
 /*
  * \file EBSummaryClient.cc
  *
- * $Date: 2012/03/30 09:35:29 $
- * $Revision: 1.223.2.9 $
+ * $Date: 2012/04/13 17:59:44 $
+ * $Revision: 1.223.2.10 $
  * \author G. Della Ricca
  *
 */
@@ -62,7 +62,7 @@ EBSummaryClient::EBSummaryClient(const edm::ParameterSet& ps) {
 
   produceReports_ = ps.getUntrackedParameter<bool>("produceReports", true);
 
-  reducedReports_ = ps.getUntrackedParameter<bool>("produceReports", false);
+  reducedReports_ = ps.getUntrackedParameter<bool>("reducedReports", false);
 
   // vector of selected Super Modules (Defaults to all 36).
   superModules_.reserve(36);
