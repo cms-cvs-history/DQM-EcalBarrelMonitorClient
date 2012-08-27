@@ -1,14 +1,14 @@
-#ifndef LaserClient_H
-#define LaserClient_H
+#ifndef LedClient_H
+#define LedClient_H
 
 #include "DQWorkerClient.h"
 
 namespace ecaldqm {
 
-  class LaserClient : public DQWorkerClient {
+  class LedClient : public DQWorkerClient {
   public:
-    LaserClient(edm::ParameterSet const&, edm::ParameterSet const&);
-    ~LaserClient() {}
+    LedClient(edm::ParameterSet const&, edm::ParameterSet const&);
+    ~LedClient() {}
 
     void beginRun(const edm::Run&, const edm::EventSetup&);
 
@@ -41,15 +41,15 @@ namespace ecaldqm {
     std::map<std::pair<int, int>, unsigned> wlGainToME_;
 
     int minChannelEntries_;
-    std::vector<float> expectedAmplitude_;
-    std::vector<float> amplitudeThreshold_;
-    std::vector<float> amplitudeRMSThreshold_;
-    std::vector<float> expectedTiming_;
-    std::vector<float> timingThreshold_;
-    std::vector<float> timingRMSThreshold_;
-    std::vector<float> expectedPNAmplitude_;
-    std::vector<float> pnAmplitudeThreshold_;
-    std::vector<float> pnAmplitudeRMSThreshold_;
+    std::vector<double> expectedAmplitude_;
+    std::vector<double> amplitudeThreshold_;
+    std::vector<double> amplitudeRMSThreshold_;
+    std::vector<double> expectedTiming_;
+    std::vector<double> timingThreshold_;
+    std::vector<double> timingRMSThreshold_;
+    std::vector<double> expectedPNAmplitude_;
+    std::vector<double> pnAmplitudeThreshold_;
+    std::vector<double> pnAmplitudeRMSThreshold_;
 
     float towerThreshold_;
 

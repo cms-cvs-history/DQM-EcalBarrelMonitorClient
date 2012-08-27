@@ -1,4 +1,4 @@
-#include "../interface/LaserClient.h"
+#include "../interface/LedClient.h"
 
 #include "DataFormats/EcalDetId/interface/EcalPnDiodeDetId.h"
 
@@ -11,8 +11,8 @@
 
 namespace ecaldqm {
 
-  LaserClient::LaserClient(edm::ParameterSet const& _workerParams, edm::ParameterSet const& _commonParams) :
-    DQWorkerClient(_workerParams, _commonParams, "LaserClient"),
+  LedClient::LedClient(edm::ParameterSet const& _workerParams, edm::ParameterSet const& _commonParams) :
+    DQWorkerClient(_workerParams, _commonParams, "LedClient"),
     wlToME_(),
     wlGainToME_(),
     minChannelEntries_(_workerParams.getUntrackedParameter<int>("minChanelEntries")),
@@ -24,17 +24,18 @@ namespace ecaldqm {
     timingRMSThreshold_(0),
     expectedPNAmplitude_(0),
     pnAmplitudeThreshold_(0),
-    pnAmplitudeRMSThreshold_(0)
+    pnAmplitudeRMSThreshold_(0),
+    towerThreshold_(_workerParams.getUntrackedParameter<double>("towerThreshold"))
   {
     using namespace std;
 
     vector<int> MGPAGainsPN(_commonParams.getUntrackedParameter<vector<int> >("MGPAGainsPN"));
-    vector<int> laserWavelengths(_commonParams.getUntrackedParameter<vector<int> >("laserWavelengths"));
+    vector<int> ledWavelengths(_commonParams.getUntrackedParameter<vector<int> >("ledWavelengths"));
 
     unsigned iMEWL(0);
     unsigned iMEWLG(0);
-    for(vector<int>::iterator wlItr(laserWavelengths.begin()); wlItr != laserWavelengths.end(); ++wlItr){
-      if(*wlItr <= 0 || *wlItr >= 3) throw cms::Exception("InvalidConfiguration") << "Laser Wavelength" << endl;
+    for(vector<int>::iterator wlItr(ledWavelengths.begin()); wlItr != ledWavelengths.end(); ++wlItr){
+      if(*wlItr <= 0 || *wlItr >= 5) throw cms::Exception("InvalidConfiguration") << "Led Wavelength" << endl;
       wlToME_[*wlItr] = iMEWL++;
 
       for(vector<int>::iterator gainItr(MGPAGainsPN.begin()); gainItr != MGPAGainsPN.end(); ++gainItr){
@@ -169,7 +170,7 @@ namespace ecaldqm {
   }
 
   void
-  LaserClient::beginRun(const edm::Run &, const edm::EventSetup &)
+  LedClient::beginRun(const edm::Run &, const edm::EventSetup &)
   {
     for(unsigned iME(0); iME < wlToME_.size(); ++iME){
       static_cast<MESetMulti*>(MEs_[kQuality])->use(iME);
@@ -183,12 +184,12 @@ namespace ecaldqm {
   }
 
   void
-  LaserClient::producePlots()
+  LedClient::producePlots()
   {
-    uint32_t mask(1 << EcalDQMStatusHelper::LASER_MEAN_ERROR |
-                  1 << EcalDQMStatusHelper::LASER_RMS_ERROR |
-                  1 << EcalDQMStatusHelper::LASER_TIMING_MEAN_ERROR |
-                  1 << EcalDQMStatusHelper::LASER_TIMING_RMS_ERROR);
+    uint32_t mask(1 << EcalDQMStatusHelper::LED_MEAN_ERROR |
+                  1 << EcalDQMStatusHelper::LED_RMS_ERROR |
+                  1 << EcalDQMStatusHelper::LED_TIMING_MEAN_ERROR |
+                  1 << EcalDQMStatusHelper::LED_TIMING_RMS_ERROR);
 
     for(std::map<int, unsigned>::iterator wlItr(wlToME_.begin()); wlItr != wlToME_.end(); ++wlItr){
       static_cast<MESetMulti*>(MEs_[kQuality])->use(wlItr->second);
@@ -290,7 +291,7 @@ namespace ecaldqm {
 
   /*static*/
   void
-  LaserClient::setMEOrdering(std::map<std::string, unsigned>& _nameToIndex)
+  LedClient::setMEOrdering(std::map<std::string, unsigned>& _nameToIndex)
   {
     _nameToIndex["Quality"] = kQuality;
     _nameToIndex["AmplitudeMean"] = kAmplitudeMean;
@@ -307,5 +308,5 @@ namespace ecaldqm {
     _nameToIndex["PNAmplitude"] = kPNAmplitude;
   }
 
-  DEFINE_ECALDQM_WORKER(LaserClient);
+  DEFINE_ECALDQM_WORKER(LedClient);
 }

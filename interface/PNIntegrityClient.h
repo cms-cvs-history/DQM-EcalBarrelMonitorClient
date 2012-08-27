@@ -1,32 +1,30 @@
-#ifndef IntegrityClient_H
-#define IntegrityClient_H
+#ifndef PNIntegrityClient_H
+#define PNIntegrityClient_H
 
 #include "DQWorkerClient.h"
 
 namespace ecaldqm {
 
-  class IntegrityClient : public DQWorkerClient {
+  class PNIntegrityClient : public DQWorkerClient {
   public:
-    IntegrityClient(edm::ParameterSet const&, edm::ParameterSet const&);
-    ~IntegrityClient() {}
+    PNIntegrityClient(edm::ParameterSet const&, edm::ParameterSet const&);
+    ~PNIntegrityClient() {}
 
     void bookMEs();
 
     void producePlots();
 
     enum MESets {
-      kQuality,
       kQualitySummary,
       nMESets
     };
 
     enum Sources {
       kOccupancy,
-      kGain,
-      kChId,
-      kGainSwitch,
-      kTowerId,
-      kBlockSize,
+      kMEMChId,
+      kMEMGain,
+      kMEMBlockSize,
+      kMEMTowerId,
       nSources
     };
 
