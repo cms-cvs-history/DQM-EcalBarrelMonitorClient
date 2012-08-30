@@ -1,14 +1,14 @@
-#ifndef PedestalClient_H
-#define PedestalClient_H
+#ifndef TestPulseClient_H
+#define TestPulseClient_H
 
 #include "DQWorkerClient.h"
 
 namespace ecaldqm
 {
-  class PedestalClient : public DQWorkerClient {
+  class TestPulseClient : public DQWorkerClient {
   public:
-    PedestalClient(edm::ParameterSet const&, edm::ParameterSet const&);
-    ~PedestalClient() {}
+    TestPulseClient(edm::ParameterSet const&, edm::ParameterSet const&);
+    ~TestPulseClient() {}
 
     void beginRun(const edm::Run&, const edm::EventSetup&);
 
@@ -16,17 +16,17 @@ namespace ecaldqm
 
     enum MESets {
       kQuality,
-      kMean,
-      kRMS,
-      kPNRMS,
+      kAmplitudeMean,
+      kAmplitudeRMS,
+      kPNAmplitudeRMS,
       kQualitySummary,
       kPNQualitySummary,
       nMESets
     };
 
     enum Sources {
-      kPedestal,
-      kPNPedestal,
+      kAmplitude,
+      kPNAmplitude,
       nSources
     };
 
@@ -36,11 +36,9 @@ namespace ecaldqm
     std::map<int, unsigned> gainToME_;
     std::map<int, unsigned> pnGainToME_;
 
-    std::vector<float> expectedMean_;
-    std::vector<float> toleranceMean_;
+    std::vector<float> amplitudeThreshold_;
     std::vector<float> toleranceRMS_;
-    std::vector<float> expectedPNMean_;
-    std::vector<float> tolerancePNMean_;
+    std::vector<float> PNAmplitudeThreshold_;
     std::vector<float> tolerancePNRMS_;
   };
 

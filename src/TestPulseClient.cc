@@ -1,19 +1,19 @@
-#include "../interface/PedestalClient.h"
+#include "../interface/TestPulseClient.h"
 
 #include "DQM/EcalCommon/interface/MESetMulti.h"
 
 #include "CondFormats/EcalObjects/interface/EcalDQMStatusHelper.h"
 
+#include <iomanip>
+
 namespace ecaldqm
 {
 
-  PedestalClient::PedestalClient(edm::ParameterSet const& _workerParams, edm::ParameterSet const& _commonParams) :
-    DQWorkerClient(_workerParams, _commonParams, "PedestalClient"),
-    expectedMean_(0),
-    toleranceMean_(0),
+  TestPulseClient::TestPulseClient(edm::ParameterSet const& _workerParams, edm::ParameterSet const& _commonParams) :
+    DQWorkerClient(_workerParams, _commonParams, "TestPulseClient"),
+    amplitudeThreshold_(0),
     toleranceRMS_(0),
-    expectedPNMean_(0),
-    tolerancePNMean_(0),
+    PNAmplitudeThreshold_(0),
     tolerancePNRMS_(0)
   {
     using namespace std;
@@ -35,35 +35,31 @@ namespace ecaldqm
 
     stringstream ss;
 
-    expectedMean_.resize(iMEGain);
-    toleranceMean_.resize(iMEGain);
+    amplitudeThreshold_.resize(iMEGain);
     toleranceRMS_.resize(iMEGain);
 
     for(map<int, unsigned>::iterator gainItr(gainToME_.begin()); gainItr != gainToME_.end(); ++gainItr){
       ss.str("");
       ss << "G" << gainItr->first;
 
-      expectedMean_[gainItr->second] = _workerParams.getUntrackedParameter<double>("expectedMean" + ss.str());
-      toleranceMean_[gainItr->second] = _workerParams.getUntrackedParameter<double>("toleranceMean" + ss.str());
+      amplitudeThreshold_[gainItr->second] = _workerParams.getUntrackedParameter<double>("amplitudeThreshold" + ss.str());
       toleranceRMS_[gainItr->second] = _workerParams.getUntrackedParameter<double>("toleranceRMS" + ss.str());
     }
 
-    expectedPNMean_.resize(iMEPNGain);
-    tolerancePNMean_.resize(iMEPNGain);
+    PNAmplitudeThreshold_.resize(iMEPNGain);
     tolerancePNRMS_.resize(iMEPNGain);
 
     for(map<int, unsigned>::iterator gainItr(pnGainToME_.begin()); gainItr != pnGainToME_.end(); ++gainItr){
       ss.str("");
       ss << "G" << gainItr->first;
 
-      expectedPNMean_[gainItr->second] = _workerParams.getUntrackedParameter<double>("expectedPNMean" + ss.str());
-      tolerancePNMean_[gainItr->second] = _workerParams.getUntrackedParameter<double>("tolerancePNMean" + ss.str());
+      PNAmplitudeThreshold_[gainItr->second] = _workerParams.getUntrackedParameter<double>("PNAmplitudeThreshold" + ss.str());
       tolerancePNRMS_[gainItr->second] = _workerParams.getUntrackedParameter<double>("tolerancePNRMS" + ss.str());
     }
 
     map<string, string> replacements;
 
-    unsigned apdPlots[] = {kQuality, kMean, kRMS, kQualitySummary};
+    unsigned apdPlots[] = {kQuality, kAmplitudeMean, kAmplitudeRMS, kQualitySummary};
     for(unsigned iS(0); iS < sizeof(apdPlots) / sizeof(unsigned); ++iS){
       unsigned plot(apdPlots[iS]);
       MESet* temp(MEs_[plot]);
@@ -83,7 +79,7 @@ namespace ecaldqm
       delete temp;
     }
 
-    unsigned pnPlots[] = {kPNRMS, kPNQualitySummary};
+    unsigned pnPlots[] = {kPNAmplitudeRMS, kPNQualitySummary};
     for(unsigned iS(0); iS < sizeof(pnPlots) / sizeof(unsigned); ++iS){
       unsigned plot(pnPlots[iS]);
       MESet* temp(MEs_[plot]);
@@ -103,7 +99,7 @@ namespace ecaldqm
       delete temp;
     }
 
-    unsigned apdSources[] = {kPedestal};
+    unsigned apdSources[] = {kAmplitude};
     for(unsigned iS(0); iS < sizeof(apdSources) / sizeof(unsigned); ++iS){
       unsigned plot(apdSources[iS]);
       MESet const* temp(sources_[plot]);
@@ -123,7 +119,7 @@ namespace ecaldqm
       delete temp;
     }
 
-    unsigned pnSources[] = {kPNPedestal};
+    unsigned pnSources[] = {kPNAmplitude};
     for(unsigned iS(0); iS < sizeof(pnSources) / sizeof(unsigned); ++iS){
       unsigned plot(pnSources[iS]);
       MESet const* temp(sources_[plot]);
@@ -145,7 +141,7 @@ namespace ecaldqm
   }
 
   void
-  PedestalClient::beginRun(edm::Run const&, edm::EventSetup const&)
+  TestPulseClient::beginRun(edm::Run const&, edm::EventSetup const&)
   {
     for(unsigned iME(0); iME < gainToME_.size(); ++iME){
       static_cast<MESetMulti*>(MEs_[kQuality])->use(iME);
@@ -168,63 +164,63 @@ namespace ecaldqm
   }
 
   void
-  PedestalClient::producePlots()
+  TestPulseClient::producePlots()
   {
     using namespace std;
 
     for(map<int, unsigned>::iterator gainItr(gainToME_.begin()); gainItr != gainToME_.end(); ++gainItr){
       static_cast<MESetMulti*>(MEs_[kQuality])->use(gainItr->second);
       static_cast<MESetMulti*>(MEs_[kQualitySummary])->use(gainItr->second);
-      static_cast<MESetMulti*>(MEs_[kMean])->use(gainItr->second);
-      static_cast<MESetMulti*>(MEs_[kRMS])->use(gainItr->second);
+      static_cast<MESetMulti*>(MEs_[kAmplitudeMean])->use(gainItr->second);
+      static_cast<MESetMulti*>(MEs_[kAmplitudeRMS])->use(gainItr->second);
 
-      static_cast<MESetMulti const*>(sources_[kPedestal])->use(gainItr->second);
+      static_cast<MESetMulti const*>(sources_[kAmplitude])->use(gainItr->second);
 
-      MEs_[kMean]->reset();
-      MEs_[kRMS]->reset();
+      MEs_[kAmplitudeMean]->reset();
+      MEs_[kAmplitudeRMS]->reset();
 
       uint32_t mask(0);
       switch(gainItr->first){
       case 1:
-        mask |= (1 << EcalDQMStatusHelper::PEDESTAL_LOW_GAIN_MEAN_ERROR |
-                 1 << EcalDQMStatusHelper::PEDESTAL_LOW_GAIN_RMS_ERROR);
+        mask |= (1 << EcalDQMStatusHelper::TESTPULSE_LOW_GAIN_MEAN_ERROR |
+                 1 << EcalDQMStatusHelper::TESTPULSE_LOW_GAIN_RMS_ERROR);
         break;
       case 6:
-        mask |= (1 << EcalDQMStatusHelper::PEDESTAL_MIDDLE_GAIN_MEAN_ERROR |
-                 1 << EcalDQMStatusHelper::PEDESTAL_MIDDLE_GAIN_RMS_ERROR);
+        mask |= (1 << EcalDQMStatusHelper::TESTPULSE_MIDDLE_GAIN_MEAN_ERROR |
+                 1 << EcalDQMStatusHelper::TESTPULSE_MIDDLE_GAIN_RMS_ERROR);
         break;
       case 12:
-        mask |= (1 << EcalDQMStatusHelper::PEDESTAL_HIGH_GAIN_MEAN_ERROR |
-                 1 << EcalDQMStatusHelper::PEDESTAL_HIGH_GAIN_RMS_ERROR);
+        mask |= (1 << EcalDQMStatusHelper::TESTPULSE_HIGH_GAIN_MEAN_ERROR |
+                 1 << EcalDQMStatusHelper::TESTPULSE_HIGH_GAIN_RMS_ERROR);
         break;
       default:
         break;
       }
 
       MESet::iterator qEnd(MEs_[kQuality]->end());
-      MESet::const_iterator pItr(sources_[kPedestal]);
+      MESet::const_iterator aItr(sources_[kAmplitude]);
       for(MESet::iterator qItr(MEs_[kQuality]->beginChannel()); qItr != qEnd; qItr.toNextChannel()){
 
         DetId id(qItr->getId());
 
         bool doMask(applyMask_(kQuality, id, mask));
 
-        pItr = qItr;
+        aItr = qItr;
 
-        float entries(pItr->getBinEntries());
+        float entries(aItr->getBinEntries());
 
         if(entries < 1.){
           qItr->setBinContent(doMask ? kMUnknown : kUnknown);
           continue;
         }
 
-        float mean(pItr->getBinContent());
-        float rms(pItr->getBinError() * sqrt(entries));
+        float amp(aItr->getBinContent());
+        float rms(aItr->getBinError() * sqrt(entries));
 
-        MEs_[kMean]->fill(id, mean);
-        MEs_[kRMS]->fill(id, rms);
+        MEs_[kAmplitudeMean]->fill(id, amp);
+        MEs_[kAmplitudeRMS]->fill(id, rms);
 
-        if(abs(mean - expectedMean_[gainItr->second]) > toleranceMean_[gainItr->second] || rms > toleranceRMS_[gainItr->second])
+        if(amp < amplitudeThreshold_[gainItr->second] || rms > toleranceRMS_[gainItr->second])
           qItr->setBinContent(doMask ? kMBad : kBad);
         else
           qItr->setBinContent(doMask ? kMGood : kGood);
@@ -235,21 +231,21 @@ namespace ecaldqm
 
     for(map<int, unsigned>::iterator gainItr(pnGainToME_.begin()); gainItr != pnGainToME_.end(); ++gainItr){
       static_cast<MESetMulti*>(MEs_[kPNQualitySummary])->use(gainItr->second);
-      static_cast<MESetMulti*>(MEs_[kPNRMS])->use(gainItr->second);
+      static_cast<MESetMulti*>(MEs_[kPNAmplitudeRMS])->use(gainItr->second);
 
-      static_cast<MESetMulti const*>(sources_[kPNPedestal])->use(gainItr->second);
+      static_cast<MESetMulti const*>(sources_[kPNAmplitude])->use(gainItr->second);
 
-      MEs_[kPNRMS]->reset();
+      MEs_[kPNAmplitudeRMS]->reset();
 
       uint32_t mask(0);
       switch(gainItr->first){
       case 1:
-        mask |= (1 << EcalDQMStatusHelper::PEDESTAL_LOW_GAIN_MEAN_ERROR |
-                 1 << EcalDQMStatusHelper::PEDESTAL_LOW_GAIN_RMS_ERROR);
+        mask |= (1 << EcalDQMStatusHelper::TESTPULSE_LOW_GAIN_MEAN_ERROR |
+                 1 << EcalDQMStatusHelper::TESTPULSE_LOW_GAIN_RMS_ERROR);
         break;
       case 16:
-        mask |= (1 << EcalDQMStatusHelper::PEDESTAL_HIGH_GAIN_MEAN_ERROR |
-                 1 << EcalDQMStatusHelper::PEDESTAL_HIGH_GAIN_RMS_ERROR);
+        mask |= (1 << EcalDQMStatusHelper::TESTPULSE_HIGH_GAIN_MEAN_ERROR |
+                 1 << EcalDQMStatusHelper::TESTPULSE_HIGH_GAIN_RMS_ERROR);
         break;
       default:
         break;
@@ -268,19 +264,18 @@ namespace ecaldqm
 
           bool doMask(applyMask_(kPNQualitySummary, id));
 
-          float entries(sources_[kPNPedestal]->getBinEntries(id));
+          float amp(sources_[kPNAmplitude]->getBinContent(id));
+          float entries(sources_[kPNAmplitude]->getBinEntries(id));
+          float rms(sources_[kPNAmplitude]->getBinError(id) * sqrt(entries));
 
           if(entries < 1.){
             MEs_[kPNQualitySummary]->setBinContent(id, doMask ? kMUnknown : kUnknown);
             continue;
           }
 
-          float mean(sources_[kPNPedestal]->getBinContent(id));
-          float rms(sources_[kPNPedestal]->getBinError(id) * sqrt(entries));
+          MEs_[kPNAmplitudeRMS]->fill(id, rms);
 
-          MEs_[kPNRMS]->fill(id, rms);
-
-          if(abs(mean - expectedPNMean_[gainItr->second]) > tolerancePNMean_[gainItr->second] || rms > tolerancePNRMS_[gainItr->second])
+          if(amp < PNAmplitudeThreshold_[gainItr->second] || rms > tolerancePNRMS_[gainItr->second])
             MEs_[kPNQualitySummary]->setBinContent(id, doMask ? kMBad : kBad);
           else
             MEs_[kPNQualitySummary]->setBinContent(id, doMask ? kMGood : kGood);
@@ -289,19 +284,20 @@ namespace ecaldqm
     }
   }
 
+  /*static*/
   void
-  PedestalClient::setMEOrdering(std::map<std::string, unsigned>& _nameToIndex)
+  TestPulseClient::setMEOrdering(std::map<std::string, unsigned>& _nameToIndex)
   {
     _nameToIndex["Quality"] = kQuality;
-    _nameToIndex["Mean"] = kMean;
-    _nameToIndex["RMS"] = kRMS;
-    _nameToIndex["PNRMS"] = kPNRMS;
+    _nameToIndex["AmplitudeMean"] = kAmplitudeMean;
+    _nameToIndex["AmplitudeRMS"] = kAmplitudeRMS;
+    _nameToIndex["PNAmplitudeRMS"] = kPNAmplitudeRMS;
     _nameToIndex["QualitySummary"] = kQualitySummary;
     _nameToIndex["PNQualitySummary"] = kPNQualitySummary;
 
-    _nameToIndex["Pedestal"] = kPedestal;
-    _nameToIndex["PNPedestal"] = kPNPedestal;
+    _nameToIndex["Amplitude"] = kAmplitude;
+    _nameToIndex["PNAmplitude"] = kPNAmplitude;
   }
 
-  DEFINE_ECALDQM_WORKER(PedestalClient);
+  DEFINE_ECALDQM_WORKER(TestPulseClient);
 }
